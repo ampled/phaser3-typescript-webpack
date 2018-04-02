@@ -1,5 +1,5 @@
 {
-  "name": "phaser-typescript-webpack",
+  "name": "phaser3-typescript-webpack",
   "version": "1.0.0",
   "main": "src/index.ts",
   "license": "MIT",

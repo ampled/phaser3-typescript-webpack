@@ -1,0 +1,43 @@
+{
+  "resources": [
+    "sfx.mp3",
+    "sfx.ogg"
+  ],
+  "spritemap": {
+    "death": {
+      "start": 0,
+      "end": 0.4622902494331066,
+      "loop": false
+    },
+    "enemykill": {
+      "start": 2,
+      "end": 2.1782993197278913,
+      "loop": false
+    },
+    "enemyshot": {
+      "start": 4,
+      "end": 4.146961451247165,
+      "loop": false
+    },
+    "foley": {
+      "start": 6,
+      "end": 6.2280272108843535,
+      "loop": false
+    },
+    "jump": {
+      "start": 8,
+      "end": 8.252539682539682,
+      "loop": false
+    },
+    "shoot": {
+      "start": 10,
+      "end": 10.370929705215419,
+      "loop": false
+    },
+    "starget": {
+      "start": 12,
+      "end": 12.333628117913833,
+      "loop": false
+    }
+  }
+}

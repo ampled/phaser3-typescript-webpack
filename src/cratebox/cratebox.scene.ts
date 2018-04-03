@@ -364,8 +364,6 @@ export class CrateboxScene extends Scene {
   }
 
   shoot(): void {
-    console.log(this.player.body instanceof Phaser.Physics.Arcade.Body);
-
     this.sound
       .playAudioSprite('sfx', 'shoot', { rate: 1 } as any);
     // this.player.shooting = true;

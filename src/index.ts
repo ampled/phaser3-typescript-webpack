@@ -15,6 +15,7 @@ const config: Opt<GameConfig> = {
   physics: {
     default: 'arcade',
     arcade: {
+      tilebias: 4,
       gravity: { y: 600 },
       debug: true
     }

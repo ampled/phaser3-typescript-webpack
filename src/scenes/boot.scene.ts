@@ -16,6 +16,7 @@ export class BootScene extends Scene {
       .spritesheet('enemy', './assets/sprites/enemy.png', { frameWidth: 16, frameHeight: 16 })
       .spritesheet('star', './assets/sprites/star.png', { frameWidth: 16, frameHeight: 16 })
       .spritesheet('projectile', './assets/sprites/projectile.png', { frameWidth: 16, frameHeight: 16 })
+      .spritesheet('gun', './assets/sprites/gun.png', { frameWidth: 16, frameHeight: 16 })
       .bitmapFont('mario', 'assets/fonts/font.png', 'assets/fonts/font.fnt')
       .spritesheet('player-sheet', 'assets/sprites/player.png', { frameWidth: 16, frameHeight: 16 })
       .atlas('player-sprites', 'assets/sprites/player/player.png', 'assets/sprites/player/player.json')
@@ -52,6 +53,23 @@ export class BootScene extends Scene {
       // this.anims.generateFrameNames('player-sprites',
       //   { start: 1, end: 3, first: 1, suffix: '.png', zeroPad: 2 })
     } as any;
+
+    const run: AnimationConfig = {
+      key: 'run',
+      defaultTextureKey: 'player',
+      frameRate: 15,
+      repeat: -1,
+      repeatDelay: 0,
+      yoyo: true,
+      frames: [
+        { key: 'player-sprites', frame: '09.png' },
+        { key: 'player-sprites', frame: '010.png' },
+        { key: 'player-sprites', frame: '011.png' }
+      ]
+      // this.anims.generateFrameNames('player-sprites',
+      //   { start: 1, end: 3, first: 1, suffix: '.png', zeroPad: 2 })
+    } as any;
+
     const jump: AnimationConfig = {
       key: 'jump',
       repeat: -1,
@@ -72,7 +90,7 @@ export class BootScene extends Scene {
 
     this.anims.create(stand);
     this.anims.create(walk);
-    console.log(walk);
+    this.anims.create(run);
     this.anims.create(jump);
     this.anims.create(shoot);
 

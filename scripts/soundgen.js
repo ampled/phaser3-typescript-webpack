@@ -8,10 +8,12 @@ var files = [
   'assets/@raw/sounds/wav/death.wav',
   'assets/@raw/sounds/wav/enemykill.wav',
   'assets/@raw/sounds/wav/enemyshot.wav',
+  'assets/@raw/sounds/wav/enemyloop.wav',
   'assets/@raw/sounds/wav/foley.wav',
   'assets/@raw/sounds/wav/jump.wav',
   'assets/@raw/sounds/wav/shoot.wav',
-  'assets/@raw/sounds/wav/starget.wav'
+  'assets/@raw/sounds/wav/starget.wav',
+  'assets/@raw/sounds/wav/pause.wav',
 ];
 
 var opts = { output: 'assets/sounds/sfx', log: 'info', export: 'mp3,ogg', path: '.' };

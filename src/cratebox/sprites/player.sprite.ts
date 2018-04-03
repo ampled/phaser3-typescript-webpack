@@ -16,10 +16,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   update(time: number, delta: number) {
     let anim = 'stand';
 
-    if (this.scene.shootTimer > 0) {
-      this.shooting = true;
-    } else {
-      this.shooting = false;
+    // if (this.scene.shootTimer > 0) {
+    //   this.shooting = true;
+    // } else {
+    //   this.shooting = false;
+    // }
+
+    if (this.scene.shootTimer < 150) {
+      this.scene.gunBody.setAngularVelocity(0);
+      this.scene.gun.setAngle(0);
+      this.scene.gun.setSize(16, 16);
     }
 
     if (this.body.velocity.y !== 0) {
@@ -27,7 +33,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     } else if (this.shooting) {
       anim = 'shoot';
     } else if (this.body.velocity.x !== 0) {
-      anim = 'walk';
+      anim = 'run';
+    } else {
+      anim = 'stand';
     }
 
     if ((<any>this.anims).getCurrentKey() !== anim) {

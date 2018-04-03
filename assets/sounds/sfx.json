@@ -6,7 +6,7 @@
   "spritemap": {
     "death": {
       "start": 0,
-      "end": 0.4622902494331066,
+      "end": 0.4561451247165533,
       "loop": false
     },
     "enemykill": {
@@ -19,24 +19,34 @@
       "end": 4.146961451247165,
       "loop": false
     },
-    "foley": {
+    "enemyloop": {
       "start": 6,
-      "end": 6.2280272108843535,
+      "end": 6.463333333333333,
+      "loop": false
+    },
+    "foley": {
+      "start": 8,
+      "end": 8.228027210884354,
       "loop": false
     },
     "jump": {
-      "start": 8,
-      "end": 8.252539682539682,
+      "start": 10,
+      "end": 10.252539682539682,
       "loop": false
     },
     "shoot": {
-      "start": 10,
-      "end": 10.370929705215419,
+      "start": 12,
+      "end": 12.370929705215419,
       "loop": false
     },
     "starget": {
-      "start": 12,
-      "end": 12.333628117913833,
+      "start": 14,
+      "end": 14.333628117913833,
+      "loop": false
+    },
+    "pause": {
+      "start": 16,
+      "end": 16.512585034013604,
       "loop": false
     }
   }

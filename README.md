@@ -1,1 +1,4 @@
 # 😎
+
+- yarn install
+- yarn start

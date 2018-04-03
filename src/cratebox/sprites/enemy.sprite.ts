@@ -58,6 +58,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
       this.dir = this.dir * 1.1;
       this.health = 6;
       this.scene.minishake();
+      this.scene.sound.playAudioSprite('sfx', 'enemyloop');
     }
 
   }
@@ -70,6 +71,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   dieAnim(fromRight) {
+    this.scene.minishake();
     this.scene.sys.sound.playAudioSprite('sfx', 'enemykill');
     this.flipY = true;
     this.scene.enemyGroup.remove(this as any);
@@ -82,6 +84,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   kill() {
     this.scene.killedEnemies.remove(this as any);
+    this.disableBody();
     this.destroy();
   }
 

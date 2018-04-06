@@ -1,4 +1,11 @@
-yarn install
-yarn start
+# Game
 
-try here https://ampled.github.io/
+__Try here <https://ampled.github.io/>__
+
+
+### Build
+
+```yarn install```
+### Run
+```yarn start```
+

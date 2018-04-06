@@ -13,6 +13,8 @@ export class Scene extends Phaser.Scene {
   sound: Phaser.Sound.WebAudioSoundManager;
   anims: Phaser.Animations.AnimationManager;
 
+  events: Phaser.Events.EventEmitter;
+
   constructor(config: Opt<SettingsConfig>) {
     super(config as any);
   }

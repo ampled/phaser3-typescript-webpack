@@ -7041,7 +7041,7 @@ declare namespace Phaser {
              * Calls each of the listeners registered for a given event.
              * @param event The event name.
              */
-            emit(event: string | symbol): boolean;
+            emit(event: string | symbol, ...args: any[]): boolean;
 
             /**
              * Add a listener for a given event.

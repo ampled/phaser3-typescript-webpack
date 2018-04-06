@@ -19,6 +19,9 @@
     "object-literal-sort-keys": false,
     "ordered-imports": false,
     "no-console": false,
+    "interface-name": [
+      false
+    ],
     "arrow-parens": false,
     "no-angle-bracket-type-assertion": false,
     "whitespace": [

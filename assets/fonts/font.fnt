@@ -46,5 +46,6 @@
     <char id="44" x="20" y="24" width="3" height="3" xoffset="1" yoffset="5" xadvance="8" page="0" chnl="15"/>
     <char id="45" x="24" y="20" width="6" height="1" xoffset="1" yoffset="3" xadvance="8" page="0" chnl="15"/>
     <char id="32" x="0" y="0" width="0" height="0" xoffset="1" yoffset="3" xadvance="8" page="0" chnl="15"/>
+    <char id="42" x="20" y="29" width="7" height="7" xoffset="0" yoffset="0" xadvance="8" page="0" chnl="15"/>
   </chars>
 </font>

@@ -52,7 +52,6 @@ export class BootScene extends Scene {
   }
 
   create() {
-    // debugger;
     const stand: AnimationConfig = {
       key: 'stand',
       defaultTexturekey: 'player',

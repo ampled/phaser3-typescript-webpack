@@ -1,6 +1,4 @@
-// TODO
-// INCLUDE ASSET FILES
-// UGLIFY
+// @ts-check
 
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -30,6 +28,17 @@ module.exports = {
       {
         test: [/\.vert$/, /\.frag$/],
         use: 'raw-loader'
+      },
+      {
+        test: [
+          /\.(png|fnt|mp3|ogg)$/
+        ],
+        use: [{ loader: 'file-loader', options: { name: 'assets/[name].[ext]' } }]
+      },
+      {
+        type: 'javascript/auto',
+        test: /\.json$/,
+        use: [{ loader: 'file-loader', options: { name: 'assets/[name].[ext]' } }]
       }
     ]
   },

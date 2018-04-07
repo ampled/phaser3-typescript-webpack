@@ -1,5 +1,26 @@
 import { Scene } from 'phaser-util/scene';
 
+import * as crateboxMap from 'assets/tilemaps/cratebox.json';
+import * as crateboxTiles from 'assets/tilesets/16x16.png';
+
+import * as playerSprite from 'assets/sprites/player.png';
+import * as playerSpriteSheet from 'assets/sprites/player/player.png';
+import * as playerSpriteAtlas from 'assets/sprites/player/player.json';
+import * as enemySprite from 'assets/sprites/enemy.png';
+import * as starSprite from 'assets/sprites/star.png';
+import * as projectileSprite from 'assets/sprites/projectile.png';
+import * as gunSprite from 'assets/sprites/gun.png';
+
+import * as marioFontPng from 'assets/fonts/font.png';
+import * as marioFont from 'assets/fonts/font.fnt';
+
+import * as bgm1mp3 from 'assets/music/bgm1.mp3';
+import * as bgm1ogg from 'assets/music/bgm1.ogg';
+
+import * as sfxmp3 from 'assets/sounds/sfx.mp3';
+import * as sfxogg from 'assets/sounds/sfx.ogg';
+import * as sfxsheet from 'assets/sounds/sfx.json';
+
 export class BootScene extends Scene {
   text: ArcadePhysicsText;
   keys: { [key: string]: Phaser.Input.Keyboard.Key };
@@ -10,24 +31,23 @@ export class BootScene extends Scene {
 
   preload() {
     this.load
-      .tilemapTiledJSON('cratebox', './assets/tilemaps/cratebox.json')
-      .spritesheet('cratebox', './assets/tilesets/16x16.png', { frameWidth: 64, frameHeight: 64 })
-      .spritesheet('player', './assets/sprites/player.png', { frameWidth: 16, frameHeight: 16 })
-      .spritesheet('enemy', './assets/sprites/enemy.png', { frameWidth: 16, frameHeight: 16 })
-      .spritesheet('star', './assets/sprites/star.png', { frameWidth: 16, frameHeight: 16 })
-      .spritesheet('projectile', './assets/sprites/projectile.png', { frameWidth: 16, frameHeight: 16 })
-      .spritesheet('gun', './assets/sprites/gun.png', { frameWidth: 16, frameHeight: 16 })
-      .bitmapFont('mario', 'assets/fonts/font.png', 'assets/fonts/font.fnt')
-      .spritesheet('player-sheet', 'assets/sprites/player.png', { frameWidth: 16, frameHeight: 16 })
-      .atlas('player-sprites', 'assets/sprites/player/player.png', 'assets/sprites/player/player.json')
+      .tilemapTiledJSON('cratebox', crateboxMap)
+      .spritesheet('cratebox', crateboxTiles, { frameWidth: 64, frameHeight: 64 })
+      .spritesheet('player', playerSprite, { frameWidth: 16, frameHeight: 16 })
+      .atlas('player-sprites', playerSpriteSheet, playerSpriteAtlas)
+      .spritesheet('enemy', enemySprite, { frameWidth: 16, frameHeight: 16 })
+      .spritesheet('star', starSprite, { frameWidth: 16, frameHeight: 16 })
+      .spritesheet('projectile', projectileSprite, { frameWidth: 16, frameHeight: 16 })
+      .spritesheet('gun', gunSprite, { frameWidth: 16, frameHeight: 16 })
+      .bitmapFont('mario', marioFontPng, marioFont)
       .audio('bgm', [
-        'assets/music/bgm1.mp3',
-        'assets/music/bgm1.ogg'
+        bgm1mp3,
+        bgm1ogg
       ])
       .audioSprite('sfx', [
-        'assets/sounds/sfx.ogg',
-        'assets/sounds/sfx.mp3'
-      ], 'assets/sounds/sfx.json' as any, { instances: 2 });
+        sfxmp3,
+        sfxogg
+      ], sfxsheet as any, { instances: 2 });
 
   }
 
@@ -105,11 +125,11 @@ export class BootScene extends Scene {
 
     this.input.keyboard.on('keyup', e => {
       if (e.key === '2') {
-        this.scene.start('CrateboxScene');
+        // this.scene.start('CrateboxScene');
       }
     });
 
-    this.scene.pause('Boot');
+    // this.scene.pause('Boot');
     this.scene.start('CrateboxScene');
   }
 

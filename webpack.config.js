@@ -33,12 +33,12 @@ module.exports = {
         test: [
           /\.(png|fnt|mp3|ogg)$/
         ],
-        use: [{ loader: 'file-loader', options: { name: 'assets/[name].[ext]' } }]
+        use: [{ loader: 'file-loader', options: { name: 'assets/[name].[hash].[ext]' } }]
       },
       {
         type: 'javascript/auto',
         test: /\.json$/,
-        use: [{ loader: 'file-loader', options: { name: 'assets/[name].[ext]' } }]
+        use: [{ loader: 'file-loader', options: { name: 'assets/[name].[hash].[ext]' } }]
       }
     ]
   },

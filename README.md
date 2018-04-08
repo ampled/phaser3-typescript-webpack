@@ -2,10 +2,8 @@
 
 __Try here <https://ampled.github.io/>__
 
-
-### Build
-
+## Run
 ```yarn install```
-### Run
+
 ```yarn start```
 

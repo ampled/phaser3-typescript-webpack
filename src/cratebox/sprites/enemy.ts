@@ -64,21 +64,21 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   }
 
-  damage(amount: number, fromRight: boolean): void {
+  damage(amount: number, fromRight: boolean, multiplier = 1): void {
     this.health -= amount;
     if (this.health <= 0) {
-      this.dieAnim(fromRight);
+      this.dieAnim(fromRight, multiplier);
     }
   }
 
-  dieAnim(fromRight) {
+  dieAnim(fromRight, multiplier = 1) {
     this.scene.minishake();
     this.scene.events.emit('sfx', 'enemykill');
     this.flipY = true;
     this.scene.enemyGroup.remove(this as any);
     this.scene.killedEnemies.add(this as any);
     this.setVelocityY(Phaser.Math.Between(-100, -250));
-    this.setVelocityX(fromRight ? -100 : 100);
+    this.setVelocityX((fromRight ? -100 : 100) * multiplier);
     this.setAngularVelocity(Phaser.Math.Between(100, 1000));
     this.killAt = 2000;
   }

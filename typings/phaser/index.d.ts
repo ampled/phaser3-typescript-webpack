@@ -10180,7 +10180,7 @@ declare namespace Phaser {
             /**
              * If this Game Object is enabled for physics then this property will contain a reference to a Physics Body.
              */
-            body: object;
+            body: any;
 
             /**
              * Sets the `active` property of this Game Object and returns this Game Object for further chaining.
@@ -30832,7 +30832,7 @@ declare namespace Phaser {
                 /**
                  * [description]
                  */
-                body: Phaser.Physics.Impact.Body;
+                body: Phaser.Physics.Impact.Body | any;
 
                 /**
                  * [description]

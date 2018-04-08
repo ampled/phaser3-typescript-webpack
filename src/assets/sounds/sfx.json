@@ -14,14 +14,14 @@
       "end": 2.1782993197278913,
       "loop": false
     },
-    "enemyshot": {
+    "enemyloop": {
       "start": 4,
-      "end": 4.146961451247165,
+      "end": 4.463333333333333,
       "loop": false
     },
-    "enemyloop": {
+    "enemyshot": {
       "start": 6,
-      "end": 6.463333333333333,
+      "end": 6.146961451247165,
       "loop": false
     },
     "foley": {
@@ -34,19 +34,29 @@
       "end": 10.252539682539682,
       "loop": false
     },
-    "shoot": {
+    "pause": {
       "start": 12,
-      "end": 12.370929705215419,
+      "end": 12.512585034013606,
+      "loop": false
+    },
+    "shoot": {
+      "start": 14,
+      "end": 14.370929705215419,
+      "loop": false
+    },
+    "starget_alt": {
+      "start": 16,
+      "end": 17.028276643990928,
       "loop": false
     },
     "starget": {
-      "start": 14,
-      "end": 14.333628117913833,
+      "start": 19,
+      "end": 19.333628117913833,
       "loop": false
     },
-    "pause": {
-      "start": 16,
-      "end": 16.512585034013604,
+    "walk": {
+      "start": 21,
+      "end": 21.11501133786848,
       "loop": false
     }
   }

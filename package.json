@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack --mode development",
     "build": "webpack --mode production --config webpack.build.js",
-    "start": "webpack-dev-server --mode development",
+    "start": "webpack-dev-server --mode development --config webpack.config.js",
     "makesound": "node scripts/soundgen.js"
   },
   "dependencies": {

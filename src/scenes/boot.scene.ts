@@ -8,8 +8,14 @@ import * as playerSpriteSheet from 'assets/sprites/player/player.png';
 import * as playerSpriteAtlas from 'assets/sprites/player/player.json';
 import * as enemySprite from 'assets/sprites/enemy.png';
 import * as starSprite from 'assets/sprites/star.png';
-import * as projectileSprite from 'assets/sprites/projectile.png';
+
 import * as gunSprite from 'assets/sprites/gun.png';
+import * as dualGunSprite from 'assets/sprites/dualgun.png';
+import * as projectileSprite from 'assets/sprites/projectile.png';
+import * as smgSprite from 'assets/sprites/smg.png';
+import * as smgProj from 'assets/sprites/smgproj.png';
+import * as shotgunSprite from 'assets/sprites/shotgun.png';
+import * as shotgunProj from 'assets/sprites/shotgunproj.png';
 
 import * as marioFontPng from 'assets/fonts/font.png';
 import * as marioFont from 'assets/fonts/font.fnt';
@@ -38,7 +44,12 @@ export class BootScene extends Scene {
       .spritesheet('enemy', enemySprite, { frameWidth: 16, frameHeight: 16 })
       .spritesheet('star', starSprite, { frameWidth: 16, frameHeight: 16 })
       .spritesheet('projectile', projectileSprite, { frameWidth: 16, frameHeight: 16 })
+      .spritesheet('smgproj', smgProj, { frameWidth: 16, frameHeight: 16 })
+      .spritesheet('shotgunproj', shotgunProj, { frameWidth: 16, frameHeight: 16 })
+      .spritesheet('dualgun', dualGunSprite, { frameWidth: 48, frameHeight: 16 })
       .spritesheet('gun', gunSprite, { frameWidth: 16, frameHeight: 16 })
+      .spritesheet('smg', smgSprite, { frameWidth: 16, frameHeight: 16 })
+      .spritesheet('shotgun', shotgunSprite, { frameWidth: 16, frameHeight: 16 })
       .bitmapFont('mario', marioFontPng, marioFont)
       .audio('bgm', [
         bgm1mp3,

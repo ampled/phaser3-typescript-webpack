@@ -23,6 +23,8 @@ export class CrateboxScene extends Scene {
   score = 0;
   scoreDisplay: Phaser.GameObjects.BitmapText;
   scoreText: Phaser.GameObjects.BitmapText;
+  gunText: Phaser.GameObjects.BitmapText;
+  gunTextTimer: number = 1001;
   bestScore = 0;
   bestScoreDisplay: Phaser.GameObjects.DynamicBitmapText;
   bestScoreText: Phaser.GameObjects.BitmapText;
@@ -32,6 +34,9 @@ export class CrateboxScene extends Scene {
   map: Phaser.Tilemaps.Tilemap;
   tileset: Phaser.Tilemaps.Tileset;
   groundLayer: Phaser.Tilemaps.StaticTilemapLayer;
+
+  shotgunVelocity = 50;
+  shotgunDrag = 50;
 
   // TODO get these from the tiled map as objects
   starCoords = [
@@ -51,34 +56,6 @@ export class CrateboxScene extends Scene {
     super({ key: 'CrateboxScene' });
   }
 
-  togglePause(): void {
-    if (this.paused) {
-      this.scene.resume('CrateboxScene');
-      this.sound.resumeAll();
-      this.sys.sound.playAudioSprite('sfx', 'pause');
-      this.paused = false;
-    } else {
-      this.scene.pause('CrateboxScene');
-      this.sound.pauseAll();
-      this.paused = true;
-    }
-    this.pauseText.setVisible(this.paused);
-  }
-
-  pause(): void {
-    this.scene.pause('CrateboxScene');
-    this.sound.pauseAll();
-    this.paused = true;
-    this.pauseText.setVisible(this.paused);
-  }
-
-  unpause(): void {
-    this.scene.resume('CrateboxScene');
-    this.sound.resumeAll();
-    this.paused = false;
-    this.pauseText.setVisible(this.paused);
-  }
-
   create(): void {
     console.log(this);
     this.events.on('sfx', (sfx) => this.sound.playAudioSprite('sfx', sfx));
@@ -91,9 +68,10 @@ export class CrateboxScene extends Scene {
     this.cameras.main.roundPixels = true;
     this.physics.world.drawDebug = false;
 
-    // #region text setup
+    //#region text setup
     this.pauseText = this.add.bitmapText(145, 69, 'mario', 'P A U S E D !').setDepth(100) as any;
     this.pauseText.setVisible(false);
+    this.gunText = this.add.bitmapText(100, 165, 'mario', '').setDepth(100) as any;
     this.scoreDisplay = this.add.bitmapText(21, 5, 'mario', '* SCORE').setDepth(100) as any;
     this.bestScoreText = this.add.bitmapText(316, 5, 'mario', 'BEST').setDepth(100) as any;
     this.scoreText =
@@ -103,7 +81,7 @@ export class CrateboxScene extends Scene {
     this.enemySpawnTimeDebug =
       this.add.bitmapText(5, 214, 'mario', Math.floor(this.enemySpawnTimer / 100).toString()).setDepth(100) as any;
     this.enemySpawnTimeDebug.setVisible(false);
-    // #endregion
+    //#endregion
 
     this.map = this.make.tilemap({ key: 'cratebox' });
     this.tileset = this.map.addTilesetImage('cratebox', 'cratebox', 16, 16);
@@ -114,7 +92,9 @@ export class CrateboxScene extends Scene {
     this.keys.X = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
 
     this.projectileGroup =
-      this.add.group({ createCallback: proj => this.physics.world.enable(proj) } as any);
+      this.add.group({
+        createCallback: proj => this.physics.world.enable(proj)
+      } as any);
     this.enemyGroup = this.physics.add.group();
     this.killedEnemies = this.physics.add.group();
 
@@ -128,8 +108,7 @@ export class CrateboxScene extends Scene {
       this.projectileGroup as any,
       this.groundLayer as any,
       (proj) => {
-        proj.destroy();
-        this.sys.sound.playAudioSprite('sfx', 'foley', { volume: .7 } as any);
+        if (proj.active) { proj.getData('onCollide')(proj, this); }
       },
       undefined, this);
 
@@ -164,6 +143,18 @@ export class CrateboxScene extends Scene {
         window.localStorage.setItem('bestScore', '0');
         this.bestScore = 0;
         this.bestScoreDisplay.setText('0');
+      } else if (e.key === '5') {
+        this.shotgunVelocity += 10;
+        console.log('vel', this.shotgunVelocity);
+      } else if (e.key === 't') {
+        this.shotgunVelocity -= 10;
+        console.log('vel', this.shotgunVelocity);
+      } else if (e.key === '6') {
+        this.shotgunDrag += 10;
+        console.log('drag', this.shotgunDrag);
+      } else if (e.key === 'y') {
+        this.shotgunDrag -= 10;
+        console.log('drag', this.shotgunDrag);
       }
     });
   }
@@ -171,9 +162,14 @@ export class CrateboxScene extends Scene {
   update(time: number, delta: number): void {
     if (this.paused) { this.pause(); return; }
 
+    if (this.gunTextTimer > 2500) {
+      this.gunText.setVisible(false);
+    }
+
     this.cameraShakeTimer -= delta;
     this.debugTimer -= delta;
     this.enemySpawnTimer -= delta;
+    this.gunTextTimer += delta;
 
     if (this.cameraShakeTimer < 0) {
       this.cameras.main.x = 0;
@@ -207,8 +203,37 @@ export class CrateboxScene extends Scene {
 
   }
 
+  togglePause(): void {
+    if (this.paused) {
+      this.scene.resume('CrateboxScene');
+      this.sound.resumeAll();
+      this.sys.sound.playAudioSprite('sfx', 'pause');
+      this.paused = false;
+    } else {
+      this.scene.pause('CrateboxScene');
+      this.sound.pauseAll();
+      this.paused = true;
+    }
+    this.pauseText.setVisible(this.paused);
+  }
+
+  pause(): void {
+    this.scene.pause('CrateboxScene');
+    this.sound.pauseAll();
+    this.paused = true;
+    this.pauseText.setVisible(this.paused);
+  }
+
+  unpause(): void {
+    this.scene.resume('CrateboxScene');
+    this.sound.resumeAll();
+    this.paused = false;
+    this.pauseText.setVisible(this.paused);
+  }
+
   initPlayer(): void {
-    this.player = new Player(this, 200 + 16, 50, 'player-sprites', this.groundLayer);
+    this.player = new Player(this, 200, 152, 'player-sprites', this.groundLayer);
+    this.player.anims.play('stand');
     this.add.existing(this.player);
   }
 
@@ -239,7 +264,6 @@ export class CrateboxScene extends Scene {
     (<Phaser.Physics.Arcade.StaticBody>star.body).y = newPos.y - 8;
     this.star.setX(newPos.x);
     this.star.setY(newPos.y);
-    this.sys.sound.playAudioSprite('sfx', 'starget');
     if (!this.music.isPlaying) {
       this.restartMusic();
     }
@@ -255,7 +279,12 @@ export class CrateboxScene extends Scene {
       });
     }
     // this.cameras.main.flash(100, 1, 1, .5);
-
+    if (this.score % 10 === 0) {
+      this.events.emit('sfx', 'starget_alt');
+    } else {
+      this.events.emit('sfx', 'starget');
+    }
+    this.player.changeGun();
     this.setEnemySpawnTime();
   }
 
@@ -288,13 +317,18 @@ export class CrateboxScene extends Scene {
       Math.floor(Math.random() * 2)) as any, true);
   }
 
-  enemyShot = (proj, enemy: Enemy) => {
+  enemyShot = (proj: Phaser.GameObjects.GameObject, enemy: Enemy) => {
+    console.log('enemyShot');
     this.sys.sound.playAudioSprite('sfx', 'enemyshot');
     let fromRight = true;
-    if (proj.x < enemy.x) {
+    let multiplier = 1;
+    if ((<any>proj).x < enemy.x) {
       fromRight = false;
     }
-    enemy.damage(3, fromRight);
+    if (proj.getData('force')) {
+      multiplier = proj.getData('force');
+    }
+    enemy.damage(proj.getData('dmg'), fromRight, multiplier);
     proj.destroy();
   }
 
@@ -315,6 +349,12 @@ export class CrateboxScene extends Scene {
     }
   }
 
+  flashGunName(name: string): void {
+    const padText = '     ';
+    this.gunText.setText(padText + name + ' !').setVisible(true);
+    this.gunTextTimer = 0;
+  }
+
   restart(): void {
     this.enemySpawnTimer = 5000;
     this.enemySpawnTime = 5000;
@@ -330,6 +370,7 @@ export class CrateboxScene extends Scene {
     this.enemyGroup.clear(true);
     this.player.x = 200;
     this.player.y = 150;
+    this.player.resetGun(this.player.x, this.player.y);
     window.localStorage.setItem('bestScore', this.bestScore.toString());
     this.music.stop();
   }

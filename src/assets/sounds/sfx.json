@@ -44,19 +44,24 @@
       "end": 14.370929705215419,
       "loop": false
     },
-    "starget_alt": {
+    "shotgunreload": {
       "start": 16,
-      "end": 17.028276643990928,
+      "end": 16.363469387755103,
+      "loop": false
+    },
+    "starget_alt": {
+      "start": 18,
+      "end": 19.028276643990928,
       "loop": false
     },
     "starget": {
-      "start": 19,
-      "end": 19.333628117913833,
+      "start": 21,
+      "end": 21.333628117913833,
       "loop": false
     },
     "walk": {
-      "start": 21,
-      "end": 21.11501133786848,
+      "start": 23,
+      "end": 23.11501133786848,
       "loop": false
     }
   }

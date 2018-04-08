@@ -4,6 +4,7 @@ import { CrateboxScene } from 'cratebox/cratebox.scene';
 export class Shotgun extends Gun implements GunProps {
   name = 'S H O T G U N';
   sfx = 'death';
+  reloaded = true;
 
   cooldown = 650;
   shootTimer = 650;
@@ -13,7 +14,7 @@ export class Shotgun extends Gun implements GunProps {
 
   projectile: ProjectileConfig = {
     velocity: 900,
-    amount: 6,
+    amount: 5,
     size: 2,
     gravity: false,
     key: 'shotgunproj'
@@ -45,6 +46,10 @@ export class Shotgun extends Gun implements GunProps {
     if (this.projectileTimer > 270) {
       this.projRef.forEach(proj => proj.destroy());
     }
+    if (this.shootTimer > this.cooldown - 200 && !this.reloaded) {
+      this.scene.events.emit('sfx', 'shotgunreload');
+      this.reloaded = true;
+    }
   }
 
   shoot(): void {
@@ -63,7 +68,7 @@ export class Shotgun extends Gun implements GunProps {
         .setVelocityY(Phaser.Math.Between(-150, 120))
         .setSize(this.projectile.size, this.projectile.size)
         .setBounce(.7, 2)
-        .setDragX(3570)
+        .setDragX(Phaser.Math.Between(3000, 4000))
         // .setAccelerationX(this.flipX ? 300 : -300)
         .allowGravity = this.projectile.gravity;
     });
@@ -75,6 +80,7 @@ export class Shotgun extends Gun implements GunProps {
     this.body.setAngularVelocity(this.flipX ? this.recoil : -this.recoil);
     this.shootTimer = 0;
     this.projectileTimer = 0;
+    this.reloaded = false;
   }
 
   preDestroy(): void {

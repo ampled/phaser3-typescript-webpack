@@ -62,7 +62,8 @@ export class Shotgun extends Gun implements GunProps {
         .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
         .setVelocityY(Phaser.Math.Between(-150, 120))
         .setSize(this.projectile.size, this.projectile.size)
-        .setAccelerationX(this.flipX ? 3570 : -3570)
+        .setBounce(.7, 2)
+        .setDragX(3570)
         // .setAccelerationX(this.flipX ? 300 : -300)
         .allowGravity = this.projectile.gravity;
     });
@@ -76,9 +77,15 @@ export class Shotgun extends Gun implements GunProps {
     this.projectileTimer = 0;
   }
 
+  preDestroy(): void {
+    this.projRef.forEach(proj => proj.destroy());
+  }
+
   projectileCollide = (projectile, scene) => {
-    // scene.events.emit('sfx', 'enemyshot');
-    projectile.destroy();
+    projectile.setAlpha(.7);
+    // projectile.flipX = true;
+    // projectile.body.setVelocityX(100);
+    // projectile.body.setVelocity(- projectile.body.velocity.x / 10);
   }
 
 }

@@ -42,4 +42,6 @@ export class Gun extends Phaser.GameObjects.Sprite implements GunProps {
     //
   }
 
+  preDestroy(): void { }
+
 }

@@ -60,6 +60,7 @@ export class Player extends Phaser.GameObjects.Sprite {
 
   resetGun(x, y): void {
     if (this.gun) {
+      this.gun.preDestroy();
       this.gun.destroy();
     }
     this.gun = GunFactory.createDefaultGun(this.scene, x + 8, y);

@@ -13,7 +13,7 @@ export const guns: Array<typeof Gun> = [
 
 export class GunFactory {
   static roll = 0;
-  static defaultGun = Shotgun;
+  static defaultGun = Pistol;
 
   static createGun(scene, x, y, GunClass: typeof Gun): Gun {
     return new GunClass(scene, x, y);

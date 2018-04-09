@@ -14,8 +14,8 @@ export class Shotgun extends Gun implements GunProps {
 
   projectile: ProjectileConfig = {
     velocity: 900,
-    amount: 5,
-    size: 2,
+    amount: 6,
+    size: 3,
     gravity: false,
     key: 'shotgunproj'
   };

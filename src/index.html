@@ -8,26 +8,23 @@
     body {
       /* height: 100%; */
       margin: 0;
+      width: 100%;
       background-color: black;
       color: white;
     }
 
+    a {
+      color: white;
+      font-size: 1.5em;
+    }
+
     #game {
-      display: block;
+      width: 100%;
       text-align: center;
-      /* height: 80%; */
-      /* width: 100%; */
-      width: 460px;
-      height: 300px;
-      border-radius: 9px;
-      margin: auto;
-      margin-top: 20%;
-      border-width: 25px;
-      box-shadow: 0px 0px 97px 31px rgba(255, 255, 255, .5);
-      overflow: visible;
     }
 
     #game canvas {
+      display: inline-block;
       border-style: solid inset;
       border-color: rgba(0, 0, 0, 0.3);
       /* border-width: 30px; */
@@ -51,19 +48,22 @@
   <div id="game">
   </div>
   <pre id="info">
-    collect stars
+    collect stars ~ <em><a href="javascript:toggleTouch()">toggle touch</a></em> ~ <em><a href="javascript:togglePause()">toggle pause</a></em>
 
-    left / right - move
-    up / space   - jump
-    x            - shoot
-    p            - pause
-    m            - mute / unmute
-    3            - debug physics and enemy spawn time
-    4            - clear best score
-    shift        - spawn enemy
+    left / right ~ move
+    up / space   ~ jump
+    x / down     ~ shoot
+    p            ~ pause / unpause
+    m            ~ mute / unmute
+    3            ~ toggle debug
+    4            ~ clear best score
+    shift        ~ spawn enemy
 
-    <a href="http://github.com/ampled/phaser3-typescript-webpack">source</a>
-    <a href="http://www.supercratebox.com/">super crate box</a>
+    📂 ~ <a href="http://github.com/ampled/phaser3-typescript-webpack">source</a> 
+
+    🎵 ~ <a href="https://www.gamedevmarket.net/member/Kjartanmaa">music</a> 
+
+    ❤️ ~ <a href="http://www.supercratebox.com/">super crate box</a> 
   </pre>
 </body>
 

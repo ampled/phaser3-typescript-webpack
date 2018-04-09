@@ -7,6 +7,7 @@ export class Player extends Phaser.GameObjects.Sprite {
 
   // input keys
   keys: { [key: string]: Phaser.Input.Keyboard.Key };
+  inputs: { [key: string]: boolean };
 
   gun: Gun;
 
@@ -38,6 +39,12 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   update(time: number, delta: number): void {
+    this.inputs = {
+      left: this.keys.left.isDown || this.scene.touchControls.left,
+      right: this.keys.right.isDown || this.scene.touchControls.right,
+      jump: this.keys.up.isDown || this.keys.space.isDown || this.scene.touchControls.up,
+      shoot: this.keys.down.isDown || this.keys.X.isDown || this.scene.touchControls.shoot
+    };
     if (this.y > 400) {
       this.scene.restart();
       return;
@@ -81,13 +88,13 @@ export class Player extends Phaser.GameObjects.Sprite {
 
   controls(time: number, delta: number): void {
 
-    if (this.keys.left.isDown && !this.keys.right.isDown) {
+    if (this.inputs.left && !this.inputs.right) {
       this.body.setVelocityX(-this.runSpeed);
       if (this.walkSfxTimer > 150 && this.body.onFloor()) {
         this.walkSfx();
       }
       this.flipX = true;
-    } else if (this.keys.right.isDown && !this.keys.left.isDown) {
+    } else if (this.inputs.right && !this.inputs.left) {
       this.body.setVelocityX(this.runSpeed);
       if (this.walkSfxTimer > 150 && this.body.onFloor()) {
         this.walkSfx();
@@ -97,7 +104,7 @@ export class Player extends Phaser.GameObjects.Sprite {
       this.body.setVelocityX(0);
     }
 
-    if (this.keys.up.isDown || this.keys.space.isDown) {
+    if (this.inputs.jump) {
       if (this.body.onFloor() && this.jumpTimer === 0) {
         this.jumpTimer = 1;
         this.body.setVelocityY(-150);
@@ -113,7 +120,7 @@ export class Player extends Phaser.GameObjects.Sprite {
       this.jumpTimer = 0;
     }
 
-    if (this.keys.X.isDown || this.keys.down.isDown) {
+    if (this.inputs.shoot) {
       if (this.gun.shootTimer > this.gun.cooldown) {
         this.gun.shoot();
       }
@@ -126,7 +133,7 @@ export class Player extends Phaser.GameObjects.Sprite {
       anim = 'jump';
     } else if (this.isShooting) {
       anim = 'shoot';
-    } else if (this.body.velocity.x !== 0 && this.keys.left.isDown || this.keys.right.isDown) {
+    } else if (this.body.velocity.x !== 0 && this.inputs.left || this.inputs.right) {
       anim = 'run';
     } else {
       anim = 'stand';

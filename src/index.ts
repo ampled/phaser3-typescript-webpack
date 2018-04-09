@@ -10,7 +10,7 @@ const config: Opt<GameConfig> = {
   parent: 'game',
   width: 400,
   height: 240,
-  zoom: 1,
+  zoom: 2,
   pixelArt: true,
   physics: {
     default: 'arcade',

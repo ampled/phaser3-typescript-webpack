@@ -17,6 +17,9 @@ import * as smgProj from 'assets/sprites/smgproj.png';
 import * as shotgunSprite from 'assets/sprites/shotgun.png';
 import * as shotgunProj from 'assets/sprites/shotgunproj.png';
 
+import * as dirButton from 'assets/sprites/touch/dir.png';
+import * as shootButton from 'assets/sprites/touch/shoot.png';
+
 import * as marioFontPng from 'assets/fonts/font.png';
 import * as marioFont from 'assets/fonts/font.fnt';
 
@@ -49,6 +52,8 @@ export class BootScene extends Scene {
       .spritesheet('dualgun', dualGunSprite, { frameWidth: 48, frameHeight: 16 })
       .spritesheet('gun', gunSprite, { frameWidth: 16, frameHeight: 16 })
       .spritesheet('smg', smgSprite, { frameWidth: 16, frameHeight: 16 })
+      .spritesheet('dir', dirButton, { frameWidth: 60, frameHeight: 60 })
+      .spritesheet('shoot', shootButton, { frameWidth: 60, frameHeight: 60 })
       .spritesheet('shotgun', shotgunSprite, { frameWidth: 16, frameHeight: 16 })
       .bitmapFont('mario', marioFontPng, marioFont)
       .audio('bgm', [

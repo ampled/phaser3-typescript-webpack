@@ -18,18 +18,20 @@ export class CrateboxScene extends Scene {
   killedEnemies: Phaser.Physics.Arcade.Group;
   enemySpawnTimer = 2500;
   enemySpawnTime = 5000;
+  enemySpawnCounter = 1;
   enemySpawnTimeDebug: Phaser.GameObjects.BitmapText;
 
   score = 0;
   scoreDisplay: Phaser.GameObjects.BitmapText;
   scoreText: Phaser.GameObjects.BitmapText;
-  gunText: Phaser.GameObjects.BitmapText;
+  gunText: Phaser.GameObjects.DynamicBitmapText;
   gunTextTimer: number = 1001;
   bestScore = 0;
   bestScoreDisplay: Phaser.GameObjects.DynamicBitmapText;
   bestScoreText: Phaser.GameObjects.BitmapText;
 
   keys: { [key: string]: Phaser.Input.Keyboard.Key };
+  touchControls;
 
   map: Phaser.Tilemaps.Tilemap;
   tileset: Phaser.Tilemaps.Tileset;
@@ -57,6 +59,10 @@ export class CrateboxScene extends Scene {
   }
 
   create(): void {
+
+    // tslint:disable:no-string-literal
+    window['toggleTouch'] = this.toggleTouch.bind(this);
+    window['togglePause'] = this.togglePause.bind(this);
     console.log(this);
     this.events.on('sfx', (sfx) => this.sound.playAudioSprite('sfx', sfx));
     this.music = this.sound.add('bgm');
@@ -71,7 +77,12 @@ export class CrateboxScene extends Scene {
     //#region text setup
     this.pauseText = this.add.bitmapText(145, 69, 'mario', 'P A U S E D !').setDepth(100) as any;
     this.pauseText.setVisible(false);
-    this.gunText = this.add.bitmapText(100, 165, 'mario', '').setDepth(100) as any;
+    this.gunText = this.add.dynamicBitmapText(100, 165, 'mario', '').setDepth(100) as any;
+    this.gunText.setDisplayCallback((data: any) => {
+      data.x = Phaser.Math.Between(data.x - .1, data.x + .1);
+      data.y = Phaser.Math.Between(data.y - .1, data.y + .1);
+      return data;
+    });
     this.scoreDisplay = this.add.bitmapText(21, 5, 'mario', '* SCORE').setDepth(100) as any;
     this.bestScoreText = this.add.bitmapText(316, 5, 'mario', 'BEST').setDepth(100) as any;
     this.scoreText =
@@ -88,6 +99,7 @@ export class CrateboxScene extends Scene {
     this.groundLayer = this.map.createStaticLayer('groundLayer', this.tileset, 0, 0);
     this.groundLayer.setCollisionByProperty({ collide: true });
 
+    this.setupTouch();
     this.keys = this.input.keyboard.createCursorKeys() as any;
     this.keys.X = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
 
@@ -155,6 +167,8 @@ export class CrateboxScene extends Scene {
       } else if (e.key === 'y') {
         this.shotgunDrag -= 10;
         console.log('drag', this.shotgunDrag);
+      } else if (e.key === 'w') {
+        this.player.changeGun();
       }
     });
   }
@@ -186,8 +200,13 @@ export class CrateboxScene extends Scene {
     );
 
     if (this.enemySpawnTimer < 0) {
-      this.spawnEnemy();
+      if (this.enemySpawnCounter % 5 === 0) {
+        this.spawnEnemySquad();
+      } else {
+        this.spawnEnemy();
+      }
     }
+
     if (this.keys.shift.isDown && this.debugTimer < 0) {
       this.spawnEnemy();
       this.debugTimer = 300;
@@ -215,6 +234,69 @@ export class CrateboxScene extends Scene {
       this.paused = true;
     }
     this.pauseText.setVisible(this.paused);
+  }
+
+  setupTouch(): void {
+    const jumpButton = this.add.sprite(370, 210, 'dir');
+    const shootButton = this.add.sprite(310, 210, 'shoot');
+    const leftButton = this.add.sprite(30, 210, 'dir');
+    const rightButton = this.add.sprite(90, 210, 'dir');
+    jumpButton.setAngle(-90).setInteractive();
+    jumpButton.setAlpha(.6).setInteractive();
+    shootButton.setAlpha(.6).setInteractive();
+    leftButton.setAlpha(.6).setInteractive();
+    rightButton.setAlpha(.6).setInteractive();
+    leftButton.flipX = true;
+    this.touchControls = {
+      visible: false,
+      buttons: [
+        jumpButton,
+        shootButton,
+        leftButton,
+        rightButton
+      ],
+      left: false,
+      right: false,
+      up: false,
+      shoot: false
+    };
+    jumpButton.on('pointerdown', (pointer) => {
+      this.touchControls.up = true;
+    });
+    jumpButton.on('pointerup', (pointer) => {
+      this.touchControls.up = false;
+    });
+    shootButton.on('pointerdown', (pointer) => {
+      this.touchControls.shoot = true;
+    });
+    shootButton.on('pointerup', (pointer) => {
+      this.touchControls.shoot = false;
+    });
+    leftButton.on('pointerdown', (pointer) => {
+      this.touchControls.left = true;
+      this.touchControls.right = false;
+    });
+    leftButton.on('pointerup', (pointer) => {
+      this.touchControls.left = false;
+    });
+    rightButton.on('pointerdown', (pointer) => {
+      this.touchControls.right = true;
+      this.touchControls.left = false;
+    });
+    rightButton.on('pointerup', (pointer) => {
+      this.touchControls.right = false;
+    });
+
+    this.toggleTouch();
+  }
+
+  toggleTouch = () => {
+    this.touchControls.visible = !this.touchControls.visible;
+    if (this.touchControls.visible) {
+      this.touchControls.buttons.forEach(button => button.setAlpha(0));
+    } else {
+      this.touchControls.buttons.forEach(button => button.setAlpha(.6));
+    }
   }
 
   pause(): void {
@@ -309,12 +391,26 @@ export class CrateboxScene extends Scene {
         Math.floor(Math.random() * 2)) as any, true
     );
     this.enemySpawnTimer = this.enemySpawnTime;
+    this.enemySpawnCounter += 1;
   }
 
-  spawnEnemySquad(): void {
-    this.enemyGroup.addMultiple(new Enemy(
-      this, 200, 0, 'enemy',
-      Math.floor(Math.random() * 2)) as any, true);
+  spawnEnemySquad(amount = 2): void {
+    const enemies: Enemy[] = [];
+    let dir = 1;
+    for (let i = 0; i < amount; i++) {
+      enemies.push(
+        new Enemy(this, 200, 0, 'enemy', dir)
+      );
+      if (dir === 1) {
+        dir = 2;
+      } else {
+        dir = 1;
+      }
+    }
+    console.log(enemies.length);
+    this.enemyGroup.addMultiple(enemies as any, true);
+    this.enemySpawnCounter += 1;
+    this.enemySpawnTimer = this.enemySpawnTime;
   }
 
   enemyShot = (proj: Phaser.GameObjects.GameObject, enemy: Enemy) => {
@@ -369,7 +465,8 @@ export class CrateboxScene extends Scene {
     this.bestScoreDisplay.setDisplayCallback((data) => data);
     this.enemyGroup.clear(true);
     this.player.x = 200;
-    this.player.y = 150;
+    this.player.y = 140;
+    this.player.body.setVelocity(0, 0);
     this.player.resetGun(this.player.x, this.player.y);
     window.localStorage.setItem('bestScore', this.bestScore.toString());
     this.music.stop();

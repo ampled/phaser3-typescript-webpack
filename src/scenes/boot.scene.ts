@@ -10,6 +10,7 @@ import * as enemySprite from 'assets/sprites/enemy.png';
 import * as starSprite from 'assets/sprites/star.png';
 
 import * as gunSprite from 'assets/sprites/gun.png';
+import * as minigunSprite from 'assets/sprites/minigun.png';
 import * as dualGunSprite from 'assets/sprites/dualgun.png';
 import * as projectileSprite from 'assets/sprites/projectile.png';
 import * as smgSprite from 'assets/sprites/smg.png';
@@ -51,6 +52,7 @@ export class BootScene extends Scene {
       .spritesheet('shotgunproj', shotgunProj, { frameWidth: 16, frameHeight: 16 })
       .spritesheet('dualgun', dualGunSprite, { frameWidth: 48, frameHeight: 16 })
       .spritesheet('gun', gunSprite, { frameWidth: 16, frameHeight: 16 })
+      .spritesheet('minigun', minigunSprite, { frameWidth: 17, frameHeight: 17 })
       .spritesheet('smg', smgSprite, { frameWidth: 16, frameHeight: 16 })
       .spritesheet('dir', dirButton, { frameWidth: 60, frameHeight: 60 })
       .spritesheet('shoot', shootButton, { frameWidth: 60, frameHeight: 60 })

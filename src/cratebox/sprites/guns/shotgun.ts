@@ -17,7 +17,7 @@ export class Shotgun extends Gun implements GunProps {
     amount: 6,
     size: 3,
     gravity: false,
-    key: 'shotgunproj'
+    key: 'smgproj'
   };
 
   projectileTimer = 0;

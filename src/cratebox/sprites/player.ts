@@ -13,6 +13,7 @@ export class Player extends Phaser.GameObjects.Sprite {
 
   // factors
   runSpeed = 100;
+  knockback = 0;
 
   // timers
   jumpTimer = 0;
@@ -39,6 +40,7 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   update(time: number, delta: number): void {
+    // this.knockback = 0;
     this.inputs = {
       left: this.keys.left.isDown || this.scene.touchControls.left,
       right: this.keys.right.isDown || this.scene.touchControls.right,
@@ -87,21 +89,31 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   controls(time: number, delta: number): void {
+    if (this.inputs.shoot) {
+      if (this.gun.shootTimer > this.gun.cooldown) {
+        this.knockback = this.gun.shoot();
+        if (!this.knockback) {
+          this.knockback = 0;
+        }
+      }
+    } else {
+      this.knockback = 0;
+    }
 
     if (this.inputs.left && !this.inputs.right) {
-      this.body.setVelocityX(-this.runSpeed);
+      this.body.setVelocityX(-this.runSpeed + this.knockback);
       if (this.walkSfxTimer > 150 && this.body.onFloor()) {
         this.walkSfx();
       }
       this.flipX = true;
     } else if (this.inputs.right && !this.inputs.left) {
-      this.body.setVelocityX(this.runSpeed);
+      this.body.setVelocityX(this.runSpeed + this.knockback);
       if (this.walkSfxTimer > 150 && this.body.onFloor()) {
         this.walkSfx();
       }
       this.flipX = false;
     } else {
-      this.body.setVelocityX(0);
+      this.body.setVelocityX(this.knockback);
     }
 
     if (this.inputs.jump) {
@@ -120,11 +132,6 @@ export class Player extends Phaser.GameObjects.Sprite {
       this.jumpTimer = 0;
     }
 
-    if (this.inputs.shoot) {
-      if (this.gun.shootTimer > this.gun.cooldown) {
-        this.gun.shoot();
-      }
-    }
   }
 
   animation(time: number, delta: number): void {
@@ -133,7 +140,7 @@ export class Player extends Phaser.GameObjects.Sprite {
       anim = 'jump';
     } else if (this.isShooting) {
       anim = 'shoot';
-    } else if (this.body.velocity.x !== 0 && this.inputs.left || this.inputs.right) {
+    } else if (this.body.velocity.x !== 0 && (this.inputs.left || this.inputs.right)) {
       anim = 'run';
     } else {
       anim = 'stand';

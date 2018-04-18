@@ -1,0 +1,136 @@
+{
+	"frames": {
+		"dualgun": {
+			"frame": {
+				"x": 2,
+				"y": 2,
+				"w": 48,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 48,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 48,
+				"h": 16
+			},
+			"pivot": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"gun": {
+			"frame": {
+				"x": 50,
+				"y": 2,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			},
+			"pivot": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"minigun": {
+			"frame": {
+				"x": 66,
+				"y": 2,
+				"w": 17,
+				"h": 17
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 17,
+				"h": 17
+			},
+			"sourceSize": {
+				"w": 17,
+				"h": 17
+			},
+			"pivot": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"shotgun": {
+			"frame": {
+				"x": 83,
+				"y": 2,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			},
+			"pivot": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		},
+		"smg": {
+			"frame": {
+				"x": 99,
+				"y": 2,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			},
+			"pivot": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		}
+	},
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"image": "guns.png",
+		"format": "RGBA8888",
+		"size": {
+			"w": 117,
+			"h": 21
+		},
+		"scale": "1",
+		"smartupdate": "$TexturePacker:SmartUpdate:d1c136789ed97c3c106ded31cf75b44b:10b41c255aae0abe866b17862c1a1b26:62c1f540b5fd80b9e41584087e1ed9b4$"
+	}
+}

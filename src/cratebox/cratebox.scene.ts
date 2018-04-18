@@ -5,7 +5,7 @@ import { Player } from 'cratebox/sprites/player';
 export class CrateboxScene extends Scene {
   paused = true;
   pauseText: Phaser.GameObjects.BitmapText;
-  music: Phaser.Sound.BaseSound;
+  music: Phaser.Sound.WebAudioSound;
   player: Player;
 
   sleepTimer = 0;
@@ -65,7 +65,7 @@ export class CrateboxScene extends Scene {
     window['togglePause'] = this.togglePause.bind(this);
     console.log(this);
     this.events.on('sfx', (sfx) => this.sound.playAudioSprite('sfx', sfx));
-    this.music = this.sound.add('bgm');
+    this.music = this.sound.add('bgm') as Phaser.Sound.WebAudioSound;
     this.bestScore = parseInt(window.localStorage.getItem('bestScore'), 10);
     if (isNaN(this.bestScore)) {
       this.bestScore = 0;
@@ -474,7 +474,9 @@ export class CrateboxScene extends Scene {
 
   restartMusic(): void {
     this.music.stop();
+    // this.music.setRate(0.5);
     this.music.play({ loop: true, volume: 0.3 } as any);
+
   }
 
 }

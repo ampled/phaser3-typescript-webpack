@@ -20,8 +20,8 @@ export class Pistol extends Gun implements GunProps {
 
   scene: CrateboxScene;
 
-  constructor(scene, x, y, key = 'gun') {
-    super(scene, x, y, key);
+  constructor(scene, x, y, key = 'guns', frame = 'gun') {
+    super(scene, x, y, key, frame);
     // this.scene.physics.world.enable(this);
     this.body.setSize(this.size, this.size).allowGravity = false;
   }
@@ -38,7 +38,7 @@ export class Pistol extends Gun implements GunProps {
     this.shootTimer += delta;
   }
 
-  shoot(): void {
+  shoot() {
     this.scene.events.emit('sfx', this.sfx);
     const projectile =
       this.scene.projectileGroup.create(this.x, this.y, this.projectile.key)
@@ -51,6 +51,7 @@ export class Pistol extends Gun implements GunProps {
       .allowGravity = this.projectile.gravity;
     this.body.setAngularVelocity(this.flipX ? this.recoil : -this.recoil);
     this.shootTimer = 0;
+    return 0;
   }
 
   projectileCollide = (projectile, scene) => {

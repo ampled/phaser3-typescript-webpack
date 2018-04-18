@@ -1,5 +1,7 @@
 import { Gun, GunProps, ProjectileConfig } from 'cratebox/sprites/guns/gun';
 import { CrateboxScene } from 'cratebox/cratebox.scene';
+import ABody = Phaser.Physics.Arcade.Body;
+
 
 export class DualPistol extends Gun implements GunProps {
   name = '  D U A L S';
@@ -20,8 +22,8 @@ export class DualPistol extends Gun implements GunProps {
 
   scene: CrateboxScene;
 
-  constructor(scene, x, y, key = 'dualgun') {
-    super(scene, x, y, key);
+  constructor(scene, x, y, key = 'guns', frame = 'dualgun') {
+    super(scene, x, y, key, frame);
     // this.scene.physics.world.enable(this);
     this.body.setSize(this.size, this.size).allowGravity = false;
   }
@@ -34,7 +36,7 @@ export class DualPistol extends Gun implements GunProps {
     this.shootTimer += delta;
   }
 
-  shoot(): void {
+  shoot() {
     this.scene.events.emit('sfx', this.sfx);
     const projectile =
       this.scene.projectileGroup.create(this.x + 16, this.y, this.projectile.key)
@@ -46,17 +48,18 @@ export class DualPistol extends Gun implements GunProps {
         .setData('dmg', this.damage)
         .setData('onCollide', this.projectileCollide);
 
-    projectile.body
+    (<ABody>projectile.body)
       .setVelocityX(this.projectile.velocity)
       .setSize(this.projectile.size, this.projectile.size)
       .allowGravity = this.projectile.gravity;
 
-    projectile2.body
+    (<ABody>projectile2.body)
       .setVelocityX(-this.projectile.velocity)
       .setSize(this.projectile.size, this.projectile.size)
       .allowGravity = this.projectile.gravity;
 
     this.shootTimer = 0;
+    return 0;
   }
 
   projectileCollide = (projectile, scene) => {

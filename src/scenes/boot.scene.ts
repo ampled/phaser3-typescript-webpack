@@ -5,6 +5,11 @@ import * as crateboxTiles from 'assets/tilesets/16x16.png';
 
 import * as playerSprite from 'assets/sprites/player.png';
 import * as playerSpriteSheet from 'assets/sprites/player/player.png';
+
+import * as gunSpriteSheet from 'assets/sprites/guns/guns.png';
+import * as gunSpriteAtlas from 'assets/sprites/guns/guns.json';
+
+
 import * as playerSpriteAtlas from 'assets/sprites/player/player.json';
 import * as enemySprite from 'assets/sprites/enemy.png';
 import * as starSprite from 'assets/sprites/star.png';
@@ -45,6 +50,7 @@ export class BootScene extends Scene {
       .spritesheet('cratebox', crateboxTiles, { frameWidth: 64, frameHeight: 64 })
       .spritesheet('player', playerSprite, { frameWidth: 16, frameHeight: 16 })
       .atlas('player-sprites', playerSpriteSheet, playerSpriteAtlas)
+      .atlas('guns', gunSpriteSheet, gunSpriteAtlas)
       .spritesheet('enemy', enemySprite, { frameWidth: 16, frameHeight: 16 })
       .spritesheet('star', starSprite, { frameWidth: 16, frameHeight: 16 })
       .spritesheet('projectile', projectileSprite, { frameWidth: 16, frameHeight: 16 })
@@ -96,12 +102,13 @@ export class BootScene extends Scene {
       defaultTextureKey: 'player',
       frameRate: 15,
       repeat: -1,
-      repeatDelay: 0,
+      // repeatDelay: 0,
       yoyo: true,
       frames: [
         { key: 'player-sprites', frame: '09.png' },
         { key: 'player-sprites', frame: '010.png' },
-        { key: 'player-sprites', frame: '011.png' }
+        { key: 'player-sprites', frame: '011.png' },
+        { key: 'player-sprites', frame: '010.png' },
       ]
       // this.anims.generateFrameNames('player-sprites',
       //   { start: 1, end: 3, first: 1, suffix: '.png', zeroPad: 2 })

@@ -5,7 +5,7 @@ import { Shotgun } from 'cratebox/sprites/guns/shotgun';
 import { DualPistol } from 'cratebox/sprites/guns/dualpistol';
 import { Minigun } from 'cratebox/sprites/guns/minigun';
 
-export const DefaultGun = Minigun;
+export const DefaultGun = Pistol;
 
 export const guns: Array<typeof Gun> = [
   Pistol,

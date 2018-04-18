@@ -7,10 +7,10 @@ export class Minigun extends Smg implements GunProps {
 
   cooldown = 40;
   shootTimer = 30;
-  recoil = 4000;
+  recoil = 0;
   damage = 1.2;
-  pushBackFloor = 300;
-  pushBackAir = 1250;
+  pushBackFloor = 90;
+  pushBackAir = 150;
   angleSpread = 150;
 
   projectile = {
@@ -20,8 +20,8 @@ export class Minigun extends Smg implements GunProps {
     key: 'smgproj'
   };
 
-  constructor(scene, x, y, key = 'minigun') {
-    super(scene, x, y, key);
+  constructor(scene, x, y, key = 'guns', frame = 'minigun') {
+    super(scene, x, y, key, frame);
   }
 
 }

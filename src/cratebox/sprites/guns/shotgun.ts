@@ -26,8 +26,8 @@ export class Shotgun extends Gun implements GunProps {
 
   scene: CrateboxScene;
 
-  constructor(scene, x, y, key = 'shotgun') {
-    super(scene, x, y, key);
+  constructor(scene, x, y, key = 'guns', frame = 'shotgun') {
+    super(scene, x, y, key, frame);
     this.body.setSize(this.size, this.size).allowGravity = false;
   }
 
@@ -52,7 +52,7 @@ export class Shotgun extends Gun implements GunProps {
     }
   }
 
-  shoot(): void {
+  shoot() {
     this.scene.events.emit('sfx', this.sfx);
     this.scene.minishake();
     this.projRef =
@@ -81,6 +81,7 @@ export class Shotgun extends Gun implements GunProps {
     this.shootTimer = 0;
     this.projectileTimer = 0;
     this.reloaded = false;
+    return 0;
   }
 
   preDestroy(): void {

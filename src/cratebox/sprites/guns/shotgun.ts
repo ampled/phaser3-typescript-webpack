@@ -2,7 +2,8 @@ import { Gun, GunProps, ProjectileConfig } from 'cratebox/sprites/guns/gun';
 import { CrateboxScene } from 'cratebox/cratebox.scene';
 
 export class Shotgun extends Gun implements GunProps {
-  name = 'S H O T G U N';
+  static id = 'SHOTGUN';
+  id = 'SHOTGUN';
   sfx = 'death';
   reloaded = true;
 
@@ -21,7 +22,6 @@ export class Shotgun extends Gun implements GunProps {
   };
 
   projectileTimer = 0;
-  projectileRef: Phaser.GameObjects.GameObject;
   projRef: Phaser.GameObjects.GameObject[] = [];
 
   scene: CrateboxScene;

@@ -2,9 +2,9 @@ import { Gun, GunProps, ProjectileConfig } from 'cratebox/sprites/guns/gun';
 import { CrateboxScene } from 'cratebox/cratebox.scene';
 import ABody = Phaser.Physics.Arcade.Body;
 
-
 export class DualPistol extends Gun implements GunProps {
-  name = '  D U A L S';
+  static id = 'DUALS';
+  id = 'DUALS';
   sfx = 'shoot';
 
   cooldown = 300;

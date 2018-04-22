@@ -64,10 +64,24 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   }
 
-  damage(amount: number, fromRight: boolean, multiplier = 1): void {
+  damage(amount: number = 0, fromRight: boolean, multiplier = 1): void {
+    // console.log('enemydmg', amount)
     this.health -= amount;
+    this.setTint(Phaser.Display.Color.GetColor(255, 0, 0));
+    this.setScale(1, 1);
     if (this.health <= 0) {
       this.dieAnim(fromRight, multiplier);
+    } else {
+      this.scene.tweens.add({
+        targets: this,
+        duration: 50,
+        // x: this.x + 20,
+        scaleY: .7,
+        yoyo: true,
+        onComplete: () => {
+          this.setTint(Phaser.Display.Color.GetColor(255, 255, 255));
+        }
+      });
     }
   }
 

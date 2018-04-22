@@ -26,4 +26,15 @@ export class GunFactory {
     }
   }
 
+  static getNextGun(scene, x, y, currentGun: Gun): Gun {
+    let nextIndex: number;
+    const currentIndex = guns.findIndex(gun => gun.id === currentGun.id);
+    nextIndex = currentIndex + 1;
+    if (currentIndex >= guns.length - 1) {
+      nextIndex = 0;
+    }
+    console.log(currentIndex, nextIndex);
+    return this.createGun(scene, x, y, guns[nextIndex]);
+  }
+
 }

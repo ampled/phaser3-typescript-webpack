@@ -2,8 +2,10 @@ import { Pistol } from 'cratebox/sprites/guns/pistol';
 import { GunProps } from 'cratebox/sprites/guns/gun';
 
 export class Smg extends Pistol implements GunProps {
-  name = '    S M G';
+  static id = 'SMG';
+  id = 'SMG';
   sfx = 'enemyshot';
+  sfxRate = 2;
 
   cooldown = 75;
   shootTimer = 75;
@@ -25,7 +27,7 @@ export class Smg extends Pistol implements GunProps {
   }
 
   shoot(): number {
-    this.scene.events.emit('sfx', this.sfx);
+    this.scene.events.emit('sfx', this.sfx, this.sfxRate);
     const projectile =
       this.scene.projectileGroup.create(this.x, this.y, this.projectile.key)
         .setData('dmg', this.damage)

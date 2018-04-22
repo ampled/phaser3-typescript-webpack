@@ -1,7 +1,7 @@
 import { CrateboxScene } from 'cratebox/cratebox.scene';
 
 export interface GunProps {
-  name: string;
+  id: string;
   sfx: string;
   cooldown: number;
   recoil: number;
@@ -18,7 +18,8 @@ export interface ProjectileConfig {
 }
 
 export class Gun extends Phaser.GameObjects.Sprite implements GunProps {
-  name: string;
+  public static id: string;
+  id: string;
   sfx: string;
   cooldown: number;
   recoil: number;

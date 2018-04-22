@@ -2,7 +2,8 @@ import { Gun, GunProps, ProjectileConfig } from 'cratebox/sprites/guns/gun';
 import { CrateboxScene } from 'cratebox/cratebox.scene';
 
 export class Pistol extends Gun implements GunProps {
-  name = 'P I S T O L';
+  static id = 'PISTOL';
+  id = 'PISTOL';
   sfx = 'shoot';
 
   cooldown = 300;

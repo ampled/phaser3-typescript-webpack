@@ -76,6 +76,11 @@ export class BootScene extends Scene {
   }
 
   create() {
+    const explosionGraphic = this.make.graphics({ x: 0, y: 0, add: false });
+    explosionGraphic.fillStyle(Phaser.Display.Color.GetColor(255, 255, 255), 1);
+    explosionGraphic.fillCircle(10, 10, 10);
+    explosionGraphic.generateTexture('explosion', 20, 20);
+
     const stand: AnimationConfig = {
       key: 'stand',
       defaultTexturekey: 'player',

@@ -62,6 +62,8 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.animation(time, delta);
     this.controls(time, delta);
 
+    this.body.setFrictionY(1000);
+
     this.shootTimer += delta;
     this.walkSfxTimer += delta;
 
@@ -85,13 +87,20 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.gun.destroy();
     this.gun = GunFactory.createRandomGun(this.scene, this.x, this.y);
     this.scene.add.existing(this.gun);
-    this.scene.flashGunName(this.gun.name);
+    this.scene.flashGunName(this.gun.id);
+  }
+
+  nextGun(): void {
+    this.gun.destroy();
+    this.gun = GunFactory.getNextGun(this.scene, this.x, this.y, this.gun);
+    this.scene.add.existing(this.gun);
+    this.scene.flashGunName(this.gun.id);
   }
 
   controls(time: number, delta: number): void {
     if (this.inputs.shoot) {
       if (this.gun.shootTimer > this.gun.cooldown) {
-        this.knockback = this.gun.shoot();
+        this.knockback = this.shoot();
         if (!this.knockback) {
           this.knockback = 0;
         }
@@ -150,8 +159,19 @@ export class Player extends Phaser.GameObjects.Sprite {
     }
   }
 
-  shoot(): void {
-    this.gun.shoot();
+  shoot(): number {
+    this.scene.tweens.add({
+      targets: this,
+      duration: 20,
+      // scaleY: .9,
+      displayOriginX: this.flipX ? this.displayOriginX + 1 : this.displayOriginX - 1,
+      // displayOriginY: this.displayOriginY - 1,
+      yoyo: true,
+      onComplete: () => {
+        this.setScale(1, 1);
+      }
+    });
+    return this.gun.shoot();
   }
 
   walkSfx(): void {

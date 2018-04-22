@@ -2,19 +2,21 @@ import { Smg } from 'cratebox/sprites/guns/smg';
 import { GunProps } from 'cratebox/sprites/guns/gun';
 
 export class Minigun extends Smg implements GunProps {
-  name = 'M I N I G U N';
+  static id = 'MINIGUN';
+  id = 'MINIGUN';
   sfx = 'enemyshot';
+  sfxRate = 0.5;
 
   cooldown = 40;
   shootTimer = 30;
   recoil = 0;
   damage = 1.2;
   pushBackFloor = 90;
-  pushBackAir = 150;
+  pushBackAir = 300;
   angleSpread = 150;
 
   projectile = {
-    velocity: 500,
+    velocity: 600,
     size: 5,
     gravity: false,
     key: 'smgproj'

@@ -61,11 +61,12 @@ export class CrateboxScene extends Scene {
   }
 
   create(): void {
+    console.log(this);
 
     // tslint:disable:no-string-literal
     window['toggleTouch'] = this.toggleTouch.bind(this);
     window['togglePause'] = this.togglePause.bind(this);
-    console.log(this);
+
     this.events.on('sfx', (sfx, rate) => this.sound.playAudioSprite('sfx', sfx, { rate } as any));
     this.music = this.sound.add('bgm') as Phaser.Sound.WebAudioSound;
     this.bestScore = parseInt(window.localStorage.getItem('bestScore'), 10);
@@ -109,9 +110,11 @@ export class CrateboxScene extends Scene {
       this.add.group({
         createCallback: proj => this.physics.world.enable(proj)
       } as any);
+
     this.explosionGroup = this.add.group({
       createCallback: proj => this.physics.world.enable(proj)
     } as any);
+
     this.enemyGroup = this.physics.add.group();
     this.killedEnemies = this.physics.add.group();
 
@@ -119,7 +122,14 @@ export class CrateboxScene extends Scene {
 
     this.physics.add.collider(this.enemyGroup as any, this.groundLayer as any);
     this.physics.add.overlap(this.enemyGroup as any, this.player as any, this.enemyHit);
-    this.physics.add.overlap(this.projectileGroup as any, this.enemyGroup as any, this.enemyShot as any);
+
+    this.physics.add.overlap(
+      this.projectileGroup as any,
+      this.enemyGroup as any,
+      this.enemyShot as any,
+      undefined, this
+    );
+
     this.physics.add.overlap(this.explosionGroup as any, this.enemyGroup as any, this.enemyExplode as any);
 
     this.physics.add.collider(
@@ -127,10 +137,7 @@ export class CrateboxScene extends Scene {
       this.groundLayer as any,
       (proj) => {
         if (proj.active) { proj.getData('onCollide')(proj, this); }
-      },
-      undefined, this);
-
-    this.spawnStar();
+      }, undefined, this);
 
     this.input.keyboard.on('keyup', e => {
       if (e.key === 'p') {
@@ -147,6 +154,7 @@ export class CrateboxScene extends Scene {
         }
       }
     });
+
     this.input.keyboard.on('keyup', e => {
       if (e.key === '3') {
         this.physics.world.drawDebug = !this.physics.world.drawDebug;
@@ -162,23 +170,23 @@ export class CrateboxScene extends Scene {
         this.bestScore = 0;
         this.bestScoreDisplay.setText('0');
       } else if (e.key === '5') {
-        this.shotgunVelocity += 10;
-        console.log('vel', this.shotgunVelocity);
+        console.log(this);
       } else if (e.key === 't') {
-        this.shotgunVelocity -= 10;
-        console.log('vel', this.shotgunVelocity);
+        //
       } else if (e.key === '6') {
-        this.shotgunDrag += 10;
-        console.log('drag', this.shotgunDrag);
+        // tslint:disable-next-line:no-debugger
+        debugger;
       } else if (e.key === 'y') {
-        this.shotgunDrag -= 10;
-        console.log('drag', this.shotgunDrag);
+        //
       } else if (e.key === 'w') {
         this.player.changeGun();
       } else if (e.key === 'r') {
         this.player.nextGun();
       }
     });
+
+    this.spawnStar();
+
   }
 
   update(time: number, delta: number): void {
@@ -441,7 +449,10 @@ export class CrateboxScene extends Scene {
 
   enemyShot = (proj: Phaser.GameObjects.GameObject, enemy: Enemy) => {
     console.log('enemyShot');
-    this.sys.sound.playAudioSprite('sfx', 'enemyshot');
+
+    const scene = this as CrateboxScene;
+
+    scene.sys.sound.playAudioSprite('sfx', 'enemyshot');
     let fromRight = true;
     let multiplier = 1;
     if ((<any>proj).x < enemy.x) {
@@ -451,7 +462,7 @@ export class CrateboxScene extends Scene {
       multiplier = proj.getData('force');
     }
     if (proj.getData('onEnemy')) {
-      proj.getData('onEnemy')(proj, enemy);
+      proj.getData('onEnemy')(proj, enemy, scene);
     }
     enemy.damage(proj.getData('dmg'), fromRight, multiplier);
     proj.destroy();

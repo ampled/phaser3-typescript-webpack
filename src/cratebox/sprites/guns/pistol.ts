@@ -32,10 +32,6 @@ export class Pistol extends Gun implements GunProps {
     this.y = this.scene.player.y;
     this.flipX = this.scene.player.flipX;
     this.setDepth(this.flipX ? 11 : 9);
-    if (this.shootTimer > this.cooldown / 2) {
-      this.body.setAngularVelocity(0);
-      this.setAngle(0);
-    }
     this.shootTimer += delta;
   }
 
@@ -50,7 +46,16 @@ export class Pistol extends Gun implements GunProps {
       .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
       .setSize(this.projectile.size, this.projectile.size)
       .allowGravity = this.projectile.gravity;
-    this.body.setAngularVelocity(this.flipX ? this.recoil : -this.recoil);
+
+    this.scene.tweens.add({
+      targets: this,
+      duration: 150,
+      ease: 'Sine.easeIn',
+      yoyo: true,
+      angle: this.flipX ? 70 : -70,
+    });
+
+    // this.body.setAngularVelocity(this.flipX ? this.recoil : -this.recoil);
     this.shootTimer = 0;
     return 0;
   }

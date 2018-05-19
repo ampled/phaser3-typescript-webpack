@@ -99,6 +99,7 @@ export class Player extends Phaser.GameObjects.Sprite {
 
   controls(time: number, delta: number): void {
     if (this.inputs.shoot) {
+      console.log('shoot');
       if (this.gun.shootTimer > this.gun.cooldown) {
         this.knockback = this.shoot();
         if (!this.knockback) {
@@ -164,7 +165,7 @@ export class Player extends Phaser.GameObjects.Sprite {
       targets: this,
       duration: 20,
       // scaleY: .9,
-      displayOriginX: this.flipX ? this.displayOriginX + 1 : this.displayOriginX - 1,
+      displayOriginX: this.flipX ? this.displayOriginX - 1 : this.displayOriginX + 1,
       // displayOriginY: this.displayOriginY - 1,
       yoyo: true,
       onComplete: () => {

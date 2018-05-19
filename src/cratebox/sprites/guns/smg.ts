@@ -9,7 +9,7 @@ export class Smg extends Pistol implements GunProps {
 
   cooldown = 75;
   shootTimer = 75;
-  recoil = 1000;
+  recoil = 30;
   damage = 2;
   pushBackFloor = 40;
   pushBackAir = 60;
@@ -38,7 +38,13 @@ export class Smg extends Pistol implements GunProps {
       .setVelocityY(Phaser.Math.Between(-this.angleSpread, this.angleSpread))
       .setSize(this.projectile.size, this.projectile.size)
       .allowGravity = this.projectile.gravity;
-    this.body.setAngularVelocity(this.flipX ? this.recoil : -this.recoil);
+    this.scene.tweens.add({
+      targets: this,
+      duration: this.cooldown / 2,
+      ease: 'Sine.easeInOut',
+      yoyo: true,
+      angle: this.flipX ? this.recoil : -this.recoil,
+    });
     this.shootTimer = 0;
     if (this.scene.player.body.onFloor()) {
       // this.scene.player.x += this.flipX ? 1 : -1;

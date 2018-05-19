@@ -1,5 +1,6 @@
 import { Gun, GunProps, ProjectileConfig } from 'cratebox/sprites/guns/gun';
 import { CrateboxScene } from 'cratebox/cratebox.scene';
+import { noop } from 'util/';
 
 export class Shotgun extends Gun implements GunProps {
   static id = 'SHOTGUN';
@@ -36,16 +37,12 @@ export class Shotgun extends Gun implements GunProps {
     this.y = this.scene.player.y;
     this.flipX = this.scene.player.flipX;
     this.setDepth(this.flipX ? 11 : 9);
-    if (this.shootTimer > this.cooldown / 5) {
-      this.body.setAngularVelocity(0);
-      this.setAngle(0);
-    }
     this.shootTimer += delta;
     this.projectileTimer += delta;
 
-    if (this.projectileTimer > 270) {
-      this.projRef.forEach(proj => proj.destroy());
-    }
+    // if (this.projectileTimer > 270) {
+    //   this.projRef.forEach(proj => proj.destroy());
+    // }
     if (this.shootTimer > this.cooldown - 200 && !this.reloaded) {
       this.scene.events.emit('sfx', 'shotgunreload');
       this.reloaded = true;
@@ -69,15 +66,35 @@ export class Shotgun extends Gun implements GunProps {
         .setSize(this.projectile.size, this.projectile.size)
         .setBounce(.7, 2)
         .setDragX(Phaser.Math.Between(3000, 4000))
-        // .setAccelerationX(this.flipX ? 300 : -300)
         .allowGravity = this.projectile.gravity;
     });
     this.projRef.forEach(proj =>
       proj.setData('dmg', this.damage)
+        .setData('id', 'shotgun')
         .setData('onCollide', this.projectileCollide)
         .setData('force', 4)
     );
-    this.body.setAngularVelocity(this.flipX ? this.recoil : -this.recoil);
+    this.scene.time.addEvent({
+      delay: 270,
+      // tslint:disable-next-line:object-literal-shorthand
+      callback() {
+        const scene = this as CrateboxScene;
+        scene.projectileGroup.children.each(proj => {
+          proj.getData('id') === 'shotgun' ? proj.destroy() : noop();
+        }, undefined);
+      },
+      callbackScope: this.scene,
+      repeat: false,
+      loop: false
+    } as any);
+
+    this.scene.tweens.add({
+      targets: this,
+      duration: 200,
+      ease: 'Power2',
+      yoyo: true,
+      angle: this.flipX ? 90 : -90,
+    });
     this.shootTimer = 0;
     this.projectileTimer = 0;
     this.reloaded = false;
@@ -85,14 +102,11 @@ export class Shotgun extends Gun implements GunProps {
   }
 
   preDestroy(): void {
-    this.projRef.forEach(proj => proj.destroy());
+    // this.projRef.forEach(proj => proj.destroy());
   }
 
   projectileCollide = (projectile, scene) => {
     projectile.setAlpha(.7);
-    // projectile.flipX = true;
-    // projectile.body.setVelocityX(100);
-    // projectile.body.setVelocity(- projectile.body.velocity.x / 10);
   }
 
 }

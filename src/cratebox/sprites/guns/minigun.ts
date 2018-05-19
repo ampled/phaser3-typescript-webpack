@@ -9,7 +9,7 @@ export class Minigun extends Smg implements GunProps {
 
   cooldown = 40;
   shootTimer = 30;
-  recoil = 0;
+  recoil = 10;
   damage = 1.2;
   pushBackFloor = 90;
   pushBackAir = 300;

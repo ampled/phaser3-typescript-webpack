@@ -1,9 +1,9 @@
 import { Gun, GunProps, ProjectileConfig } from 'cratebox/sprites/guns/gun';
 import { CrateboxScene } from 'cratebox/cratebox.scene';
 
-export class GrenadeLauncher extends Gun implements GunProps {
-  static id = 'GRENADELAUNCHER';
-  id = 'GRENADELAUNCHER';
+export class RocketLauncher extends Gun implements GunProps {
+  static id = 'ROCKETLAUNCHER';
+  id = 'ROCKETLAUNCHER';
   sfx = 'shoot';
   sfxRate = 0.5;
 
@@ -17,13 +17,15 @@ export class GrenadeLauncher extends Gun implements GunProps {
   projectile: ProjectileConfig = {
     velocity: 250,
     size: 5,
-    gravity: true,
+    gravity: false,
     key: 'smgproj'
   };
 
   scene: CrateboxScene;
 
-  constructor(scene, x, y, key = 'guns', frame = 'gun') {
+  smoke;
+
+  constructor(scene, x, y, key = 'guns', frame = 'minigun') {
     super(scene, x, y, key, frame);
     this.body.setSize(this.size, this.size).allowGravity = false;
     this.flipY = true;
@@ -48,20 +50,25 @@ export class GrenadeLauncher extends Gun implements GunProps {
 
     this.scene.events.emit('sfx', this.sfx, this.sfxRate);
 
-    const grenade =
+    const grenade: any =
       this.scene.projectileGroup.create(this.x, this.y, this.projectile.key)
         .setData('dmg', this.damage)
-        // .setData('onCollide', this.projectileCollide)
+        .setData('onCollide', this.projectileCollide)
         .setData('onEnemy', this.explode);
 
     grenade.body
       .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
-      .setDragX(190)
-      .setVelocityY(-200)
-      .setFrictionX(1000)
       .setSize(this.projectile.size, this.projectile.size)
-      .setBounce(1, .5)
       .allowGravity = this.projectile.gravity;
+
+    // this.smoke = this.scene.add.particles('shotgunproj');
+
+    // this.smoke.createEmitter({
+    //   x: grenade.x,
+    //   y: 300,
+    //   lifespan: 1000,
+    //   speed: { min: 400, max: 400 }
+    // });
 
     this.scene.tweens.add({
       targets: this,
@@ -85,6 +92,10 @@ export class GrenadeLauncher extends Gun implements GunProps {
   }
 
   explode = (grenade, enemy, scene: CrateboxScene) => {
+    // if (this.smoke.active) {
+    //   this.smoke.destroy();
+    // }
+
     if (grenade.active) {
       scene.events.emit('sfx', 'death', 0.5);
       const a = new Phaser.Geom.Point(grenade.x, grenade.y);
@@ -122,9 +133,9 @@ export class GrenadeLauncher extends Gun implements GunProps {
 
   }
 
-  // projectileCollide = (projectile, scene) => {
-  //
-  // }
+  projectileCollide = (projectile, scene) => {
+    this.explode(projectile, undefined, scene);
+  }
 
   enemyCollide = (projectile, enemy, scene?) => {
     this.explode(projectile, enemy, scene);

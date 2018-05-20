@@ -39,12 +39,12 @@ export class DualPistol extends Gun implements GunProps {
   shoot() {
     this.scene.events.emit('sfx', this.sfx);
     const projectile =
-      this.scene.projectileGroup.create(this.x + 16, this.y, this.projectile.key)
+      this.scene.projectileGroup.create(this.x + 16, this.y, 'projectiles', 'smgproj')
         .setData('dmg', this.damage)
         .setData('onCollide', this.projectileCollide);
 
     const projectile2 =
-      this.scene.projectileGroup.create(this.x - 16, this.y, this.projectile.key)
+      this.scene.projectileGroup.create(this.x - 16, this.y, 'projectiles', 'smgproj')
         .setData('dmg', this.damage)
         .setData('onCollide', this.projectileCollide);
 

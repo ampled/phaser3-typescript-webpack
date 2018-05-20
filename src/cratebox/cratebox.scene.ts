@@ -38,6 +38,7 @@ export class CrateboxScene extends Scene {
   map: Phaser.Tilemaps.Tilemap;
   tileset: Phaser.Tilemaps.Tileset;
   groundLayer: Phaser.Tilemaps.StaticTilemapLayer;
+  smokeEmitter: Phaser.GameObjects.Particles.ParticleEmitterManager;
 
   shotgunVelocity = 50;
   shotgunDrag = 50;
@@ -101,6 +102,8 @@ export class CrateboxScene extends Scene {
     this.tileset = this.map.addTilesetImage('cratebox', 'cratebox', 16, 16);
     this.groundLayer = this.map.createStaticLayer('groundLayer', this.tileset, 0, 0);
     this.groundLayer.setCollisionByProperty({ collide: true });
+
+    this.smokeEmitter = this.add.particles('projectiles');
 
     this.setupTouch();
     this.keys = this.input.keyboard.createCursorKeys() as any;

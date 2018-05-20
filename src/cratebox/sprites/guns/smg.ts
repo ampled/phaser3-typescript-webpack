@@ -29,7 +29,7 @@ export class Smg extends Pistol implements GunProps {
   shoot(): number {
     this.scene.events.emit('sfx', this.sfx, this.sfxRate);
     const projectile =
-      this.scene.projectileGroup.create(this.x, this.y, this.projectile.key)
+      this.scene.projectileGroup.create(this.x, this.y, 'projectiles', this.projectile.key)
         .setData('dmg', this.damage)
         .setData('onCollide', this.projectileCollide);
 

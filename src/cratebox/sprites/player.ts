@@ -99,7 +99,6 @@ export class Player extends Phaser.GameObjects.Sprite {
 
   controls(time: number, delta: number): void {
     if (this.inputs.shoot) {
-      console.log('shoot');
       if (this.gun.shootTimer > this.gun.cooldown) {
         this.knockback = this.shoot();
         if (!this.knockback) {

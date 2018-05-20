@@ -9,7 +9,7 @@ import { RocketLauncher } from 'cratebox/sprites/guns/rocketlauncher';
 
 export const DefaultGun = RocketLauncher;
 
-export const guns: Array<typeof Gun> = [
+export const guns: (Array<typeof Gun>) = [
   Pistol,
   DualPistol,
   Smg,

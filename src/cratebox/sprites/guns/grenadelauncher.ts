@@ -7,7 +7,7 @@ export class GrenadeLauncher extends Gun implements GunProps {
   sfx = 'shoot';
   sfxRate = 0.5;
 
-  cooldown = 1200;
+  cooldown = 300;
   recoil = 200;
   damage = .1;
   size = 10;
@@ -23,10 +23,9 @@ export class GrenadeLauncher extends Gun implements GunProps {
 
   scene: CrateboxScene;
 
-  constructor(scene, x, y, key = 'guns', frame = 'gun') {
+  constructor(scene, x, y, key = 'guns', frame = 'gl') {
     super(scene, x, y, key, frame);
     this.body.setSize(this.size, this.size).allowGravity = false;
-    this.flipY = true;
   }
 
   update(time: number, delta: number): void {
@@ -49,9 +48,9 @@ export class GrenadeLauncher extends Gun implements GunProps {
     this.scene.events.emit('sfx', this.sfx, this.sfxRate);
 
     const grenade =
-      this.scene.projectileGroup.create(this.x, this.y, this.projectile.key)
+      this.scene.projectileGroup.create(this.x, this.y, 'projectiles', 'smgproj')
         .setData('dmg', this.damage)
-        // .setData('onCollide', this.projectileCollide)
+        .setData('onCollide', this.projectileCollide)
         .setData('onEnemy', this.explode);
 
     grenade.body
@@ -122,9 +121,9 @@ export class GrenadeLauncher extends Gun implements GunProps {
 
   }
 
-  // projectileCollide = (projectile, scene) => {
-  //
-  // }
+  projectileCollide = (projectile, scene) => {
+    // nada
+  }
 
   enemyCollide = (projectile, enemy, scene?) => {
     this.explode(projectile, enemy, scene);

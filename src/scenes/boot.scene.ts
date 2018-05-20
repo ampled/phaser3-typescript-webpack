@@ -9,6 +9,8 @@ import * as playerSpriteSheet from 'assets/sprites/player/player.png';
 import * as gunSpriteSheet from 'assets/sprites/guns/guns.png';
 import * as gunSpriteAtlas from 'assets/sprites/guns/guns.json';
 
+import * as projSpriteSheet from 'assets/sprites/guns/projectiles.png';
+import * as projSpriteAtlas from 'assets/sprites/guns/projectiles.json';
 
 import * as playerSpriteAtlas from 'assets/sprites/player/player.json';
 import * as enemySprite from 'assets/sprites/enemy.png';
@@ -51,6 +53,7 @@ export class BootScene extends Scene {
       .spritesheet('player', playerSprite, { frameWidth: 16, frameHeight: 16 })
       .atlas('player-sprites', playerSpriteSheet, playerSpriteAtlas)
       .atlas('guns', gunSpriteSheet, gunSpriteAtlas)
+      .atlas('projectiles', projSpriteSheet, projSpriteAtlas)
       .spritesheet('enemy', enemySprite, { frameWidth: 16, frameHeight: 16 })
       .spritesheet('star', starSprite, { frameWidth: 16, frameHeight: 16 })
       .spritesheet('projectile', projectileSprite, { frameWidth: 16, frameHeight: 16 })

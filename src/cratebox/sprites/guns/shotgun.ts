@@ -55,7 +55,8 @@ export class Shotgun extends Gun implements GunProps {
     this.projRef =
       this.scene.projectileGroup
         .createMultiple({
-          key: this.projectile.key,
+          key: 'projectiles',
+          frame: this.projectile.key,
           repeat: this.projectile.amount,
           setXY: { x: this.x, y: this.y }
         } as any);

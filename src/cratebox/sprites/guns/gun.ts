@@ -33,7 +33,6 @@ export class Gun extends Phaser.GameObjects.Sprite implements GunProps {
   constructor(scene, x, y, key = 'gun', frame?) {
     super(scene, x, y, key, frame);
     this.scene.physics.world.enable(this as Phaser.GameObjects.Sprite);
-    // this.setAlpha(0);
   }
 
   shoot(...args: any[]): undefined | number {
@@ -44,6 +43,6 @@ export class Gun extends Phaser.GameObjects.Sprite implements GunProps {
     //
   }
 
-  preDestroy(): void { }
+  preDestroy(): void { /* */ }
 
 }

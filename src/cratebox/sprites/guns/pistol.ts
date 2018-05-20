@@ -6,8 +6,8 @@ export class Pistol extends Gun implements GunProps {
   id = 'PISTOL';
   sfx = 'shoot';
 
-  cooldown = 300;
-  shootTimer = 300;
+  cooldown = 280;
+  shootTimer = 280;
   recoil = 200;
   damage = 3;
   size = 10;
@@ -23,7 +23,6 @@ export class Pistol extends Gun implements GunProps {
 
   constructor(scene, x, y, key = 'guns', frame = 'gun') {
     super(scene, x, y, key, frame);
-    // this.scene.physics.world.enable(this);
     this.body.setSize(this.size, this.size).allowGravity = false;
   }
 

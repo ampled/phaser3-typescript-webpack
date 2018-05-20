@@ -33,7 +33,6 @@ export class GunFactory {
     if (currentIndex >= guns.length - 1) {
       nextIndex = 0;
     }
-    console.log(currentIndex, nextIndex);
     return this.createGun(scene, x, y, guns[nextIndex]);
   }
 

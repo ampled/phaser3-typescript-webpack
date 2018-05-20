@@ -1,3 +1,5 @@
+import { center } from 'util/';
+
 import { Scene } from 'phaser-util/scene';
 import { Enemy } from 'cratebox/sprites/enemy';
 import { Player } from 'cratebox/sprites/player';
@@ -82,6 +84,7 @@ export class CrateboxScene extends Phaser.Scene {
     this.pauseText = this.add.bitmapText(145, 69, 'mario', 'P A U S E D !').setDepth(100) as any;
     this.pauseText.setVisible(false);
     this.gunText = this.add.dynamicBitmapText(100, 165, 'mario', '').setDepth(100) as any;
+    this.gunText.letterSpacing = 3;
     this.gunText.setDisplayCallback((data: any) => {
       data.x = Phaser.Math.Between(data.x - .1, data.x + .1);
       data.y = Phaser.Math.Between(data.y - .1, data.y + .1);
@@ -486,8 +489,8 @@ export class CrateboxScene extends Phaser.Scene {
   }
 
   flashGunName(name: string): void {
-    const padText = '     ';
-    this.gunText.setText(padText + name + ' !').setVisible(true);
+
+    this.gunText.setText(center(name + '!', 18)).setVisible(true);
     this.gunTextTimer = 0;
   }
 

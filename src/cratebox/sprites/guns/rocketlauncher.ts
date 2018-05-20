@@ -15,15 +15,13 @@ export class RocketLauncher extends Gun implements GunProps {
   shootTimer = 1201;
 
   projectile: ProjectileConfig = {
-    velocity: 250,
+    velocity: 50,
     size: 5,
     gravity: false,
-    key: 'smgproj'
+    key: 'rocket'
   };
 
   scene: CrateboxScene;
-
-  smoke: Phaser.GameObjects.Particles.ParticleEmitter;
 
   constructor(scene, x, y, key = 'guns', frame = 'rl') {
     super(scene, x, y, key, frame);
@@ -31,7 +29,7 @@ export class RocketLauncher extends Gun implements GunProps {
   }
 
   update(time: number, delta: number): void {
-    this.x = this.flipX ? this.scene.player.x - 8 : this.scene.player.x + 8;
+    this.x = this.flipX ? this.scene.player.x - 3 : this.scene.player.x + 3;
     this.y = this.scene.player.y;
     this.flipX = this.scene.player.flipX;
     this.setDepth(this.flipX ? 11 : 9);
@@ -48,29 +46,36 @@ export class RocketLauncher extends Gun implements GunProps {
 
     this.scene.events.emit('sfx', this.sfx, this.sfxRate);
 
-    const grenade: any =
-      this.scene.projectileGroup.create(this.x, this.y, 'projectiles', 'rocket')
+    const grenade: Phaser.GameObjects.GameObject =
+      this.scene.projectileGroup.create(this.x, this.y, 'projectiles', this.projectile.key)
         .setData('dmg', this.damage)
         .setData('onCollide', this.projectileCollide)
-        .setData('onEnemy', this.explode)
+        .setData('onEnemy', this.explode);
 
-    grenade.flipX = this.flipX;
+    (<any>grenade).flipX = this.flipX;
 
     grenade.body
       .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
+      .setAccelerationX(this.flipX ? -300 : 300)
+      .setAccelerationY(Phaser.Math.Between(-7, 7))
       .setSize(this.projectile.size, this.projectile.size)
       .allowGravity = this.projectile.gravity;
 
-    this.smoke = this.scene.smokeEmitter
+    const smoke = this.scene.smokeEmitter
       .createEmitter({
         frame: 'smoke',
+        angle: { min: -120, max: 120 },
         scale: { start: 1.5, end: 0.5 },
-        alpha: { start: .9, end: 0.2 },
+        alpha: { start: 1, end: .5 },
         lifespan: 400,
         speed: { min: 50, max: 100 },
         follow: grenade,
-        frequency: .5
+        frequency: 100,
+        quantity: 3,
+        blendMode: 'MULTIPLY'
       });
+
+    grenade.setData('smoke', smoke);
 
     this.scene.tweens.add({
       targets: this,
@@ -81,22 +86,12 @@ export class RocketLauncher extends Gun implements GunProps {
       displayOriginX: this.flipX ? this.displayOriginX - 5 : this.displayOriginX + 5,
     });
 
-    this.scene.time.addEvent({
-      delay: 1000,
-      callback: this.explode,
-      callbackScope: this.scene,
-      args: [grenade, undefined, this.scene],
-      loop: false,
-      repeat: false
-    } as any);
-
     return 0;
   }
 
   explode = (grenade, enemy, scene: CrateboxScene) => {
-    if (this.smoke.active) {
-      scene.smokeEmitter.emitters.remove(this.smoke);
-      // scene.smokeEmitter.emitters.removeAll();
+    if (grenade.getData('smoke').active) {
+      scene.smokeEmitter.emitters.remove(grenade.getData('smoke'));
     }
 
     if (grenade.active) {
@@ -116,18 +111,18 @@ export class RocketLauncher extends Gun implements GunProps {
         duration: 190,
         ease: 'Back',
         yoyo: true,
-        scaleX: 7,
-        scaleY: 6,
+        scaleX: 5.5,
+        scaleY: 5.5,
         onComplete(tween: Phaser.Tweens.Tween, expl: Phaser.GameObjects.Image[]) {
           expl[0].destroy();
         },
         onUpdate(tween: Phaser.Tweens.Tween, expl: Phaser.GameObjects.Image) {
           const p = tween.getValue();
           expl.setAlpha(.16 * p);
-          if (p > 5) {
+          if (p > 4) {
             expl.setTint(Phaser.Display.Color.GetColor(255, 255, 0));
           }
-          if (p > 7) {
+          if (p > 5.6) {
             expl.setTint(Phaser.Display.Color.GetColor(255, 255, 255));
           }
         }

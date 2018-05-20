@@ -2,7 +2,7 @@
 
 "dualgun":
 {
-	"frame": {"x":1,"y":1,"w":48,"h":16},
+	"frame": {"x":1,"y":19,"w":48,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":16},
@@ -11,7 +11,7 @@
 },
 "gl":
 {
-	"frame": {"x":1,"y":19,"w":16,"h":16},
+	"frame": {"x":73,"y":1,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -20,7 +20,7 @@
 },
 "gun":
 {
-	"frame": {"x":19,"y":19,"w":16,"h":16},
+	"frame": {"x":51,"y":19,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -29,16 +29,25 @@
 },
 "minigun":
 {
-	"frame": {"x":37,"y":19,"w":17,"h":17},
+	"frame": {"x":69,"y":19,"w":17,"h":17},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":17,"h":17},
 	"sourceSize": {"w":17,"h":17},
 	"pivot": {"x":0.5,"y":0.5}
 },
+"revolver":
+{
+	"frame": {"x":55,"y":1,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16},
+	"pivot": {"x":0.5,"y":0.5}
+},
 "rl":
 {
-	"frame": {"x":1,"y":38,"w":16,"h":16},
+	"frame": {"x":19,"y":1,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -47,7 +56,7 @@
 },
 "shotgun":
 {
-	"frame": {"x":19,"y":38,"w":16,"h":16},
+	"frame": {"x":1,"y":1,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -56,7 +65,7 @@
 },
 "smg":
 {
-	"frame": {"x":37,"y":38,"w":16,"h":16},
+	"frame": {"x":37,"y":1,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -68,8 +77,8 @@
 	"version": "1.0",
 	"image": "guns.png",
 	"format": "RGBA8888",
-	"size": {"w":55,"h":55},
+	"size": {"w":90,"h":37},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:5a94d72bb11eb34bded83eef02563394:47fefeb16182cf202bc4a1bf8767b9ec:62c1f540b5fd80b9e41584087e1ed9b4$"
+	"smartupdate": "$TexturePacker:SmartUpdate:97f255a961dc2564577fd82982303824:aeb6c5c2ad365c09166ba459f2116c97:62c1f540b5fd80b9e41584087e1ed9b4$"
 }
 }

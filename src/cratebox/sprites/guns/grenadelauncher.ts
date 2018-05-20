@@ -12,7 +12,7 @@ export class GrenadeLauncher extends Gun implements GunProps {
   damage = .1;
   size = 10;
 
-  shootTimer = 1201;
+  shootTimer = 1200;
 
   projectile: ProjectileConfig = {
     velocity: 250,

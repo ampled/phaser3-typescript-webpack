@@ -44,8 +44,6 @@ export class RocketLauncher extends Gun implements GunProps {
   }
 
   shoot() {
-    console.log(this, 'shoot');
-
     this.shootTimer = 0;
 
     this.scene.events.emit('sfx', this.sfx, this.sfxRate);
@@ -65,20 +63,14 @@ export class RocketLauncher extends Gun implements GunProps {
 
     this.smoke = this.scene.smokeEmitter
       .createEmitter({
-        // x: this.x,
-        // y: this.y,
         frame: 'smoke',
         scale: { start: 1.5, end: 0.5 },
         alpha: { start: .9, end: 0.2 },
         lifespan: 400,
         speed: { min: 50, max: 100 },
         follow: grenade,
-        frequency: 0
+        frequency: .5
       });
-
-    console.log(this.smoke);
-
-    // this.smoke.explode(50, this.x, this.y);
 
     this.scene.tweens.add({
       targets: this,

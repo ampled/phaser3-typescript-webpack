@@ -3,7 +3,7 @@ import { Enemy } from 'cratebox/sprites/enemy';
 import { Player } from 'cratebox/sprites/player';
 import { TestClass } from 'cratebox/sprites/test';
 
-export class CrateboxScene extends Scene {
+export class CrateboxScene extends Phaser.Scene {
   paused = true;
   pauseText: Phaser.GameObjects.BitmapText;
   music: Phaser.Sound.WebAudioSound;
@@ -151,9 +151,11 @@ export class CrateboxScene extends Scene {
     this.input.keyboard.on('keyup', e => {
       if (e.key === 'm') {
         if (this.sound.mute) {
-          this.sound.setMute(false);
+          // this.sound.setMute(false);
+          this.sound.mute = false;
         } else {
-          this.sound.setMute(true);
+          // this.sound.setMute(true);
+          this.sound.mute = true;
         }
       }
     });
@@ -361,8 +363,8 @@ export class CrateboxScene extends Scene {
 
   starGet = (star: Phaser.GameObjects.Sprite, player) => {
     const newPos = this.getStarPosition();
-    (<Phaser.Physics.Arcade.StaticBody>star.body).x = newPos.x - 8;
-    (<Phaser.Physics.Arcade.StaticBody>star.body).y = newPos.y - 8;
+    (star.body).x = newPos.x - 8;
+    (star.body).y = newPos.y - 8;
     this.star.setX(newPos.x);
     this.star.setY(newPos.y);
     if (!this.music.isPlaying) {
@@ -426,14 +428,12 @@ export class CrateboxScene extends Scene {
         dir = 1;
       }
     }
-    console.log(enemies.length);
     this.enemyGroup.addMultiple(enemies as any, true);
     this.enemySpawnCounter += 1;
     this.enemySpawnTimer = this.enemySpawnTime;
   }
 
   enemyExplode = (proj: Phaser.GameObjects.GameObject, enemy: Enemy) => {
-    // console.log('enemyexplode');
     this.events.emit('sfx', 'enemyshot', 2);
     let fromRight = true;
     let multiplier = 1;
@@ -451,10 +451,7 @@ export class CrateboxScene extends Scene {
   }
 
   enemyShot = (proj: Phaser.GameObjects.GameObject, enemy: Enemy) => {
-    console.log('enemyShot');
-
     const scene = this as CrateboxScene;
-
     scene.sys.sound.playAudioSprite('sfx', 'enemyshot');
     let fromRight = true;
     let multiplier = 1;

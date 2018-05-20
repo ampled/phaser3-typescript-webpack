@@ -16,9 +16,9 @@ export class Scene extends Phaser.Scene {
   events: Phaser.Events.EventEmitter;
   time: Phaser.Time.Clock;
 
-  constructor(config: Opt<SettingsConfig>) {
-    super(config as any);
-  }
+  // constructor(config: Opt<SettingsConfig>) {
+  //   super(config as any);
+  // }
 
   update(time: number, delta?: number): void { /* */ }
 

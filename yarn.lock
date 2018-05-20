@@ -1959,7 +1959,7 @@ eventemitter3@1.x.x:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-1.2.0.tgz#1c86991d816ad1e504750e73874224ecf3bec508"
 
-eventemitter3@^3.0.1:
+eventemitter3@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.0.tgz#090b4d6cdbd645ed10bf750d4b5407942d7ba163"
 
@@ -4204,11 +4204,11 @@ performance-now@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-0.2.0.tgz#33ef30c5c77d4ea21c5a53869d91b56d8f2555e5"
 
-phaser@3.5.1:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/phaser/-/phaser-3.5.1.tgz#828a68ddc249ba0217e1b0ad8e2979cd138d14a9"
+phaser@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/phaser/-/phaser-3.8.0.tgz#e5ff59cc0b7a1cabb8d32b61d89c3ffe58f869fc"
   dependencies:
-    eventemitter3 "^3.0.1"
+    eventemitter3 "^3.1.0"
 
 pify@^2.0.0, pify@^2.3.0:
   version "2.3.0"

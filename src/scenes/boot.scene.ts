@@ -38,7 +38,7 @@ import * as sfxmp3 from 'assets/sounds/sfx.mp3';
 import * as sfxogg from 'assets/sounds/sfx.ogg';
 import * as sfxsheet from 'assets/sounds/sfx.json';
 
-export class BootScene extends Scene {
+export class BootScene extends Phaser.Scene {
   text: ArcadePhysicsText;
   keys: { [key: string]: Phaser.Input.Keyboard.Key };
 
@@ -71,10 +71,11 @@ export class BootScene extends Scene {
         bgm1mp3,
         bgm1ogg
       ])
-      .audioSprite('sfx', [
-        sfxmp3,
-        sfxogg
-      ], sfxsheet as any, { instances: 2 });
+      .audioSprite('sfx', sfxsheet, [sfxmp3, sfxogg] as any);
+    // .audioSprite('sfx', [
+    //   sfxmp3,
+    //   sfxogg
+    // ], sfxsheet as any, { instances: 2 });
 
   }
 
@@ -88,7 +89,7 @@ export class BootScene extends Scene {
       key: 'stand',
       defaultTexturekey: 'player',
       frames: this.anims.generateFrameNames('player-sprites',
-        { start: 2, end: 2, first: 2, suffix: '.png', zeroPad: 2 })
+        { start: 2, end: 2, suffix: '.png', zeroPad: 2 })
     } as any;
     const walk: AnimationConfig = {
       key: 'walk',
@@ -129,7 +130,7 @@ export class BootScene extends Scene {
       repeatDelay: 0,
       frameRate: 15,
       frames: this.anims.generateFrameNames('player-sprites',
-        { start: 4, end: 7, first: 4, suffix: '.png', zeroPad: 2 })
+        { start: 4, end: 7, suffix: '.png', zeroPad: 2 })
     } as any;
 
     const shoot: AnimationConfig = {
@@ -137,7 +138,7 @@ export class BootScene extends Scene {
       duration: 5,
       defaultTextureKey: 'player',
       frames: this.anims.generateFrameNames('player-sprites',
-        { start: 8, end: 8, first: 8, suffix: '.png', zeroPad: 2 })
+        { start: 8, end: 8, suffix: '.png', zeroPad: 2 })
     } as any;
 
     this.anims.create(stand);

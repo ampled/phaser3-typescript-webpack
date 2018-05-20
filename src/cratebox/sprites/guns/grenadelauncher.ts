@@ -7,7 +7,7 @@ export class GrenadeLauncher extends Gun implements GunProps {
   sfx = 'shoot';
   sfxRate = 0.5;
 
-  cooldown = 300;
+  cooldown = 1200;
   recoil = 200;
   damage = .1;
   size = 10;
@@ -41,8 +41,6 @@ export class GrenadeLauncher extends Gun implements GunProps {
   }
 
   shoot() {
-    console.log(this, 'shoot');
-
     this.shootTimer = 0;
 
     this.scene.events.emit('sfx', this.sfx, this.sfxRate);

@@ -40,7 +40,7 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   update(time: number, delta: number): void {
-    // this.knockback = 0;
+
     this.inputs = {
       left: this.keys.left.isDown || this.scene.touchControls.left,
       right: this.keys.right.isDown || this.scene.touchControls.right,

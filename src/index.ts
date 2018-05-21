@@ -26,5 +26,5 @@ const config: Opt<GameConfig> = {
   ]
 };
 
-const game = new Game(config);
+const game = new Phaser.Game(config);
 console.log(game);

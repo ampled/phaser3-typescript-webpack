@@ -1,0 +1,39 @@
+{"frames": {
+
+"big00":
+{
+	"frame": {"x":1,"y":1,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"big01":
+{
+	"frame": {"x":34,"y":1,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"big02":
+{
+	"frame": {"x":67,"y":1,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "bigenemies.png",
+	"format": "RGBA8888",
+	"size": {"w":100,"h":34},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:a47ed0db13c1ff18bac4ce440b1d5c80:51b0f0c2466aee6a375f9ff79298bf3f:5f335b7b227081c26ba5903984d72761$"
+}
+}

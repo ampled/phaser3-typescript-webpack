@@ -1,7 +1,7 @@
 import { center } from 'util/';
 
 import { Scene } from 'phaser-util/scene';
-import { Enemy } from 'cratebox/sprites/enemy';
+import { Enemy } from 'cratebox/sprites/enemies/enemy';
 import { Player } from 'cratebox/sprites/player';
 import { TestClass } from 'cratebox/sprites/test';
 
@@ -154,10 +154,8 @@ export class CrateboxScene extends Phaser.Scene {
     this.input.keyboard.on('keyup', e => {
       if (e.key === 'm') {
         if (this.sound.mute) {
-          // this.sound.setMute(false);
           this.sound.mute = false;
         } else {
-          // this.sound.setMute(true);
           this.sound.mute = true;
         }
       }
@@ -351,7 +349,7 @@ export class CrateboxScene extends Phaser.Scene {
     this.star =
       this.make.sprite({ scene: this, key: 'star', x: starPosition.x, y: starPosition.y });
     this.physics.world.enable(this.star, Phaser.Physics.Arcade.STATIC_BODY);
-    this.physics.add.overlap(this.star as any, this.player as any, this.starGet);
+    this.physics.add.overlap(this.star, this.player, this.starGet);
   }
 
   getStarPosition(): { x: number, y: number } {
@@ -411,8 +409,8 @@ export class CrateboxScene extends Phaser.Scene {
   spawnEnemy(): void {
     this.enemyGroup.add(
       new Enemy(
-        this, 200, 0, 'enemy',
-        Math.floor(Math.random() * 2)) as any, true
+        this, 200, 0,
+        Math.floor(Math.random() * 2)), true
     );
     this.enemySpawnTimer = this.enemySpawnTime;
     this.enemySpawnCounter += 1;
@@ -423,7 +421,7 @@ export class CrateboxScene extends Phaser.Scene {
     let dir = 1;
     for (let i = 0; i < amount; i++) {
       enemies.push(
-        new Enemy(this, 200, 0, 'enemy', dir)
+        new Enemy(this, 200, 0, dir)
       );
       if (dir === 1) {
         dir = 2;
@@ -431,7 +429,7 @@ export class CrateboxScene extends Phaser.Scene {
         dir = 1;
       }
     }
-    this.enemyGroup.addMultiple(enemies as any, true);
+    this.enemyGroup.addMultiple(enemies, true);
     this.enemySpawnCounter += 1;
     this.enemySpawnTimer = this.enemySpawnTime;
   }
@@ -518,7 +516,7 @@ export class CrateboxScene extends Phaser.Scene {
   restartMusic(): void {
     this.music.stop();
     // this.music.setRate(0.5);
-    this.music.play({ loop: true, volume: 0.3 } as any);
+    this.music.play('', { loop: true, volume: 0.3 });
 
   }
 

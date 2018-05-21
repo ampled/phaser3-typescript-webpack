@@ -1,30 +1,38 @@
 import { CrateboxScene } from 'cratebox/cratebox.scene';
 
-export class Enemy extends Phaser.Physics.Arcade.Sprite {
+export class Enemy extends Phaser.GameObjects.Sprite {
   scene: CrateboxScene;
   body: Phaser.Physics.Arcade.Body;
 
-  dir;
+  dir: number;
   health = 6;
 
-  killAt = 0;
-
+  isFirst = true;
   falling = false;
+  killAt: number = 0;
 
-  constructor(scene, x, y, texture, dir) {
-    super(scene, x, y, texture);
+  constructor(scene, x, y, dir) {
+    super(scene, x, y, 'enemies');
 
-    this.scene.physics.add.existing(this);
+    this.scene.physics.world.enable(this);
+    this.anims.play('enemywalk');
+
     this.dir = dir === 1 ? -100 : 100;
 
-    this.body.velocity.x = this.dir;
-    this.enableBody(false, this.x, this.y, true, true);
+    console.log(this, this.body);
+  }
 
-    this.setSize(11, 16);
-    this.body.velocity.x = this.dir;
+  firstUpdate(): void {
+    this.body.setVelocityX(this.dir).setBounce(1, 0.2)
+
+    this.isFirst = false;
   }
 
   update(time: number, delta: number) {
+    if (this.isFirst) {
+      this.firstUpdate();
+    }
+
     if (this.body.onFloor() && this.falling) {
       this.scene.sys.sound.playAudioSprite('sfx', 'foley', { volume: .3 } as any);
     }
@@ -40,23 +48,13 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
       return;
     }
 
-    if (this.body.onWall()) {
-      this.dir = -this.dir;
-      this.body.velocity.x = this.dir;
-    }
-    if (this.body.velocity.x === 0) {
-      this.setVelocityX(this.dir);
-    }
-    if (this.body.bounce.y === 0) {
-      this.setBounceY(0.2);
-    }
     if (this.y > 400) {
       this.y = -5;
       this.x = 200;
       this.dir = this.dir * 1.1;
       this.health = 6;
       this.scene.minishake();
-      this.setScale(this.scaleX + 0.2, this.scaleY);
+      this.anims.play('enemywalkmad');
       this.scene.events.emit('sfx', 'enemyloop');
     }
 
@@ -78,6 +76,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
         yoyo: true,
         onComplete: () => {
           this.setTint(Phaser.Display.Color.GetColor(255, 255, 255));
+          this.setScale(1, 1);
         }
       });
     }
@@ -89,15 +88,15 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.flipY = true;
     this.scene.enemyGroup.remove(this as any);
     this.scene.killedEnemies.add(this as any);
-    this.setVelocityY(Phaser.Math.Between(-100, -250));
-    this.setVelocityX((fromRight ? -100 : 100) * multiplier);
-    this.setAngularVelocity(Phaser.Math.Between(100, 1000));
+    this.body.setVelocityY(Phaser.Math.Between(-100, -250));
+    this.body.setVelocityX((fromRight ? -100 : 100) * multiplier);
+    this.body.setAngularVelocity(Phaser.Math.Between(100, 1000));
     this.killAt = 2000;
   }
 
   kill() {
     this.scene.killedEnemies.remove(this as any);
-    this.disableBody();
+    this.scene.physics.world.disable(this);
     this.destroy();
   }
 

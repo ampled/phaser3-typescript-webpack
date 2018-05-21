@@ -5,6 +5,13 @@ import * as crateboxTiles from 'assets/tilesets/16x16.png';
 
 import * as playerSprite from 'assets/sprites/player.png';
 import * as playerSpriteSheet from 'assets/sprites/player/player.png';
+import * as playerSpriteAtlas from 'assets/sprites/player/player.json';
+
+import * as enemySpriteSheet from 'assets/sprites/enemies/enemies.png';
+import * as enemySpriteAtlas from 'assets/sprites/enemies/enemies.json';
+import * as benemySpriteSheet from 'assets/sprites/enemies/bigenemies.png';
+import * as benemySpriteAtlas from 'assets/sprites/enemies/bigenemies.json';
+
 
 import * as gunSpriteSheet from 'assets/sprites/guns/guns.png';
 import * as gunSpriteAtlas from 'assets/sprites/guns/guns.json';
@@ -12,7 +19,6 @@ import * as gunSpriteAtlas from 'assets/sprites/guns/guns.json';
 import * as projSpriteSheet from 'assets/sprites/guns/projectiles.png';
 import * as projSpriteAtlas from 'assets/sprites/guns/projectiles.json';
 
-import * as playerSpriteAtlas from 'assets/sprites/player/player.json';
 import * as enemySprite from 'assets/sprites/enemy.png';
 import * as starSprite from 'assets/sprites/star.png';
 
@@ -52,6 +58,8 @@ export class BootScene extends Phaser.Scene {
       .spritesheet('cratebox', crateboxTiles, { frameWidth: 64, frameHeight: 64 })
       .spritesheet('player', playerSprite, { frameWidth: 16, frameHeight: 16 })
       .atlas('player-sprites', playerSpriteSheet, playerSpriteAtlas)
+      .atlas('enemies', enemySpriteSheet, enemySpriteAtlas)
+      .atlas('benemies', benemySpriteSheet, benemySpriteAtlas)
       .atlas('guns', gunSpriteSheet, gunSpriteAtlas)
       .atlas('projectiles', projSpriteSheet, projSpriteAtlas)
       .spritesheet('enemy', enemySprite, { frameWidth: 16, frameHeight: 16 })
@@ -71,7 +79,7 @@ export class BootScene extends Phaser.Scene {
         bgm1mp3,
         bgm1ogg
       ])
-      .audioSprite('sfx', sfxsheet, [sfxmp3, sfxogg] as any);
+      .audioSprite('sfx', sfxsheet, [sfxmp3, sfxogg]);
     // .audioSprite('sfx', [
     //   sfxmp3,
     //   sfxogg
@@ -87,10 +95,11 @@ export class BootScene extends Phaser.Scene {
 
     const stand: AnimationConfig = {
       key: 'stand',
-      defaultTexturekey: 'player',
+      defaultTextureKey: 'player',
       frames: this.anims.generateFrameNames('player-sprites',
         { start: 2, end: 2, suffix: '.png', zeroPad: 2 })
-    } as any;
+    };
+
     const walk: AnimationConfig = {
       key: 'walk',
       defaultTextureKey: 'player',
@@ -102,16 +111,13 @@ export class BootScene extends Phaser.Scene {
         { key: 'player-sprites', frame: '01.png' },
         { key: 'player-sprites', frame: '03.png' }
       ]
-      // this.anims.generateFrameNames('player-sprites',
-      //   { start: 1, end: 3, first: 1, suffix: '.png', zeroPad: 2 })
-    } as any;
+    };
 
     const run: AnimationConfig = {
       key: 'run',
       defaultTextureKey: 'player',
       frameRate: 15,
       repeat: -1,
-      // repeatDelay: 0,
       yoyo: true,
       frames: [
         { key: 'player-sprites', frame: '09.png' },
@@ -119,9 +125,7 @@ export class BootScene extends Phaser.Scene {
         { key: 'player-sprites', frame: '011.png' },
         { key: 'player-sprites', frame: '010.png' },
       ]
-      // this.anims.generateFrameNames('player-sprites',
-      //   { start: 1, end: 3, first: 1, suffix: '.png', zeroPad: 2 })
-    } as any;
+    };
 
     const jump: AnimationConfig = {
       key: 'jump',
@@ -131,7 +135,7 @@ export class BootScene extends Phaser.Scene {
       frameRate: 15,
       frames: this.anims.generateFrameNames('player-sprites',
         { start: 4, end: 7, suffix: '.png', zeroPad: 2 })
-    } as any;
+    };
 
     const shoot: AnimationConfig = {
       key: 'shoot',
@@ -139,7 +143,7 @@ export class BootScene extends Phaser.Scene {
       defaultTextureKey: 'player',
       frames: this.anims.generateFrameNames('player-sprites',
         { start: 8, end: 8, suffix: '.png', zeroPad: 2 })
-    } as any;
+    };
 
     this.anims.create(stand);
     this.anims.create(walk);
@@ -147,7 +151,32 @@ export class BootScene extends Phaser.Scene {
     this.anims.create(jump);
     this.anims.create(shoot);
 
-    this.text = this.add.text(0, 0, 'TEST', { font: '28px Tahoma' }) as any;
+    const enemyWalk: AnimationConfig = {
+      key: 'enemywalk',
+      frameRate: 15,
+      repeat: -1,
+      frames: this.anims.generateFrameNames('enemies', { start: 0, end: 1, zeroPad: 2 })
+    };
+
+    const enemyWalkMad: AnimationConfig = {
+      key: 'enemywalkmad',
+      frameRate: 15,
+      repeat: -1,
+      frames: this.anims.generateFrameNames('enemies', { start: 0, end: 1, zeroPad: 2, prefix: 'mad' })
+    };
+
+    this.anims.create({
+      key: 'bigwalk',
+      frameRate: 15,
+      repeat: -1,
+      yoyo: true,
+      frames: this.anims.generateFrameNames('benemies', { start: 0, end: 2, zeroPad: 2, prefix: 'big' })
+    });
+
+    this.anims.create(enemyWalk);
+    this.anims.create(enemyWalkMad);
+
+    this.text = this.add.text(0, 0, 'TEST', { font: '28px Tahoma' });
     this.physics.world.enable(this.text);
     this.text.body.collideWorldBounds = true;
     this.text.body.setVelocityX(50).setBounce(1, 1);

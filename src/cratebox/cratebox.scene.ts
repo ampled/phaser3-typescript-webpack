@@ -1,7 +1,7 @@
 import { center } from 'util/';
 
 import { Scene } from 'phaser-util/scene';
-import { Enemy } from 'cratebox/sprites/enemies/enemy';
+import { Enemy, BigEnemy } from 'cratebox/sprites/enemies';
 import { Player } from 'cratebox/sprites/player';
 import { TestClass } from 'cratebox/sprites/test';
 
@@ -25,7 +25,7 @@ export class CrateboxScene extends Phaser.Scene {
   enemySpawnCounter = 1;
   enemySpawnTimeDebug: Phaser.GameObjects.BitmapText;
 
-  score = 0;
+  score = 49;
   scoreDisplay: Phaser.GameObjects.BitmapText;
   scoreText: Phaser.GameObjects.BitmapText;
   gunText: Phaser.GameObjects.DynamicBitmapText;
@@ -70,7 +70,7 @@ export class CrateboxScene extends Phaser.Scene {
     window['toggleTouch'] = this.toggleTouch.bind(this);
     window['togglePause'] = this.togglePause.bind(this);
 
-    this.events.on('sfx', (sfx, rate) => this.sound.playAudioSprite('sfx', sfx, { rate } as any));
+    this.events.on('sfx', (sfx, rate) => this.sound.playAudioSprite('sfx', sfx, { rate }));
     this.music = this.sound.add('bgm') as Phaser.Sound.WebAudioSound;
     this.bestScore = parseInt(window.localStorage.getItem('bestScore'), 10);
     if (isNaN(this.bestScore)) {
@@ -109,38 +109,38 @@ export class CrateboxScene extends Phaser.Scene {
     this.smokeEmitter = this.add.particles('projectiles');
 
     this.setupTouch();
-    this.keys = this.input.keyboard.createCursorKeys() as any;
+    this.keys = this.input.keyboard.createCursorKeys();
     this.keys.X = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
 
     this.projectileGroup =
       this.add.group({
         createCallback: proj => this.physics.world.enable(proj)
-      } as any);
+      });
 
     this.explosionGroup = this.add.group({
       createCallback: proj => this.physics.world.enable(proj)
-    } as any);
+    });
 
     this.enemyGroup = this.physics.add.group();
     this.killedEnemies = this.physics.add.group();
 
     this.initPlayer();
 
-    this.physics.add.collider(this.enemyGroup as any, this.groundLayer as any);
-    this.physics.add.overlap(this.enemyGroup as any, this.player as any, this.enemyHit);
+    this.physics.add.collider(this.enemyGroup as any, this.groundLayer);
+    this.physics.add.overlap(this.enemyGroup as any, this.player, this.enemyHit);
 
     this.physics.add.overlap(
       this.projectileGroup as any,
       this.enemyGroup as any,
-      this.enemyShot as any,
+      this.enemyShot,
       undefined, this
     );
 
-    this.physics.add.overlap(this.explosionGroup as any, this.enemyGroup as any, this.enemyExplode as any);
+    this.physics.add.overlap(this.explosionGroup as any, this.enemyGroup as any, this.enemyExplode);
 
     this.physics.add.collider(
       this.projectileGroup as any,
-      this.groundLayer as any,
+      this.groundLayer,
       (proj) => {
         if (proj.active) { proj.getData('onCollide')(proj, this); }
       }, undefined, this);
@@ -224,6 +224,8 @@ export class CrateboxScene extends Phaser.Scene {
     if (this.enemySpawnTimer < 0) {
       if (this.enemySpawnCounter % 5 === 0) {
         this.spawnEnemySquad();
+      } else if (this.enemySpawnCounter % 2 === 0) {
+        this.spawnEnemy(true);
       } else {
         this.spawnEnemy();
       }
@@ -406,12 +408,21 @@ export class CrateboxScene extends Phaser.Scene {
     }
   }
 
-  spawnEnemy(): void {
-    this.enemyGroup.add(
-      new Enemy(
-        this, 200, 0,
-        Math.floor(Math.random() * 2)), true
-    );
+  spawnEnemy(big = false): void {
+    if (big) {
+      this.enemyGroup.add(
+        new Enemy(
+          this, 200, 0,
+          Math.floor(Math.random() * 2)), true
+      );
+    } else {
+      this.enemyGroup.add(
+        new BigEnemy(
+          this, 200, 0,
+          Math.floor(Math.random() * 2)), true
+      );
+    }
+
     this.enemySpawnTimer = this.enemySpawnTime;
     this.enemySpawnCounter += 1;
   }

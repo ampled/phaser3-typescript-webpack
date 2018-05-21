@@ -74,9 +74,8 @@ export class GrenadeLauncher extends Gun implements GunProps {
       callback: this.explode,
       callbackScope: this.scene,
       args: [grenade, undefined, this.scene],
-      loop: false,
-      repeat: false
-    } as any);
+      loop: false
+    });
 
     return 0;
   }

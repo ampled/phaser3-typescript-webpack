@@ -25,17 +25,13 @@ export class Player extends Phaser.GameObjects.Sprite {
   isJumping = false;
   isFalling = false;
 
-  // scene group references
-  projectiles: Phaser.GameObjects.Group;
-
   constructor(scene, x, y, key, layer) {
     super(scene, x, y, key);
     this.keys = this.scene.keys;
     this.scene.physics.world.enable(this);
-    this.scene.physics.add.collider(this as any, layer);
+    this.scene.physics.add.collider(this, layer);
     this.body.setSize(11, 16).setCollideWorldBounds(false);
     this.setDepth(10);
-    this.projectiles = this.scene.projectileGroup;
     this.resetGun(x, y);
   }
 

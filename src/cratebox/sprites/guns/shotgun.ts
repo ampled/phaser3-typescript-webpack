@@ -59,7 +59,7 @@ export class Shotgun extends Gun implements GunProps {
           frame: this.projectile.key,
           repeat: this.projectile.amount,
           setXY: { x: this.x, y: this.y }
-        } as any);
+        });
     this.projRef.forEach(proj => {
       proj.body
         .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
@@ -85,9 +85,8 @@ export class Shotgun extends Gun implements GunProps {
         }, undefined);
       },
       callbackScope: this.scene,
-      repeat: false,
       loop: false
-    } as any);
+    });
 
     this.scene.tweens.add({
       targets: this,

@@ -26,7 +26,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   update(time: number, delta: number) {
     if (this.body.onFloor() && this.falling) {
-      this.scene.sys.sound.playAudioSprite('sfx', 'foley', { volume: .3 } as any);
+      this.scene.sys.sound.playAudioSprite('sfx', 'foley', { volume: .3 });
     }
 
     this.falling = this.body.velocity.y > 50;
@@ -87,8 +87,8 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.scene.minishake();
     this.scene.events.emit('sfx', 'enemykill');
     this.flipY = true;
-    this.scene.enemyGroup.remove(this as any);
-    this.scene.killedEnemies.add(this as any);
+    this.scene.enemyGroup.remove(this);
+    this.scene.killedEnemies.add(this);
     this.setVelocityY(Phaser.Math.Between(-100, -250));
     this.setVelocityX((fromRight ? -100 : 100) * multiplier);
     this.setAngularVelocity(Phaser.Math.Between(100, 1000));
@@ -96,7 +96,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   kill() {
-    this.scene.killedEnemies.remove(this as any);
+    this.scene.killedEnemies.remove(this);
     this.disableBody();
     this.destroy();
   }

@@ -17,7 +17,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
     this.scene.physics.world.enable(this);
     this.anims.play('enemywalk');
 
-    this.dir = dir === 1 ? -100 : 100;
+    this.dir = dir === 1 ? -90 : 90;
 
     console.log(this, this.body);
   }
@@ -34,7 +34,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
     }
 
     if (this.body.onFloor() && this.falling) {
-      this.scene.sys.sound.playAudioSprite('sfx', 'foley', { volume: .3 } as any);
+      this.scene.sys.sound.playAudioSprite('sfx', 'foley', { volume: .3 });
     }
 
     this.falling = this.body.velocity.y > 50;
@@ -86,8 +86,8 @@ export class Enemy extends Phaser.GameObjects.Sprite {
     this.scene.minishake();
     this.scene.events.emit('sfx', 'enemykill');
     this.flipY = true;
-    this.scene.enemyGroup.remove(this as any);
-    this.scene.killedEnemies.add(this as any);
+    this.scene.enemyGroup.remove(this);
+    this.scene.killedEnemies.add(this);
     this.body.setVelocityY(Phaser.Math.Between(-100, -250));
     this.body.setVelocityX((fromRight ? -100 : 100) * multiplier);
     this.body.setAngularVelocity(Phaser.Math.Between(100, 1000));
@@ -95,7 +95,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   }
 
   kill() {
-    this.scene.killedEnemies.remove(this as any);
+    this.scene.killedEnemies.remove(this);
     this.scene.physics.world.disable(this);
     this.destroy();
   }

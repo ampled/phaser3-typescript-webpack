@@ -24,12 +24,11 @@ export class DualPistol extends Gun implements GunProps {
 
   constructor(scene, x, y, key = 'guns', frame = 'dualgun') {
     super(scene, x, y, key, frame);
-    // this.scene.physics.world.enable(this);
     this.body.setSize(this.size, this.size).allowGravity = false;
   }
 
   update(time: number, delta: number): void {
-    this.x = this.flipX ? this.scene.player.x : this.scene.player.x;
+    this.x = this.scene.player.x;
     this.y = this.scene.player.y;
     this.flipX = this.scene.player.flipX;
     this.setDepth(9);
@@ -48,12 +47,12 @@ export class DualPistol extends Gun implements GunProps {
         .setData('dmg', this.damage)
         .setData('onCollide', this.projectileCollide);
 
-    (<ABody>projectile.body)
+    projectile.body
       .setVelocityX(this.projectile.velocity)
       .setSize(this.projectile.size, this.projectile.size)
       .allowGravity = this.projectile.gravity;
 
-    (<ABody>projectile2.body)
+    projectile2.body
       .setVelocityX(-this.projectile.velocity)
       .setSize(this.projectile.size, this.projectile.size)
       .allowGravity = this.projectile.gravity;

@@ -25,7 +25,7 @@ export class CrateboxScene extends Phaser.Scene {
   enemySpawnCounter = 1;
   enemySpawnTimeDebug: Phaser.GameObjects.BitmapText;
 
-  score = 49;
+  score = 0;
   scoreDisplay: Phaser.GameObjects.BitmapText;
   scoreText: Phaser.GameObjects.BitmapText;
   gunText: Phaser.GameObjects.DynamicBitmapText;

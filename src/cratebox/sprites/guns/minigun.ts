@@ -26,4 +26,9 @@ export class Minigun extends Smg implements GunProps {
     super(scene, x, y, key, frame);
   }
 
+  shoot(): number {
+    this.scene.minishake();
+    return super.shoot();
+  }
+
 }

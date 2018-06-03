@@ -11,6 +11,8 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   falling = false;
   killAt: number = 0;
 
+  canDamage = true;
+
   constructor(scene, x, y, dir) {
     super(scene, x, y, 'enemies');
 
@@ -18,12 +20,10 @@ export class Enemy extends Phaser.GameObjects.Sprite {
     this.anims.play('enemywalk');
 
     this.dir = dir === 1 ? -90 : 90;
-
-    console.log(this, this.body);
   }
 
   firstUpdate(): void {
-    this.body.setVelocityX(this.dir).setBounce(1, 0.2)
+    this.body.setVelocityX(this.dir).setBounceY(0.2);
 
     this.isFirst = false;
   }
@@ -31,6 +31,13 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   update(time: number, delta: number) {
     if (this.isFirst) {
       this.firstUpdate();
+    }
+
+    this.flipX = this.body.velocity.x < 0;
+
+    if (this.body.velocity.x === 0) {
+      this.dir = -this.dir;
+      this.body.setVelocityX(this.dir);
     }
 
     if (this.body.onFloor() && this.falling) {
@@ -60,29 +67,42 @@ export class Enemy extends Phaser.GameObjects.Sprite {
 
   }
 
-  damage(amount: number = 0, fromRight: boolean, multiplier = 1): void {
-    // console.log('enemydmg', amount)
-    this.health -= amount;
-    this.setTint(Phaser.Display.Color.GetColor(255, 0, 0));
-    this.setScale(1, 1);
-    if (this.health <= 0) {
-      this.dieAnim(fromRight, multiplier);
-    } else {
-      this.scene.tweens.add({
-        targets: this,
-        duration: 50,
-        // x: this.x + 20,
-        scaleY: .7,
-        yoyo: true,
-        onComplete: () => {
-          this.setTint(Phaser.Display.Color.GetColor(255, 255, 255));
-          this.setScale(1, 1);
-        }
-      });
+  damage(amount: number = 0, fromRight: boolean, multiplier = 1, flip = false): void {
+    if (this.canDamage) {
+      this.canDamage = false;
+      this.health -= amount;
+      this.setTint(Phaser.Display.Color.GetColor(255, 0, 0));
+      this.setScale(1, 1);
+      if (flip) {
+        this.flip();
+      }
+      if (this.health <= 0) {
+        this.dieAnim(fromRight, multiplier);
+      } else {
+        this.scene.tweens.add({
+          targets: this,
+          duration: 50,
+          // x: this.x + 20,
+          scaleY: .7,
+          yoyo: true,
+          onComplete: () => {
+            this.setTint(Phaser.Display.Color.GetColor(255, 255, 255));
+            this.setScale(1, 1);
+            this.canDamage = true;
+          }
+        });
+      }
     }
   }
 
+  flip(): void {
+    console.log('flip');
+    this.dir = -this.dir;
+    this.body.setVelocityX(this.dir);
+  }
+
   dieAnim(fromRight, multiplier = 1) {
+    this.body.allowGravity = true;
     this.scene.minishake();
     this.scene.events.emit('sfx', 'enemykill');
     this.flipY = true;

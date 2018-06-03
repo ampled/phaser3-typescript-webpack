@@ -2,16 +2,34 @@
 
 "dualgun":
 {
-	"frame": {"x":1,"y":19,"w":48,"h":16},
+	"frame": {"x":1,"y":105,"w":48,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":16},
 	"sourceSize": {"w":48,"h":16},
 	"pivot": {"x":0.5,"y":0.5}
 },
+"fryingpan":
+{
+	"frame": {"x":1,"y":71,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"fryingpanattack":
+{
+	"frame": {"x":20,"y":37,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
 "gl":
 {
-	"frame": {"x":73,"y":1,"w":16,"h":16},
+	"frame": {"x":37,"y":1,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -20,7 +38,7 @@
 },
 "gun":
 {
-	"frame": {"x":51,"y":19,"w":16,"h":16},
+	"frame": {"x":1,"y":1,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -29,7 +47,7 @@
 },
 "minigun":
 {
-	"frame": {"x":69,"y":19,"w":17,"h":17},
+	"frame": {"x":1,"y":37,"w":17,"h":17},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":17,"h":17},
@@ -38,7 +56,7 @@
 },
 "revolver":
 {
-	"frame": {"x":55,"y":1,"w":16,"h":16},
+	"frame": {"x":19,"y":1,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -47,7 +65,7 @@
 },
 "rl":
 {
-	"frame": {"x":19,"y":1,"w":16,"h":16},
+	"frame": {"x":37,"y":19,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -56,7 +74,7 @@
 },
 "shotgun":
 {
-	"frame": {"x":1,"y":1,"w":16,"h":16},
+	"frame": {"x":1,"y":19,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -65,7 +83,7 @@
 },
 "smg":
 {
-	"frame": {"x":37,"y":1,"w":16,"h":16},
+	"frame": {"x":19,"y":19,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -77,8 +95,8 @@
 	"version": "1.0",
 	"image": "guns.png",
 	"format": "RGBA8888",
-	"size": {"w":90,"h":37},
+	"size": {"w":54,"h":122},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:97f255a961dc2564577fd82982303824:aeb6c5c2ad365c09166ba459f2116c97:62c1f540b5fd80b9e41584087e1ed9b4$"
+	"smartupdate": "$TexturePacker:SmartUpdate:e34fcd8c35d76d5e5372c3d79059680a:c43d0fdda0b95aada29d53c33ccbcb9b:62c1f540b5fd80b9e41584087e1ed9b4$"
 }
 }

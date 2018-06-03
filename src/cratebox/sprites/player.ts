@@ -102,6 +102,7 @@ export class Player extends Phaser.GameObjects.Sprite {
         }
       }
     } else {
+      this.gun.unShoot();
       this.knockback = 0;
     }
 
@@ -156,17 +157,16 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   shoot(): number {
-    this.scene.tweens.add({
-      targets: this,
-      duration: 20,
-      // scaleY: .9,
-      displayOriginX: this.flipX ? this.displayOriginX - 1 : this.displayOriginX + 1,
-      // displayOriginY: this.displayOriginY - 1,
-      yoyo: true,
-      onComplete: () => {
-        this.setScale(1, 1);
-      }
-    });
+    // this.scene.tweens.add({
+    //   targets: this,
+    //   duration: 20,
+    //   displayOriginX: this.flipX ? this.displayOriginX - 1 : this.displayOriginX + 1,
+    //   yoyo: true,
+    //   onComplete: () => {
+    //     this.setScale(1, 1);
+    //     this.setDisplayOrigin(0, 0);
+    //   }
+    // });
     return this.gun.shoot();
   }
 

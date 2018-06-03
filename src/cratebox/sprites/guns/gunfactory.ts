@@ -12,6 +12,10 @@ export class GunFactory {
     return this.createGun(scene, x, y, this.getRandomGun());
   }
 
+  // static createRandomGun(scene, x, y): Gun {
+  //   return this.createGun(scene, x, y, this.defaultGun);
+  // }
+
   static createDefaultGun(scene, x, y): Gun {
     return this.createGun(scene, x, y, this.defaultGun);
   }

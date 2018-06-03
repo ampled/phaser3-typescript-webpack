@@ -7,6 +7,7 @@ export interface GunProps {
   recoil: number;
   damage: number;
   size: number;
+  canShoot: boolean;
 }
 
 export interface ProjectileConfig {
@@ -22,6 +23,7 @@ export class Gun extends Phaser.GameObjects.Sprite implements GunProps {
   id: string;
   sfx: string;
   cooldown: number;
+  canShoot = true;
   recoil: number;
   damage: number;
   size: number;
@@ -36,6 +38,10 @@ export class Gun extends Phaser.GameObjects.Sprite implements GunProps {
   }
 
   shoot(...args: any[]): undefined | number {
+    return;
+  }
+
+  unShoot(...args: any[]): void {
     return;
   }
 

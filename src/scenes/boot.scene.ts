@@ -93,6 +93,7 @@ export class BootScene extends Phaser.Scene {
     explosionGraphic.fillCircle(10, 10, 10);
     explosionGraphic.generateTexture('explosion', 20, 20);
 
+    // PLAYER ANIMS
     const stand: AnimationConfig = {
       key: 'stand',
       defaultTextureKey: 'player',
@@ -151,6 +152,7 @@ export class BootScene extends Phaser.Scene {
     this.anims.create(jump);
     this.anims.create(shoot);
 
+    // ENEMY ANIMS
     const enemyWalk: AnimationConfig = {
       key: 'enemywalk',
       frameRate: 15,
@@ -166,6 +168,13 @@ export class BootScene extends Phaser.Scene {
     };
 
     this.anims.create({
+      key: 'drone',
+      frameRate: 15,
+      repeat: -1,
+      frames: this.anims.generateFrameNames('enemies', { start: 1, end: 2, zeroPad: 2, prefix: 'drone' })
+    });
+
+    this.anims.create({
       key: 'bigwalk',
       frameRate: 15,
       repeat: -1,
@@ -173,8 +182,18 @@ export class BootScene extends Phaser.Scene {
       frames: this.anims.generateFrameNames('benemies', { start: 0, end: 2, zeroPad: 2, prefix: 'big' })
     });
 
+
     this.anims.create(enemyWalk);
     this.anims.create(enemyWalkMad);
+
+    // WEAPON ANIMS
+    this.anims.create({
+      key: 'fpattack',
+      frameRate: 15,
+      frames: [
+        { key: 'guns', frame: 'fryingpanattack' },
+        { key: 'guns', frame: 'fryingpan' }]
+    })
 
     this.text = this.add.text(0, 0, 'TEST', { font: '28px Tahoma' });
     this.physics.world.enable(this.text);

@@ -39,29 +39,44 @@
       "end": 12.512585034013606,
       "loop": false
     },
-    "shoot": {
+    "pistolshoot": {
       "start": 14,
-      "end": 14.370929705215419,
+      "end": 14.29108843537415,
+      "loop": false
+    },
+    "revolvershoot": {
+      "start": 16,
+      "end": 16.29108843537415,
+      "loop": false
+    },
+    "shoot": {
+      "start": 18,
+      "end": 18.37092970521542,
       "loop": false
     },
     "shotgunreload": {
-      "start": 16,
-      "end": 16.363469387755103,
+      "start": 20,
+      "end": 20.363469387755103,
+      "loop": false
+    },
+    "shotgunreload2": {
+      "start": 22,
+      "end": 22.274285714285714,
       "loop": false
     },
     "starget_alt": {
-      "start": 18,
-      "end": 19.028276643990928,
+      "start": 24,
+      "end": 25.028276643990928,
       "loop": false
     },
     "starget": {
-      "start": 21,
-      "end": 21.333628117913833,
+      "start": 27,
+      "end": 27.333628117913833,
       "loop": false
     },
     "walk": {
-      "start": 23,
-      "end": 23.11501133786848,
+      "start": 29,
+      "end": 29.11501133786848,
       "loop": false
     }
   }

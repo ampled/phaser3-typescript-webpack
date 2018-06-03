@@ -1,9 +1,12 @@
 import { center } from 'util/';
 
 import { Scene } from 'phaser-util/scene';
-import { Enemy, BigEnemy } from 'cratebox/sprites/enemies';
+import { Enemy, SmallRobot, BigRobot, Drone } from 'cratebox/sprites/enemies';
 import { Player } from 'cratebox/sprites/player';
 import { TestClass } from 'cratebox/sprites/test';
+
+import { EnemySpawn, getRandomEnemySpawnEvent } from './enemy-spawn.events';
+import { FryingPan } from './sprites/guns/fryingpan';
 
 export class CrateboxScene extends Phaser.Scene {
   paused = true;
@@ -20,6 +23,11 @@ export class CrateboxScene extends Phaser.Scene {
 
   enemyGroup: Phaser.Physics.Arcade.Group;
   killedEnemies: Phaser.Physics.Arcade.Group;
+
+  enemySpawnEvent: Phaser.Time.TimerEvent;
+  enemySpawnEventDebug: Phaser.GameObjects.BitmapText;
+
+  difficulty = 0;
   enemySpawnTimer = 2500;
   enemySpawnTime = 5000;
   enemySpawnCounter = 1;
@@ -47,7 +55,7 @@ export class CrateboxScene extends Phaser.Scene {
 
   // TODO get these from the tiled map as objects
   starCoords = [
-    { x: 200, y: 40 },
+    // { x: 200, y: 40 },
     { x: 200, y: 120 },
     { x: 200, y: 200 },
     { x: 50, y: 60 },
@@ -193,10 +201,26 @@ export class CrateboxScene extends Phaser.Scene {
 
     this.spawnStar();
 
+    this.enemySpawnEvent = this.time.addEvent({
+      delay: 2500,
+      loop: false,
+      callback: this.$spawnEnemy,
+      callbackScope: this
+    });
+
+    this.enemySpawnEventDebug = this.add.bitmapText(5, 214, 'mario', this.enemySpawnEvent.getElapsed().toString());
+    this.enemySpawnEventDebug.setDepth(100);
+
   }
 
   update(time: number, delta: number): void {
     if (this.paused) { this.pause(); return; }
+
+    this.enemySpawnEventDebug.setText(
+      (this.enemySpawnEvent.delay / 1000).toFixed(1).toString()
+      + ' ' +
+      ((this.enemySpawnEvent.delay - this.enemySpawnEvent.getElapsed()) / 1000).toFixed(1).toString()
+    );
 
     if (this.gunTextTimer > 2500) {
       this.gunText.setVisible(false);
@@ -215,24 +239,8 @@ export class CrateboxScene extends Phaser.Scene {
       this.minishake(false);
     }
 
-    this.enemySpawnTimeDebug.setText(
-      (this.enemySpawnTime / 1000).toFixed(1).toString()
-      + ' ' +
-      (this.enemySpawnTimer / 1000).toFixed(1).toString()
-    );
-
-    if (this.enemySpawnTimer < 0) {
-      if (this.enemySpawnCounter % 5 === 0) {
-        this.spawnEnemySquad();
-      } else if (this.enemySpawnCounter % 2 === 0) {
-        this.spawnEnemy(true);
-      } else {
-        this.spawnEnemy();
-      }
-    }
-
     if (this.keys.shift.isDown && this.debugTimer < 0) {
-      this.spawnEnemy();
+      this.spawnDrone();
       this.debugTimer = 300;
     }
 
@@ -374,7 +382,7 @@ export class CrateboxScene extends Phaser.Scene {
       this.restartMusic();
     }
     this.score += 1;
-    this.scoreText.setText(this.score.toString());
+    this.scoreText.setText(this.score.toString() + ' ' + this.difficulty.toString());
     if (this.score > this.bestScore) {
       this.bestScore = this.score;
       this.bestScoreDisplay.setText(this.bestScore.toString() + ' !');
@@ -396,28 +404,48 @@ export class CrateboxScene extends Phaser.Scene {
 
   setEnemySpawnTime(): void {
     if (this.score >= 10 && this.score < 20) {
-      this.enemySpawnTime = 4500;
+      this.difficulty = 1;
+      // this.enemySpawnTime = 4500;
     } else if (this.score >= 20 && this.score < 35) {
-      this.enemySpawnTime = 4000;
+      this.difficulty = 2;
+      // this.enemySpawnTime = 4000;
     } else if (this.score >= 35 && this.score < 50) {
-      this.enemySpawnTime = 3500;
+      this.difficulty = 3;
+      // this.enemySpawnTime = 3500;
     } else if (this.score >= 50 && this.score < 100) {
-      this.enemySpawnTime = 2000;
+      this.difficulty = 3;
+      // this.enemySpawnTime = 2000;
     } else if (this.score >= 100) {
+      this.difficulty = 4;
       this.enemySpawnTime = 1500;
     }
   }
 
-  spawnEnemy(big = false): void {
+  $spawnEnemy = (): void => {
+    const event = getRandomEnemySpawnEvent(this.difficulty);
+    if (event === EnemySpawn.NORMAL) {
+      this.spawnEnemy();
+    } else if (event === EnemySpawn.NORMALDUO) {
+      this.spawnEnemySquad();
+    } else if (event === EnemySpawn.BIG) {
+      this.spawnEnemy(true);
+    } else if (event === EnemySpawn.NORMALWAVE) {
+      this.spawnEnemyWave();
+    } else if (event === EnemySpawn.DRONE) {
+      this.spawnDrone();
+    }
+  }
+
+  spawnEnemy = (big = false): void => {
     if (big) {
       this.enemyGroup.add(
-        new Enemy(
+        new BigRobot(
           this, 200, 0,
           Math.floor(Math.random() * 2)), true
       );
     } else {
       this.enemyGroup.add(
-        new BigEnemy(
+        new SmallRobot(
           this, 200, 0,
           Math.floor(Math.random() * 2)), true
       );
@@ -427,12 +455,22 @@ export class CrateboxScene extends Phaser.Scene {
     this.enemySpawnCounter += 1;
   }
 
+  spawnDrone = (): void => {
+    this.enemyGroup.add(
+      new Drone(
+        this, 200, 0,
+        Math.floor(Math.random() * 2)), true
+    );
+    this.enemySpawnTimer = this.enemySpawnTime;
+    this.enemySpawnCounter += 1;
+  }
+
   spawnEnemySquad(amount = 2): void {
     const enemies: Enemy[] = [];
     let dir = 1;
     for (let i = 0; i < amount; i++) {
       enemies.push(
-        new Enemy(this, 200, 0, dir)
+        new SmallRobot(this, 200, 0, dir)
       );
       if (dir === 1) {
         dir = 2;
@@ -445,39 +483,68 @@ export class CrateboxScene extends Phaser.Scene {
     this.enemySpawnTimer = this.enemySpawnTime;
   }
 
+  spawnEnemyWave(): void {
+    const dir = Math.floor(Math.random() * 2);
+
+    this.time.addEvent({
+      delay: 300,
+      repeat: 2,
+      callbackScope: this,
+      callback() {
+        this.enemyGroup.add(
+          new SmallRobot(
+            this, 200, 0,
+            dir), true
+        );
+      }
+    });
+  }
+
   enemyExplode = (proj: Phaser.GameObjects.GameObject, enemy: Enemy) => {
-    this.events.emit('sfx', 'enemyshot', 2);
-    let fromRight = true;
-    let multiplier = 1;
-    if ((<any>proj).x < enemy.x) {
-      fromRight = false;
+    if (enemy.canDamage) {
+      this.events.emit('sfx', 'enemyshot', 2);
+      let fromRight = true;
+      let multiplier = 1;
+      if ((<any>proj).x < enemy.x) {
+        fromRight = false;
+      }
+      if (proj.getData('force')) {
+        multiplier = proj.getData('force');
+      }
+      if (proj.getData('onEnemy')) {
+        proj.getData('onEnemy')(proj, enemy);
+      }
+      enemy.damage(proj.getData('dmg'), fromRight, multiplier);
+      // proj.destroy();
     }
-    if (proj.getData('force')) {
-      multiplier = proj.getData('force');
-    }
-    if (proj.getData('onEnemy')) {
-      proj.getData('onEnemy')(proj, enemy);
-    }
-    enemy.damage(proj.getData('dmg'), fromRight, multiplier);
-    // proj.destroy();
   }
 
   enemyShot = (proj: Phaser.GameObjects.GameObject, enemy: Enemy) => {
-    const scene = this as CrateboxScene;
-    scene.sys.sound.playAudioSprite('sfx', 'enemyshot');
-    let fromRight = true;
-    let multiplier = 1;
-    if ((<any>proj).x < enemy.x) {
-      fromRight = false;
+    if (enemy.canDamage || proj.getData('id') === 'shotgun') {
+      const scene = this as CrateboxScene;
+      scene.sys.sound.playAudioSprite('sfx', 'enemyshot');
+      let fromRight = true;
+      let shouldFlip = false;
+      let multiplier = 1;
+      if ((<any>proj).x < enemy.x) {
+        fromRight = false;
+      }
+      if (fromRight && enemy.body.velocity.x > 0 && proj.getData('flip')) {
+        shouldFlip = true;
+      } else if (!fromRight && enemy.body.velocity.x < 0 && proj.getData('flip')) {
+        shouldFlip = true;
+      }
+      if (proj.getData('force')) {
+        multiplier = proj.getData('force');
+      }
+      if (proj.getData('onEnemy')) {
+        proj.getData('onEnemy')(proj, enemy, scene);
+      }
+      enemy.damage(proj.getData('dmg'), fromRight, multiplier, shouldFlip);
+      if (!proj.getData('melee')) {
+        proj.destroy();
+      }
     }
-    if (proj.getData('force')) {
-      multiplier = proj.getData('force');
-    }
-    if (proj.getData('onEnemy')) {
-      proj.getData('onEnemy')(proj, enemy, scene);
-    }
-    enemy.damage(proj.getData('dmg'), fromRight, multiplier);
-    proj.destroy();
   }
 
   enemyHit = (enemy, player) => {
@@ -504,6 +571,7 @@ export class CrateboxScene extends Phaser.Scene {
   }
 
   restart(): void {
+    this.difficulty = 0;
     this.enemySpawnTimer = 5000;
     this.enemySpawnTime = 5000;
     this.sys.sound.playAudioSprite('sfx', 'death');

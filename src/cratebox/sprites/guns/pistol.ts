@@ -6,11 +6,14 @@ export class Pistol extends Gun implements GunProps {
   id = 'PISTOL';
   sfx = 'shoot';
 
-  cooldown = 280;
-  shootTimer = 280;
+  cooldown = 200;
+  shootTimer = 200;
   recoil = 200;
   damage = 3;
   size = 10;
+
+  canShoot = true;
+  released = true;
 
   projectile: ProjectileConfig = {
     velocity: 600,
@@ -34,29 +37,64 @@ export class Pistol extends Gun implements GunProps {
     this.shootTimer += delta;
   }
 
-  shoot() {
-    this.scene.events.emit('sfx', this.sfx);
-    const projectile =
-      this.scene.projectileGroup.create(this.x, this.y, 'projectiles', 'smgproj')
-        .setData('dmg', this.damage)
-        .setData('onCollide', this.projectileCollide);
+  shoot(shake = false) {
+    if (this.canShoot) {
+      if (shake) {
+        this.scene.minishake();
+      }
 
-    projectile.body
-      .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
-      .setSize(this.projectile.size, this.projectile.size)
-      .allowGravity = this.projectile.gravity;
+      this.canShoot = false;
+      this.released = false;
+      this.scene.events.emit('sfx', this.sfx);
+      const projectile =
+        this.scene.projectileGroup.create(this.x, this.y, 'projectiles', 'smgproj')
+          .setData('dmg', this.damage)
+          .setData('onCollide', this.projectileCollide);
+      projectile.body
+        .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
+        .setSize(this.projectile.size, this.projectile.size)
+        .allowGravity = this.projectile.gravity;
 
-    this.scene.tweens.add({
-      targets: this,
-      duration: 150,
-      ease: 'Sine.easeIn',
-      yoyo: true,
-      angle: this.flipX ? 70 : -70,
-    });
+      this.scene.time.addEvent({
+        delay: this.cooldown,
+        callbackScope: this,
+        callback() {
+          if (this.active && this.released) {
+            this.canShoot = true;
+          }
+        }
+      });
 
-    // this.body.setAngularVelocity(this.flipX ? this.recoil : -this.recoil);
-    this.shootTimer = 0;
+      this.scene.tweens.add({
+        targets: this,
+        duration: 100,
+        ease: 'Sine.easeIn',
+        yoyo: true,
+        angle: this.flipX ? 70 : -70,
+        callbackScope: this,
+        onComplete() {
+          this.setAngle(0);
+        }
+      });
+
+      // this.body.setAngularVelocity(this.flipX ? this.recoil : -this.recoil);
+      this.shootTimer = 0;
+    } else {
+      this.scene.time.addEvent({
+        delay: this.cooldown,
+        callbackScope: this,
+        callback() {
+          if (this.active && this.released) {
+            this.canShoot = true;
+          }
+        }
+      });
+    }
     return 0;
+  }
+
+  unShoot(): void {
+    this.released = true;
   }
 
   projectileCollide = (projectile, scene) => {

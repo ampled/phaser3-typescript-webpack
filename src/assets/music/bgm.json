@@ -1,0 +1,13 @@
+{
+  "resources": [
+    "bgm1.mp3",
+    "bgm1.ogg"
+  ],
+  "spritemap": {
+    "bgm1": {
+      "start": 0,
+      "end": 105.09351473922902,
+      "loop": false
+    }
+  }
+}

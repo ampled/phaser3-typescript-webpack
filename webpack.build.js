@@ -8,9 +8,9 @@ config.plugins.push(
     sourceMap: true,
     cache: true,
     uglifyOptions: {
-      compress: true,
-      parallel: 4
-    }
+      compress: true
+    },
+    parallel: 4
   })
 )
 

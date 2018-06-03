@@ -7,8 +7,8 @@ export class DualPistol extends Gun implements GunProps {
   id = 'DUALS';
   sfx = 'shoot';
 
-  cooldown = 300;
-  shootTimer = 300;
+  cooldown = 200;
+  shootTimer = 200;
   recoil = 200;
   damage = 3;
   size = 10;

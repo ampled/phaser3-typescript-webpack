@@ -101,7 +101,7 @@ export class RocketLauncher extends Gun implements GunProps {
       const explosion = scene.add.image(a.x, a.y, 'explosion');
       scene.physics.world.enable(explosion);
       explosion.body.allowGravity = false;
-      explosion.setData('dmg', 2).setData('force', 10);
+      explosion.setData('dmg', 6).setData('force', 10);
       scene.explosionGroup.add(explosion);
       scene.minishake();
       explosion.setTint(Phaser.Display.Color.GetColor(0, 0, 0));

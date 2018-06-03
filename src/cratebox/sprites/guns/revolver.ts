@@ -25,8 +25,7 @@ export class Revolver extends Pistol implements GunProps {
   }
 
   shoot(): number {
-    this.scene.minishake();
-    return super.shoot();
+    return super.shoot(true);
   }
 
 }

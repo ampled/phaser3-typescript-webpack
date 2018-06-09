@@ -9,7 +9,7 @@ export class RocketLauncher extends Gun implements GunProps {
 
   cooldown = 1200;
   recoil = 200;
-  damage = .1;
+  damage = 6;
   size = 10;
 
   shootTimer = 1201;
@@ -46,15 +46,15 @@ export class RocketLauncher extends Gun implements GunProps {
 
     this.scene.events.emit('sfx', this.sfx, this.sfxRate);
 
-    const grenade: Phaser.GameObjects.GameObject =
+    const rocket: Phaser.GameObjects.GameObject =
       this.scene.projectileGroup.create(this.x, this.y, 'projectiles', this.projectile.key)
         .setData('dmg', this.damage)
         .setData('onCollide', this.projectileCollide)
         .setData('onEnemy', this.explode);
 
-    (<any>grenade).flipX = this.flipX;
+    (<any>rocket).flipX = this.flipX;
 
-    grenade.body
+    rocket.body
       .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
       .setAccelerationX(this.flipX ? -300 : 300)
       .setAccelerationY(Phaser.Math.Between(-7, 7))
@@ -69,13 +69,13 @@ export class RocketLauncher extends Gun implements GunProps {
         alpha: { start: 1, end: .5 },
         lifespan: 400,
         speed: { min: 50, max: 100 },
-        follow: grenade,
+        follow: rocket,
         frequency: 100,
         quantity: 3,
         blendMode: 'MULTIPLY'
       });
 
-    grenade.setData('smoke', smoke);
+    rocket.setData('smoke', smoke);
 
     this.scene.tweens.add({
       targets: this,
@@ -89,15 +89,15 @@ export class RocketLauncher extends Gun implements GunProps {
     return 0;
   }
 
-  explode = (grenade, enemy, scene: CrateboxScene) => {
-    if (grenade.getData('smoke').active) {
-      scene.smokeEmitter.emitters.remove(grenade.getData('smoke'));
+  explode = (rocket, enemy, scene: CrateboxScene) => {
+    if (rocket.getData('smoke').active) {
+      scene.smokeEmitter.emitters.remove(rocket.getData('smoke'));
     }
 
-    if (grenade.active) {
+    if (rocket.active) {
       scene.events.emit('sfx', 'death', 0.5);
-      const a = new Phaser.Geom.Point(grenade.x, grenade.y);
-      grenade.destroy();
+      const a = new Phaser.Geom.Point(rocket.x, rocket.y);
+      rocket.destroy();
       const explosion = scene.add.image(a.x, a.y, 'explosion');
       scene.physics.world.enable(explosion);
       explosion.body.allowGravity = false;

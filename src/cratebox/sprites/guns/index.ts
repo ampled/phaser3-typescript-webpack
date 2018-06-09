@@ -9,7 +9,7 @@ import { RocketLauncher } from 'cratebox/sprites/guns/rocketlauncher';
 import { Revolver } from 'cratebox/sprites/guns/revolver';
 import { FryingPan } from 'cratebox/sprites/guns/fryingpan';
 
-export const DefaultGun = FryingPan;
+export const DefaultGun = Pistol;
 
 export const guns: Array<typeof Gun> = [
   Pistol,

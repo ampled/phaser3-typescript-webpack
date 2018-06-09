@@ -9,7 +9,7 @@ export class GrenadeLauncher extends Gun implements GunProps {
 
   cooldown = 1200;
   recoil = 200;
-  damage = .1;
+  damage = 6;
   size = 10;
 
   shootTimer = 1200;

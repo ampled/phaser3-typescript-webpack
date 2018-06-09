@@ -1,12 +1,8 @@
 import { center } from 'util/';
 
-import { Scene } from 'phaser-util/scene';
+import { EnemySpawn, getRandomEnemySpawnEvent } from './enemy-spawn.events';
 import { Enemy, SmallRobot, BigRobot, Drone } from 'cratebox/sprites/enemies';
 import { Player } from 'cratebox/sprites/player';
-import { TestClass } from 'cratebox/sprites/test';
-
-import { EnemySpawn, getRandomEnemySpawnEvent } from './enemy-spawn.events';
-import { FryingPan } from './sprites/guns/fryingpan';
 
 export class CrateboxScene extends Phaser.Scene {
   paused = true;
@@ -49,9 +45,6 @@ export class CrateboxScene extends Phaser.Scene {
   tileset: Phaser.Tilemaps.Tileset;
   groundLayer: Phaser.Tilemaps.StaticTilemapLayer;
   smokeEmitter: Phaser.GameObjects.Particles.ParticleEmitterManager;
-
-  shotgunVelocity = 50;
-  shotgunDrag = 50;
 
   // TODO get these from the tiled map as objects
   starCoords = [
@@ -200,6 +193,12 @@ export class CrateboxScene extends Phaser.Scene {
     });
 
     this.spawnStar();
+
+    this.input.on('pointerdown', function (pointer) {
+
+      console.log(pointer.x, pointer.y);
+
+    }, this);
 
     this.enemySpawnEvent = this.time.addEvent({
       delay: 2250,

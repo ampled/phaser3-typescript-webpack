@@ -7,14 +7,17 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   baseVel: number;
   madVel: number;
   vel: number;
+  baseHealth = 6;
   health = 6;
   isFirst = true;
   falling = false;
   killAt: number = 0;
+  isDead = false;
   canDamage = true;
   isMad = false;
   animWalk: string;
   animMad: string;
+  smoke: Phaser.GameObjects.Particles.ParticleEmitter;
 
   constructor(scene: CrateboxScene, x: number, y: number, public dir: number, key: string) {
     super(scene, x, y, key);
@@ -48,33 +51,28 @@ export class Enemy extends Phaser.GameObjects.Sprite {
 
     this.falling = this.body.velocity.y > 50;
 
-    if (this.killAt !== 0) {
-      this.killAt -= delta;
-      if (this.killAt < 0) {
-        this.kill();
-        return;
-      }
+    if (this.isDead) {
       return;
     }
 
     if (this.y > 400) {
-      // this.scene.smokeEmitter
-      //   .createEmitter({
-      //     frame: 'smoke',
-      //     angle: { min: -120, max: 120 },
-      //     scale: { start: 1.5, end: 0.5 },
-      //     alpha: { start: 1, end: .5 },
-      //     lifespan: 400,
-      //     speed: { min: 50, max: 100 },
-      //     follow: this,
-      //     frequency: 100,
-      //     quantity: 3,
-      //     blendMode: 'MULTIPLY'
-      //   });
+      this.smoke = this.scene.smokeEmitter
+        .createEmitter({
+          frame: 'smoke',
+          angle: { min: -120, max: 120 },
+          scale: { start: 1.5, end: 0.5 },
+          alpha: { start: 1, end: .5 },
+          lifespan: 400,
+          speed: { min: 50, max: 100 },
+          follow: this,
+          frequency: 100,
+          quantity: 3,
+          blendMode: 'MULTIPLY'
+        });
       this.y = -5;
       this.x = 200;
       this.vel = this.madVel;
-      this.health = 6;
+      this.health = this.baseHealth;
       this.scene.minishake();
       this.anims.play(this.animMad);
       this.scene.events.emit('sfx', 'enemyloop');
@@ -91,7 +89,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
       this.flip();
     }
     if (this.health <= 0) {
-      this.dieAnim(fromRight, multiplier);
+      this.die(fromRight, multiplier);
     } else {
       this.scene.tweens.add({
         targets: this,
@@ -112,22 +110,30 @@ export class Enemy extends Phaser.GameObjects.Sprite {
     this.body.setVelocityX(-this.body.velocity.x);
   }
 
-  dieAnim(fromRight, multiplier = 1) {
+  die(fromRight, multiplier = 1) {
+    this.isDead = true;
+    this.body.allowGravity = true;
     this.scene.minishake();
     this.scene.events.emit('sfx', 'enemykill');
-    this.flipY = true;
     this.scene.enemyGroup.remove(this);
     this.scene.killedEnemies.add(this);
+    this.body.setAcceleration(0, 0);
     this.body.setVelocityY(Phaser.Math.Between(-100, -250));
     this.body.setVelocityX((fromRight ? -100 : 100) * multiplier);
     this.body.setAngularVelocity(Phaser.Math.Between(100, 1000));
-    this.killAt = 2000;
-  }
+    this.scene.time.addEvent({
+      delay: 2000,
+      callbackScope: this,
+      callback: () => {
+        if (this.smoke) {
+          this.scene.smokeEmitter.emitters.remove(this.smoke);
+        }
+        this.scene.killedEnemies.remove(this);
+        this.scene.physics.world.disable(this);
+        this.destroy();
+      }
+    });
 
-  kill() {
-    this.scene.killedEnemies.remove(this);
-    this.scene.physics.world.disable(this);
-    this.destroy();
   }
 
 }

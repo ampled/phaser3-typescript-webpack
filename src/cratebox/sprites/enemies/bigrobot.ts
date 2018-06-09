@@ -4,6 +4,7 @@ export class BigRobot extends Enemy {
   baseVel: number = 70;
   madVel: number = 90;
   vel: number = 70;
+  baseHealth = 12;
   health = 12;
   isFirst = true;
   falling = false;

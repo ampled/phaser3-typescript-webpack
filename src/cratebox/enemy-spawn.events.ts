@@ -29,10 +29,10 @@ const dif3 = [
 ];
 
 const dif4 = [
-  { weight: .25, event: EnemySpawn.NORMAL },
-  { weight: .25, event: EnemySpawn.NORMALWAVE },
-  { weight: .25, event: EnemySpawn.BIG },
-  { weight: .25, event: EnemySpawn.DRONE }
+  { weight: .3, event: EnemySpawn.NORMAL },
+  { weight: .1, event: EnemySpawn.NORMALWAVE },
+  { weight: .35, event: EnemySpawn.BIG },
+  { weight: .15, event: EnemySpawn.DRONE }
 ];
 
 const dif5 = [

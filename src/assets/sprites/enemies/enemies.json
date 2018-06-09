@@ -29,7 +29,25 @@
 },
 "drone02":
 {
-	"frame": {"x":55,"y":1,"w":16,"h":16},
+	"frame": {"x":1,"y":19,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"dronemad01":
+{
+	"frame": {"x":19,"y":19,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"dronemad02":
+{
+	"frame": {"x":37,"y":19,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -38,7 +56,7 @@
 },
 "mad00":
 {
-	"frame": {"x":73,"y":1,"w":16,"h":16},
+	"frame": {"x":1,"y":37,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -47,7 +65,7 @@
 },
 "mad01":
 {
-	"frame": {"x":91,"y":1,"w":16,"h":16},
+	"frame": {"x":19,"y":37,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -59,8 +77,8 @@
 	"version": "1.0",
 	"image": "enemies.png",
 	"format": "RGBA8888",
-	"size": {"w":108,"h":18},
+	"size": {"w":54,"h":54},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:d85e9b7913e2896e7d01b78b3dc7bcae:f68fb83b4b72e0102ab48e97120b9ca3:9b2a76c8b2a408b3f0547a4eddda1e06$"
+	"smartupdate": "$TexturePacker:SmartUpdate:dc9e6669e5584a28aec5ac9c041cbc71:7a0594a5249d96eaf6034ce82fc4554b:9b2a76c8b2a408b3f0547a4eddda1e06$"
 }
 }

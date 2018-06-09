@@ -28,7 +28,7 @@ export class CrateboxScene extends Phaser.Scene {
   enemySpawnEventDebug: Phaser.GameObjects.BitmapText;
 
   difficulty = 0;
-  enemySpawnTimer = 2500;
+  enemySpawnTimer = 2000;
   enemySpawnTime = 5000;
   enemySpawnCounter = 1;
   enemySpawnTimeDebug: Phaser.GameObjects.BitmapText;
@@ -202,8 +202,8 @@ export class CrateboxScene extends Phaser.Scene {
     this.spawnStar();
 
     this.enemySpawnEvent = this.time.addEvent({
-      delay: 2500,
-      loop: false,
+      delay: 2250,
+      loop: true,
       callback: this.$spawnEnemy,
       callbackScope: this
     });

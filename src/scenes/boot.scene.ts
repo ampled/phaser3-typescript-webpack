@@ -175,13 +175,27 @@ export class BootScene extends Phaser.Scene {
     });
 
     this.anims.create({
+      key: 'dronemad',
+      frameRate: 15,
+      repeat: -1,
+      frames: this.anims.generateFrameNames('enemies', { start: 1, end: 2, zeroPad: 2, prefix: 'dronemad' })
+    });
+
+    this.anims.create({
+      key: 'bigwalkmad',
+      frameRate: 15,
+      repeat: -1,
+      yoyo: true,
+      frames: this.anims.generateFrameNames('benemies', { start: 0, end: 2, zeroPad: 2, prefix: 'bigmad' })
+    });
+
+    this.anims.create({
       key: 'bigwalk',
       frameRate: 15,
       repeat: -1,
       yoyo: true,
       frames: this.anims.generateFrameNames('benemies', { start: 0, end: 2, zeroPad: 2, prefix: 'big' })
     });
-
 
     this.anims.create(enemyWalk);
     this.anims.create(enemyWalkMad);

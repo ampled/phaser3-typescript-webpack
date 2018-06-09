@@ -5,6 +5,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body;
 
   baseVel: number;
+  madVel: number;
   vel: number;
   health = 6;
   isFirst = true;
@@ -12,15 +13,18 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   killAt: number = 0;
   canDamage = true;
   isMad = false;
+  animWalk: string;
+  animMad: string;
 
-  constructor(scene: CrateboxScene, x: number, y: number, public dir: number, key: string, anim: string) {
+  constructor(scene: CrateboxScene, x: number, y: number, public dir: number, key: string) {
     super(scene, x, y, key);
 
     this.scene.physics.world.enable(this);
-    this.anims.play(anim);
   }
 
   firstUpdate(): void {
+    console.log(this.animWalk);
+    this.anims.play(this.animWalk);
     this.vel = this.dir === 1 ? -this.baseVel : this.baseVel;
     this.body.setVelocityX(this.vel).setBounceY(0.2);
     this.isFirst = false;
@@ -54,12 +58,25 @@ export class Enemy extends Phaser.GameObjects.Sprite {
     }
 
     if (this.y > 400) {
+      // this.scene.smokeEmitter
+      //   .createEmitter({
+      //     frame: 'smoke',
+      //     angle: { min: -120, max: 120 },
+      //     scale: { start: 1.5, end: 0.5 },
+      //     alpha: { start: 1, end: .5 },
+      //     lifespan: 400,
+      //     speed: { min: 50, max: 100 },
+      //     follow: this,
+      //     frequency: 100,
+      //     quantity: 3,
+      //     blendMode: 'MULTIPLY'
+      //   });
       this.y = -5;
       this.x = 200;
-      this.vel = this.vel * 1.1;
+      this.vel = this.madVel;
       this.health = 6;
       this.scene.minishake();
-      this.anims.play('enemywalkmad');
+      this.anims.play(this.animMad);
       this.scene.events.emit('sfx', 'enemyloop');
     }
 
@@ -92,8 +109,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   }
 
   flip(): void {
-    this.vel = -this.body.velocity.x;
-    this.body.setVelocityX(this.vel);
+    this.body.setVelocityX(-this.body.velocity.x);
   }
 
   dieAnim(fromRight, multiplier = 1) {

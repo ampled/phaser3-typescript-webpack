@@ -11,7 +11,7 @@
 },
 "big01":
 {
-	"frame": {"x":34,"y":1,"w":32,"h":32},
+	"frame": {"x":35,"y":1,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -20,7 +20,34 @@
 },
 "big02":
 {
-	"frame": {"x":67,"y":1,"w":32,"h":32},
+	"frame": {"x":69,"y":1,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"bigmad00":
+{
+	"frame": {"x":103,"y":1,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"bigmad01":
+{
+	"frame": {"x":137,"y":1,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"bigmad02":
+{
+	"frame": {"x":171,"y":1,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -32,8 +59,8 @@
 	"version": "1.0",
 	"image": "bigenemies.png",
 	"format": "RGBA8888",
-	"size": {"w":100,"h":34},
+	"size": {"w":204,"h":34},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:a47ed0db13c1ff18bac4ce440b1d5c80:51b0f0c2466aee6a375f9ff79298bf3f:5f335b7b227081c26ba5903984d72761$"
+	"smartupdate": "$TexturePacker:SmartUpdate:8667f3dece83e9c987f27778b6946608:7581cc646dfe5f5826b13a326eb7ec96:5f335b7b227081c26ba5903984d72761$"
 }
 }

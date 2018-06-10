@@ -1,4 +1,4 @@
-import { Enemy } from './enemy_base';
+import { Enemy } from './enemy';
 
 export class BigRobot extends Enemy {
   baseVel: number = 70;

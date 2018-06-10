@@ -16,16 +16,16 @@ const dif1 = [
 const dif2 = [
   { weight: .5, event: EnemySpawn.NORMAL },
   { weight: .2, event: EnemySpawn.NORMALDUO },
-  { weight: .15, event: EnemySpawn.DRONE },
-  { weight: .15, event: EnemySpawn.BIG }
+  { weight: .1, event: EnemySpawn.DRONE },
+  { weight: .2, event: EnemySpawn.BIG }
 ];
 
 const dif3 = [
   { weight: .4, event: EnemySpawn.NORMAL },
   { weight: .1, event: EnemySpawn.NORMALDUO },
   { weight: .1, event: EnemySpawn.NORMALWAVE },
-  { weight: .25, event: EnemySpawn.BIG },
-  { weight: .15, event: EnemySpawn.DRONE }
+  { weight: .3, event: EnemySpawn.BIG },
+  { weight: .1, event: EnemySpawn.DRONE }
 ];
 
 const dif4 = [
@@ -57,7 +57,6 @@ export const difficulties = {
 
 export function getRandomEnemySpawnEvent(diff): EnemySpawn {
   const dif = difficulties[diff];
-  console.log(dif);
   const num = Math.random();
   let s = 0;
   const lastIndex = dif.length - 1;

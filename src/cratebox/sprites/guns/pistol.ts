@@ -4,7 +4,7 @@ import { CrateboxScene } from 'cratebox/cratebox.scene';
 export class Pistol extends Gun implements GunProps {
   static id = 'PISTOL';
   id = 'PISTOL';
-  sfx = 'shoot';
+  sfx = 'pistolshoot';
 
   cooldown = 200;
   shootTimer = 200;
@@ -19,7 +19,8 @@ export class Pistol extends Gun implements GunProps {
     velocity: 600,
     size: 10,
     gravity: false,
-    key: 'projectile'
+    key: 'smgproj',
+    anim: 'projectile'
   };
 
   scene: CrateboxScene;
@@ -43,13 +44,18 @@ export class Pistol extends Gun implements GunProps {
         this.scene.minishake();
       }
 
+      const x = this.flipX ? this.x - 8 : this.x + 8;
+
       this.canShoot = false;
       this.released = false;
-      this.scene.events.emit('sfx', this.sfx);
+      this.scene.events.emit('sfx', this.sfx, Phaser.Math.FloatBetween(0.7, 1));
       const projectile =
-        this.scene.projectileGroup.create(this.x, this.y, 'projectiles', 'smgproj')
+        this.scene.projectileGroup.create(x, this.y, 'projectiles', this.projectile.key)
           .setData('dmg', this.damage)
-          .setData('onCollide', this.projectileCollide);
+          .setData('onCollide', this.projectileCollide) as Phaser.GameObjects.Sprite;
+
+      projectile.anims.play(this.projectile.anim);
+
       projectile.body
         .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
         .setSize(this.projectile.size, this.projectile.size)

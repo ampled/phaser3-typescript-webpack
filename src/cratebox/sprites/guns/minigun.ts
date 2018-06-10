@@ -5,7 +5,8 @@ export class Minigun extends Smg implements GunProps {
   static id = 'MINIGUN';
   id = 'MINIGUN';
   sfx = 'enemyshot';
-  sfxRate = 0.5;
+  sfxMin = .5;
+  sfxMax = .5;
 
   cooldown = 40;
   shootTimer = 30;
@@ -19,7 +20,8 @@ export class Minigun extends Smg implements GunProps {
     velocity: 600,
     size: 5,
     gravity: false,
-    key: 'smgproj'
+    key: 'smgproj',
+    anim: 'projectilefast'
   };
 
   constructor(scene, x, y, key = 'guns', frame = 'minigun') {
@@ -29,6 +31,11 @@ export class Minigun extends Smg implements GunProps {
   shoot(): number {
     this.scene.minishake();
     return super.shoot();
+  }
+
+  projectileCollide = (projectile, scene) => {
+    scene.events.emit('sfx', 'foley');
+    projectile.destroy();
   }
 
 }

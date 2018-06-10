@@ -8,6 +8,10 @@ import { GrenadeLauncher } from 'cratebox/sprites/guns/grenadelauncher';
 import { RocketLauncher } from 'cratebox/sprites/guns/rocketlauncher';
 import { Revolver } from 'cratebox/sprites/guns/revolver';
 import { FryingPan } from 'cratebox/sprites/guns/fryingpan';
+import { Mines } from 'cratebox/sprites/guns/mines';
+import { DiscGun } from 'cratebox/sprites/guns/discgun';
+import { Flamethrower } from 'cratebox/sprites/guns/flamethrower';
+import { LaserGun } from 'cratebox/sprites/guns/lasergun';
 
 export const DefaultGun = Pistol;
 
@@ -20,7 +24,11 @@ export const guns: Array<typeof Gun> = [
   Minigun,
   GrenadeLauncher,
   RocketLauncher,
-  FryingPan
+  FryingPan,
+  Mines,
+  DiscGun,
+  Flamethrower,
+  LaserGun
 ];
 
 export * from './gun';

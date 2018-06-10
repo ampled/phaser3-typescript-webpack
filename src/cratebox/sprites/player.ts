@@ -140,6 +140,13 @@ export class Player extends Phaser.GameObjects.Sprite {
 
   }
 
+  jump(): void {
+    if (this.body.onFloor() && this.jumpTimer === 0) {
+      this.jumpTimer = 1;
+      this.body.setVelocityY(-150);
+    }
+  }
+
   animation(time: number, delta: number): void {
     let anim: string;
     if (this.body.velocity.y !== 0) {

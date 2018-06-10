@@ -1,4 +1,4 @@
-import { Enemy } from './enemy_base';
+import { Enemy } from './enemy';
 
 export class Drone extends Enemy {
   baseVel: number = 50;
@@ -8,8 +8,8 @@ export class Drone extends Enemy {
   madAccel: number = 100;
   accel: number = 70;
 
-  baseHealth = 8;
-  health = 8;
+  baseHealth = 6;
+  health = 6;
   isFirst = true;
   canDamage = true;
   isMad = false;
@@ -19,13 +19,12 @@ export class Drone extends Enemy {
   smoke: Phaser.GameObjects.Particles.ParticleEmitter;
 
   isMoving = false;
+  goingToPit = false;
   moveEvent: Phaser.Time.TimerEvent;
 
   getOutOfTopY = 60;
   getOutOfTopX1 = 300;
   getOutOfTopX2 = 100;
-
-
 
   constructor(scene, x, y, public dir) {
     super(scene, x, y, dir, 'enemies');
@@ -33,14 +32,8 @@ export class Drone extends Enemy {
 
   firstUpdate(): void {
     this.anims.play(this.animWalk);
-    // this.vel = this.dir === 1 ? -this.baseVel : this.baseVel;
     this.body.setBounce(1, 1.5).setSize(16, 12).allowGravity = false;
-    // this.body.gravity = new Phaser.Math.Vector2(2, 2);
     this.isFirst = false;
-    this.scene.add.sprite(this.getOutOfTopX1, this.getOutOfTopY, 'projectiles', 'smgproj');
-    this.scene.add.sprite(this.getOutOfTopX2, this.getOutOfTopY, 'projectiles', 'smgproj');
-    this.scene.add.sprite(300, 180, 'projectiles', 'smgproj');
-    this.scene.add.sprite(100, 180, 'projectiles', 'smgproj');
   }
 
   update(time: number, delta: number) {
@@ -52,9 +45,13 @@ export class Drone extends Enemy {
       return;
     }
 
+    // always look towards player
     this.flipX = this.scene.player.x < this.x;
 
+    // loop back around and get mad if exit through pit
     if (this.y > 240) {
+      this.isMoving = false;
+      this.goingToPit = false;
       this.isMad = true;
       this.smoke = this.scene.smokeEmitter
         .createEmitter({
@@ -79,23 +76,35 @@ export class Drone extends Enemy {
       this.scene.events.emit('sfx', 'enemyloop');
     }
 
-    if (!this.isMoving) {
+    // exit to pit if over it
+    if (this.y > 176 && (this.x > 186 && this.x < 206) && !this.goingToPit) {
+      this.isMoving = true;
+      this.goingToPit = true;
+      this.body.setVelocity(0, 5);
+      this.anims.currentAnim.resume();
+      this.scene.time.addEvent({
+        delay: 1000,
+        callback: () => {
+          this.scene.physics.moveTo(this, 200, 241, 20);
+        }
+      });
+
+    }
+
+    if (!this.isMoving && !this.goingToPit) {
       this.isMoving = true;
 
       let x = 200;
       let y = 240;
       const distanceToPlayer = Phaser.Math.Distance.Between(this.x, this.y, this.scene.player.x, this.scene.player.y);
-      const distanceToPit = Phaser.Math.Distance.Between(this.x, this.y, 120, 400) - 200;
-
-      // console.log('distplayer', distanceToPlayer);
-      // console.log('distpit', distanceToPit);
+      const distanceToPit = Phaser.Math.Distance.Between(this.x, this.y, 120, 400) - 180;
 
       if (distanceToPlayer < distanceToPit && this.y < 170) {
-        console.log('go to player');
+        // go to player
         x = this.scene.player.x;
         y = this.scene.player.y - 16;
       } else {
-        console.log('go to pit');
+        // go to pit
         if (this.y > 80 && this.y < 160) {
           if (this.dir !== 1) {
             x = Phaser.Math.Between(40, 60);
@@ -105,7 +114,7 @@ export class Drone extends Enemy {
         }
       }
       if (this.y < this.getOutOfTopY && (this.x < this.getOutOfTopX1 && this.x > this.getOutOfTopX2)) {
-        console.log('get out of top');
+        // get out of top
         y = 40;
         if (this.dir === 1) {
           x = Phaser.Math.Between(20, 60);
@@ -117,13 +126,14 @@ export class Drone extends Enemy {
       this.scene.physics.accelerateTo(this, x, y, this.accel, this.vel, this.vel);
       // const pointer = this.scene.add.sprite(x, y, 'projectiles', 'smgproj').setTint(0);
       this.moveEvent = this.scene.time.addEvent({
-        delay: Phaser.Math.Between(1000, 2000),
+        delay: Phaser.Math.Between(1500, 2000),
         callbackScope: this,
         callback: () => {
+          this.setFrame(this.isMad ? 'dronemad01' : 'drone01');
           this.anims.currentAnim.pause();
           this.body.setAcceleration(0, 0).setVelocity(this.body.velocity.x / 3, 5);
           this.scene.time.addEvent({
-            delay: Phaser.Math.Between(2000, 4000),
+            delay: Phaser.Math.Between(2000, 3000),
             callbackScope: this,
             callback: (p) => {
               // p.destroy();
@@ -134,7 +144,6 @@ export class Drone extends Enemy {
           });
         }
       });
-
 
     }
 

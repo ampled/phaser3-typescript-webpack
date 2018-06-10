@@ -1,8 +1,8 @@
-import { Enemy } from './enemy_base';
+import { Enemy } from './enemy';
 
 export class SmallRobot extends Enemy {
   baseVel: number = 90;
-  madVel: number = 110;
+  madVel: number = 120;
   vel: number = 90;
   health = 6;
   isFirst = true;

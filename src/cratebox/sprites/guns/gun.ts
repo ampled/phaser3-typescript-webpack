@@ -16,6 +16,7 @@ export interface ProjectileConfig {
   gravity: boolean;
   amount?: number;
   key: string;
+  anim?: string;
 }
 
 export class Gun extends Phaser.GameObjects.Sprite implements GunProps {

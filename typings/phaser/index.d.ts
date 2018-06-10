@@ -54190,7 +54190,7 @@ declare namespace Phaser {
              * @param startIndex An optional start index. Default 0.
              * @param length An optional length, the total number of elements (from the startIndex) to choose from. Default array.length.
              */
-            function GetRandom(array: any[], startIndex?: integer, length?: integer): object;
+            function GetRandom(array: any[], startIndex?: integer, length?: integer): any;
 
             namespace Matrix {
                 /**

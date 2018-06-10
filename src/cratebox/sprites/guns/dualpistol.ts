@@ -1,11 +1,10 @@
 import { Gun, GunProps, ProjectileConfig } from 'cratebox/sprites/guns/gun';
 import { CrateboxScene } from 'cratebox/cratebox.scene';
-import ABody = Phaser.Physics.Arcade.Body;
+import { Pistol } from './pistol';
 
-export class DualPistol extends Gun implements GunProps {
+export class DualPistol extends Pistol implements GunProps {
   static id = 'DUALS';
   id = 'DUALS';
-  sfx = 'shoot';
 
   cooldown = 200;
   shootTimer = 200;
@@ -13,12 +12,12 @@ export class DualPistol extends Gun implements GunProps {
   damage = 3;
   size = 10;
 
-  projectile: ProjectileConfig = {
-    velocity: 600,
-    size: 10,
-    gravity: false,
-    key: 'projectile'
-  };
+  // projectile: ProjectileConfig = {
+  //   velocity: 600,
+  //   size: 10,
+  //   gravity: false,
+  //   key: 'projectile'
+  // };
 
   scene: CrateboxScene;
 
@@ -30,34 +29,83 @@ export class DualPistol extends Gun implements GunProps {
   update(time: number, delta: number): void {
     this.x = this.scene.player.x;
     this.y = this.scene.player.y;
-    this.flipX = this.scene.player.flipX;
+    // this.flipX = this.scene.player.flipX;
     this.setDepth(9);
     this.shootTimer += delta;
   }
 
-  shoot() {
-    this.scene.events.emit('sfx', this.sfx);
-    const projectile =
-      this.scene.projectileGroup.create(this.x + 16, this.y, 'projectiles', 'smgproj')
-        .setData('dmg', this.damage)
-        .setData('onCollide', this.projectileCollide);
+  shoot(shake = false) {
+    if (this.canShoot) {
+      if (shake) {
+        this.scene.minishake();
+      }
 
-    const projectile2 =
-      this.scene.projectileGroup.create(this.x - 16, this.y, 'projectiles', 'smgproj')
-        .setData('dmg', this.damage)
-        .setData('onCollide', this.projectileCollide);
+      const x1 = this.x + 16;
+      const x2 = this.x - 16;
 
-    projectile.body
-      .setVelocityX(this.projectile.velocity)
-      .setSize(this.projectile.size, this.projectile.size)
-      .allowGravity = this.projectile.gravity;
+      this.canShoot = false;
+      this.released = false;
+      this.scene.events.emit('sfx', this.sfx, Phaser.Math.FloatBetween(0.7, 1.1));
 
-    projectile2.body
-      .setVelocityX(-this.projectile.velocity)
-      .setSize(this.projectile.size, this.projectile.size)
-      .allowGravity = this.projectile.gravity;
+      const projectile =
+        this.scene.projectileGroup.create(x1, this.y, 'projectiles', this.projectile.key)
+          .setData('dmg', this.damage)
+          .setData('onCollide', this.projectileCollide) as Phaser.GameObjects.Sprite;
 
-    this.shootTimer = 0;
+      projectile.anims.play(this.projectile.anim);
+
+      const projectile2 =
+        this.scene.projectileGroup.create(x2, this.y, 'projectiles', this.projectile.key)
+          .setData('dmg', this.damage)
+          .setData('onCollide', this.projectileCollide) as Phaser.GameObjects.Sprite;
+
+      projectile2.anims.play(this.projectile.anim);
+
+      projectile2.body
+        .setVelocityX(-this.projectile.velocity)
+        .setSize(this.projectile.size, this.projectile.size)
+        .allowGravity = this.projectile.gravity;
+
+      projectile.body
+        .setVelocityX(this.projectile.velocity)
+        .setSize(this.projectile.size, this.projectile.size)
+        .allowGravity = this.projectile.gravity;
+
+      this.scene.time.addEvent({
+        delay: this.cooldown,
+        callbackScope: this,
+        callback() {
+          if (this.active && this.released) {
+            this.canShoot = true;
+          }
+        }
+      });
+
+      this.scene.tweens.add({
+        targets: this,
+        duration: 48,
+        ease: 'Sine.easeIn',
+        yoyo: true,
+        angle: this.flipX ? 10 : -10,
+        callbackScope: this,
+        onComplete() {
+          this.setAngle(0);
+        }
+      });
+
+      // this.body.setAngularVelocity(this.flipX ? this.recoil : -this.recoil);
+      this.shootTimer = 0;
+    } else {
+      this.scene.time.addEvent({
+        delay: this.cooldown,
+        callbackScope: this,
+        callback() {
+          if (this.active && this.released) {
+            this.canShoot = true;
+          }
+        }
+      });
+    }
     return 0;
   }
 

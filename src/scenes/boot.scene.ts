@@ -1,5 +1,3 @@
-import { Scene } from 'phaser-util/scene';
-
 import * as crateboxMap from 'assets/tilemaps/cratebox.json';
 import * as crateboxTiles from 'assets/tilesets/16x16.png';
 
@@ -11,7 +9,6 @@ import * as enemySpriteSheet from 'assets/sprites/enemies/enemies.png';
 import * as enemySpriteAtlas from 'assets/sprites/enemies/enemies.json';
 import * as benemySpriteSheet from 'assets/sprites/enemies/bigenemies.png';
 import * as benemySpriteAtlas from 'assets/sprites/enemies/bigenemies.json';
-
 
 import * as gunSpriteSheet from 'assets/sprites/guns/guns.png';
 import * as gunSpriteAtlas from 'assets/sprites/guns/guns.json';
@@ -153,37 +150,23 @@ export class BootScene extends Phaser.Scene {
     this.anims.create(shoot);
 
     // ENEMY ANIMS
-    const enemyWalk: AnimationConfig = {
-      key: 'enemywalk',
-      frameRate: 15,
-      repeat: -1,
-      frames: this.anims.generateFrameNames('enemies', { start: 0, end: 1, zeroPad: 2 })
-    };
-
-    const enemyWalkMad: AnimationConfig = {
-      key: 'enemywalkmad',
-      frameRate: 15,
-      repeat: -1,
-      frames: this.anims.generateFrameNames('enemies', { start: 0, end: 1, zeroPad: 2, prefix: 'mad' })
-    };
-
     this.anims.create({
       key: 'drone',
-      frameRate: 15,
+      frameRate: 10,
       repeat: -1,
       frames: this.anims.generateFrameNames('enemies', { start: 1, end: 2, zeroPad: 2, prefix: 'drone' })
     });
 
     this.anims.create({
       key: 'dronemad',
-      frameRate: 15,
+      frameRate: 20,
       repeat: -1,
       frames: this.anims.generateFrameNames('enemies', { start: 1, end: 2, zeroPad: 2, prefix: 'dronemad' })
     });
 
     this.anims.create({
       key: 'bigwalkmad',
-      frameRate: 15,
+      frameRate: 20,
       repeat: -1,
       yoyo: true,
       frames: this.anims.generateFrameNames('benemies', { start: 0, end: 2, zeroPad: 2, prefix: 'bigmad' })
@@ -197,8 +180,18 @@ export class BootScene extends Phaser.Scene {
       frames: this.anims.generateFrameNames('benemies', { start: 0, end: 2, zeroPad: 2, prefix: 'big' })
     });
 
-    this.anims.create(enemyWalk);
-    this.anims.create(enemyWalkMad);
+    this.anims.create({
+      key: 'enemywalk',
+      frameRate: 15,
+      repeat: -1,
+      frames: this.anims.generateFrameNames('enemies', { start: 0, end: 1, zeroPad: 2 })
+    });
+    this.anims.create({
+      key: 'enemywalkmad',
+      frameRate: 20,
+      repeat: -1,
+      frames: this.anims.generateFrameNames('enemies', { start: 0, end: 1, zeroPad: 2, prefix: 'mad' })
+    });
 
     // WEAPON ANIMS
     this.anims.create({
@@ -207,24 +200,49 @@ export class BootScene extends Phaser.Scene {
       frames: [
         { key: 'guns', frame: 'fryingpanattack' },
         { key: 'guns', frame: 'fryingpan' }]
-    })
-
-    this.text = this.add.text(0, 0, 'TEST', { font: '28px Tahoma' });
-    this.physics.world.enable(this.text);
-    this.text.body.collideWorldBounds = true;
-    this.text.body.setVelocityX(50).setBounce(1, 1);
-
-    this.keys = {
-      TWO: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO)
-    };
-
-    this.input.keyboard.on('keyup', e => {
-      if (e.key === '2') {
-        // this.scene.start('CrateboxScene');
-      }
     });
 
-    // this.scene.pause('Boot');
+    // PROJECTILE ANIMS
+    this.anims.create({
+      key: 'projectile',
+      duration: 100,
+      // frameRate: 12,
+      frames: [
+        { key: 'projectiles', frame: 'projectile' },
+        { key: 'projectiles', frame: 'smgproj' }
+      ]
+    });
+
+    this.anims.create({
+      key: 'projectilefast',
+      duration: 100,
+      frameRate: 32,
+      frames: [
+        { key: 'projectiles', frame: 'projectile' },
+        { key: 'projectiles', frame: 'smgproj' }
+      ]
+    });
+
+    this.anims.create({
+      key: 'disc',
+      repeat: -1,
+      frameRate: 24,
+      frames: [
+        { key: 'projectiles', frame: 'disc00' },
+        { key: 'projectiles', frame: 'disc01' }
+      ]
+    });
+
+    this.anims.create({
+      key: 'fire',
+      repeat: -1,
+      frames: [
+        { key: 'projectiles', frame: 'fire00' },
+        { key: 'projectiles', frame: 'fire01' },
+        { key: 'projectiles', frame: 'fire02' }
+      ]
+    })
+
     this.scene.start('CrateboxScene');
   }
 

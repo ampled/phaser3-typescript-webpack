@@ -5,7 +5,8 @@ export class Smg extends Pistol implements GunProps {
   static id = 'SMG';
   id = 'SMG';
   sfx = 'enemyshot';
-  sfxRate = 2;
+  sfxMin = 1;
+  sfxMax = 2.5;
 
   cooldown = 75;
   shootTimer = 75;
@@ -19,7 +20,8 @@ export class Smg extends Pistol implements GunProps {
     velocity: 400,
     size: 5,
     gravity: false,
-    key: 'smgproj'
+    key: 'smgproj',
+    anim: 'projectile'
   };
 
   constructor(scene, x, y, key = 'guns', frame = 'smg') {
@@ -27,16 +29,23 @@ export class Smg extends Pistol implements GunProps {
   }
 
   shoot(): number {
-    this.scene.events.emit('sfx', this.sfx, this.sfxRate);
+    this.scene.events.emit('sfx', this.sfx, Phaser.Math.FloatBetween(this.sfxMin, this.sfxMax));
+
+    const x = this.flipX ? this.x - 8 : this.x + 8;
+
     const projectile =
-      this.scene.projectileGroup.create(this.x, this.y, 'projectiles', this.projectile.key)
+      this.scene.projectileGroup.create(x, this.y, 'projectiles', this.projectile.key)
+        .setData('bypass', true)
         .setData('dmg', this.damage)
-        .setData('onCollide', this.projectileCollide);
+        .setData('onCollide', this.projectileCollide) as Phaser.GameObjects.Sprite;
+
+    projectile.anims.play('projectilefast');
 
     projectile.body
       .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
       .setVelocityY(Phaser.Math.Between(-this.angleSpread, this.angleSpread))
       .setSize(this.projectile.size, this.projectile.size)
+      .setBounceY(1)
       .allowGravity = this.projectile.gravity;
     this.scene.tweens.add({
       targets: this,

@@ -46,13 +46,13 @@ export class RocketLauncher extends Gun implements GunProps {
 
     this.scene.events.emit('sfx', this.sfx, this.sfxRate);
 
-    const rocket: Phaser.GameObjects.GameObject =
+    const rocket =
       this.scene.projectileGroup.create(this.x, this.y, 'projectiles', this.projectile.key)
         .setData('dmg', this.damage)
         .setData('onCollide', this.projectileCollide)
-        .setData('onEnemy', this.explode);
+        .setData('onEnemy', this.explode) as Phaser.GameObjects.Sprite;
 
-    (<any>rocket).flipX = this.flipX;
+    rocket.flipX = this.flipX;
 
     rocket.body
       .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
@@ -101,7 +101,7 @@ export class RocketLauncher extends Gun implements GunProps {
       const explosion = scene.add.image(a.x, a.y, 'explosion');
       scene.physics.world.enable(explosion);
       explosion.body.allowGravity = false;
-      explosion.setData('dmg', 6).setData('force', 10);
+      explosion.setData('dmg', 6).setData('force', 7);
       scene.explosionGroup.add(explosion);
       scene.minishake();
       explosion.setTint(Phaser.Display.Color.GetColor(0, 0, 0));

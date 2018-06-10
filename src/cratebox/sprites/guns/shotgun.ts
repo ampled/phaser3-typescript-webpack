@@ -71,6 +71,7 @@ export class Shotgun extends Gun implements GunProps {
     });
     this.projRef.forEach(proj =>
       proj.setData('dmg', this.damage)
+        .setData('bypass', true)
         .setData('id', 'shotgun')
         .setData('onCollide', this.projectileCollide)
         .setData('force', 4)

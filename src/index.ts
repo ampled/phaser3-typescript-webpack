@@ -1,6 +1,5 @@
 import 'phaser';
 
-import { Game } from 'phaser-util/game';
 import { BootScene } from 'scenes/boot.scene';
 import { CrateboxScene } from 'cratebox/cratebox.scene';
 
@@ -11,11 +10,23 @@ const config: Opt<GameConfig> = {
   width: 400,
   height: 240,
   zoom: 2,
-  pixelArt: true,
+  render: {
+    antialias: false,
+    pixelArt: true
+  },
+  input: {
+    gamepad: true
+  },
+  // fps: {
+  //   min: 1,
+  //   target: 30,
+  //   forceSetTimeOut: true,
+  //   panicMax: 20
+  // },
   physics: {
     default: 'arcade',
     arcade: {
-      tilebias: 4,
+      tilebias: 0,
       gravity: { y: 600 },
       debug: true
     }
@@ -27,4 +38,4 @@ const config: Opt<GameConfig> = {
 };
 
 const game = new Phaser.Game(config);
-// console.log(game);
+console.log(game);

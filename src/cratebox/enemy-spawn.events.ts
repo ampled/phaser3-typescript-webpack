@@ -7,6 +7,10 @@ export enum EnemySpawn {
   NONE = 'NONE'
 }
 
+const dif0 = [
+  { weight: 1, event: EnemySpawn.NORMAL }
+];
+
 const dif1 = [
   { weight: .7, event: EnemySpawn.NORMAL },
   { weight: .2, event: EnemySpawn.NORMALDUO },
@@ -47,12 +51,13 @@ const test = [
 ];
 
 export const difficulties = {
-  0: dif1,
-  1: dif2,
-  2: dif3,
-  3: dif4,
-  4: dif5,
-  5: test
+  0: dif0,
+  1: dif1,
+  2: dif2,
+  3: dif3,
+  4: dif4,
+  5: dif5,
+  6: test
 };
 
 export function getRandomEnemySpawnEvent(diff): EnemySpawn {

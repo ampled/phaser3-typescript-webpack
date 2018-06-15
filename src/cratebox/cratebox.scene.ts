@@ -5,48 +5,42 @@ import { Enemy, SmallRobot, BigRobot, Drone } from 'cratebox/sprites/enemies';
 import { Player } from 'cratebox/sprites/player';
 
 export class CrateboxScene extends Phaser.Scene {
-  paused = true;
-  pauseText: Phaser.GameObjects.BitmapText;
   music: Phaser.Sound.WebAudioSound;
   player: Player;
 
-  sleepTimer = 0;
+  paused = true;
+  pauseText: Phaser.GameObjects.BitmapText;
+
   cameraShakeTimer = 0;
   debugTimer = 300;
 
   projectileGroup: Phaser.GameObjects.Group;
   explosionGroup: Phaser.GameObjects.Group;
-
-  enemyGroup: Phaser.Physics.Arcade.Group;
-  killedEnemies: Phaser.Physics.Arcade.Group;
+  enemyGroup: Phaser.GameObjects.Group;
+  killedEnemies: Phaser.GameObjects.Group;
 
   enemySpawnEvent: Phaser.Time.TimerEvent;
   enemySpawnEventDebug: Phaser.GameObjects.BitmapText;
 
   difficulty = 0;
-  enemySpawnTimer = 2000;
-  enemySpawnTime = 5000;
-  enemySpawnCounter = 1;
-  enemySpawnTimeDebug: Phaser.GameObjects.BitmapText;
 
   score = 0;
+  bestScore = 0;
   scoreDisplay: Phaser.GameObjects.BitmapText;
   scoreText: Phaser.GameObjects.BitmapText;
-  gunText: Phaser.GameObjects.DynamicBitmapText;
-  gunTextTimer: number = 1001;
-  bestScore = 0;
   bestScoreDisplay: Phaser.GameObjects.DynamicBitmapText;
   bestScoreText: Phaser.GameObjects.BitmapText;
+  gunText: Phaser.GameObjects.DynamicBitmapText;
 
   keys: { [key: string]: Phaser.Input.Keyboard.Key };
   touchControls;
+  gamePad: Phaser.Input.Gamepad.Gamepad;
 
   map: Phaser.Tilemaps.Tilemap;
   tileset: Phaser.Tilemaps.Tileset;
   groundLayer: Phaser.Tilemaps.StaticTilemapLayer;
   smokeEmitter: Phaser.GameObjects.Particles.ParticleEmitterManager;
 
-  // TODO get these from the tiled map as objects
   starCoords = [
     // { x: 200, y: 40 },
     { x: 200, y: 120 },
@@ -56,6 +50,7 @@ export class CrateboxScene extends Phaser.Scene {
     { x: 350, y: 60 },
     { x: 350, y: 160 }
   ];
+
   // Default one so the first star does not spawn close to the player
   lastRoll = 1;
   star: Phaser.GameObjects.Sprite;
@@ -65,6 +60,11 @@ export class CrateboxScene extends Phaser.Scene {
   }
 
   create(): void {
+    this.sys.sound.volume = 0.05;
+    this.cameras.main.roundPixels = true;
+    this.physics.world.drawDebug = false;
+
+    // put scene functions in global scope so they can be run from clickable links under game canvas
     // tslint:disable:no-string-literal
     window['toggleTouch'] = this.toggleTouch.bind(this);
     window['togglePause'] = this.togglePause.bind(this);
@@ -75,9 +75,6 @@ export class CrateboxScene extends Phaser.Scene {
     if (isNaN(this.bestScore)) {
       this.bestScore = 0;
     }
-
-    this.cameras.main.roundPixels = true;
-    this.physics.world.drawDebug = false;
 
     //#region text setup
     this.pauseText = this.add.bitmapText(145, 69, 'mario', 'P A U S E D !').setDepth(100) as any;
@@ -95,39 +92,38 @@ export class CrateboxScene extends Phaser.Scene {
       this.add.bitmapText(100, 5, 'mario', this.score.toString()).setDepth(100) as any;
     this.bestScoreDisplay =
       this.add.dynamicBitmapText(361, 5, 'mario', this.bestScore.toString()).setDepth(100) as any;
-    this.enemySpawnTimeDebug =
-      this.add.bitmapText(5, 214, 'mario', Math.floor(this.enemySpawnTimer / 100).toString()).setDepth(100) as any;
-    this.enemySpawnTimeDebug.setVisible(false);
     //#endregion
 
     this.map = this.make.tilemap({ key: 'cratebox' });
     this.tileset = this.map.addTilesetImage('cratebox', 'cratebox', 16, 16);
     this.groundLayer = this.map.createStaticLayer('groundLayer', this.tileset, 0, 0);
     this.groundLayer.setCollisionByProperty({ collide: true });
-
     this.smokeEmitter = this.add.particles('projectiles');
 
+    // this.setupGamePad();
     this.setupTouch();
     this.keys = this.input.keyboard.createCursorKeys();
     this.keys.X = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
+
+    this.initPlayer();
 
     this.projectileGroup =
       this.add.group({
         createCallback: proj => this.physics.world.enable(proj)
       });
-
     this.explosionGroup = this.add.group({
       createCallback: proj => this.physics.world.enable(proj)
     });
+    this.enemyGroup = this.add.group();
+    this.killedEnemies = this.add.group();
 
-    this.enemyGroup = this.physics.add.group();
-    this.killedEnemies = this.physics.add.group();
-
-    this.initPlayer();
-
+    // world / enemy hit detection
     this.physics.add.collider(this.enemyGroup as any, this.groundLayer);
+    // enemy / player hit detection
     this.physics.add.overlap(this.enemyGroup as any, this.player, this.enemyHit);
+    // projectile / explosion hit detection
     this.physics.add.overlap(this.projectileGroup as any, this.explosionGroup as any, this.projExplosionOverlap);
+    // projectile / player hit detection (fire and disc gun)
     this.physics.add.overlap(
       this.projectileGroup as any,
       this.player,
@@ -136,8 +132,9 @@ export class CrateboxScene extends Phaser.Scene {
           proj.getData('onPlayer')(proj, player, this);
         }
       }
-    )
+    );
 
+    // projectile / enemy hit detection
     this.physics.add.overlap(
       this.projectileGroup as any,
       this.enemyGroup as any,
@@ -145,8 +142,10 @@ export class CrateboxScene extends Phaser.Scene {
       undefined, this
     );
 
+    // explosions / enemy hit detection
     this.physics.add.overlap(this.explosionGroup as any, this.enemyGroup as any, this.enemyExplode);
 
+    // world / projectiles hit detection
     this.physics.add.collider(
       this.projectileGroup as any,
       this.groundLayer,
@@ -154,12 +153,14 @@ export class CrateboxScene extends Phaser.Scene {
         if (proj.active && proj.getData('onCollide')) { proj.getData('onCollide')(proj, this); }
       }, undefined, this);
 
+    // pause key
     this.input.keyboard.on('keyup', e => {
       if (e.key === 'p') {
         this.togglePause();
       }
     });
 
+    // mute key
     this.input.keyboard.on('keyup', e => {
       if (e.key === 'm') {
         if (this.sound.mute) {
@@ -170,6 +171,7 @@ export class CrateboxScene extends Phaser.Scene {
       }
     });
 
+    // debug keys
     this.input.keyboard.on('keyup', e => {
       if (e.key === '3') {
         this.physics.world.drawDebug = !this.physics.world.drawDebug;
@@ -200,14 +202,15 @@ export class CrateboxScene extends Phaser.Scene {
       }
     });
 
-    this.spawnStar();
+    this.initStar();
 
-    this.input.on('pointerup', (pointer) => {
-      this.spawnDrone(pointer.x, pointer.y);
-    }, this);
+    // this.input.on('pointerup', (pointer) => {
+    //   this.spawnDrone(pointer.x, pointer.y);
+    // }, this);
 
+    // enemy spawn interval
     this.enemySpawnEvent = this.time.addEvent({
-      delay: 2000,
+      delay: 2500,
       loop: true,
       callback: this.$spawnEnemy,
       callbackScope: this
@@ -228,14 +231,8 @@ export class CrateboxScene extends Phaser.Scene {
       ((this.enemySpawnEvent.delay - this.enemySpawnEvent.getElapsed()) / 1000).toFixed(1).toString()
     );
 
-    if (this.gunTextTimer > 2500) {
-      this.gunText.setVisible(false);
-    }
-
     this.cameraShakeTimer -= delta;
     this.debugTimer -= delta;
-    this.enemySpawnTimer -= delta;
-    this.gunTextTimer += delta;
 
     if (this.cameraShakeTimer < 0) {
       this.cameras.main.x = 0;
@@ -275,6 +272,11 @@ export class CrateboxScene extends Phaser.Scene {
       this.paused = true;
     }
     this.pauseText.setVisible(this.paused);
+  }
+
+  setupGamePad(): void {
+    this.gamePad = this.input.gamepad.getPad(0);
+    console.log(this.gamePad);
   }
 
   setupTouch(): void {
@@ -360,13 +362,15 @@ export class CrateboxScene extends Phaser.Scene {
     this.add.existing(this.player);
   }
 
-  spawnStar(): void {
+  initStar(): void {
     if (this.star) {
       this.star.destroy();
     }
     const starPosition = this.getStarPosition();
+
     this.star =
-      this.make.sprite({ scene: this, key: 'star', x: starPosition.x, y: starPosition.y });
+      this.add.sprite(starPosition.x, starPosition.y, 'star');
+
     this.physics.world.enable(this.star, Phaser.Physics.Arcade.STATIC_BODY);
     this.physics.add.overlap(this.star, this.player, this.starGet);
   }
@@ -408,25 +412,20 @@ export class CrateboxScene extends Phaser.Scene {
       this.events.emit('sfx', 'starget');
     }
     this.player.changeGun();
-    this.setEnemySpawnTime();
+    this.setDifficultyLevel();
   }
 
-  setEnemySpawnTime(): void {
+  setDifficultyLevel(): void {
     if (this.score >= 10 && this.score < 20) {
       this.difficulty = 1;
-      // this.enemySpawnTime = 4500;
     } else if (this.score >= 20 && this.score < 35) {
       this.difficulty = 2;
-      // this.enemySpawnTime = 4000;
     } else if (this.score >= 35 && this.score < 50) {
       this.difficulty = 3;
-      // this.enemySpawnTime = 3500;
     } else if (this.score >= 50 && this.score < 100) {
-      this.difficulty = 3;
-      // this.enemySpawnTime = 2000;
-    } else if (this.score >= 100) {
       this.difficulty = 4;
-      this.enemySpawnTime = 1500;
+    } else if (this.score >= 100) {
+      this.difficulty = 5;
     }
   }
 
@@ -459,9 +458,6 @@ export class CrateboxScene extends Phaser.Scene {
           Math.floor(Math.random() * 2)), true
       );
     }
-
-    this.enemySpawnTimer = this.enemySpawnTime;
-    this.enemySpawnCounter += 1;
   }
 
   spawnDrone = (x = 200, y = 0): void => {
@@ -470,8 +466,6 @@ export class CrateboxScene extends Phaser.Scene {
         this, x, y,
         Math.floor(Math.random() * 2)), true
     );
-    this.enemySpawnTimer = this.enemySpawnTime;
-    this.enemySpawnCounter += 1;
   }
 
   spawnEnemySquad(amount = 2): void {
@@ -488,8 +482,6 @@ export class CrateboxScene extends Phaser.Scene {
       }
     }
     this.enemyGroup.addMultiple(enemies, true);
-    this.enemySpawnCounter += 1;
-    this.enemySpawnTimer = this.enemySpawnTime;
   }
 
   spawnEnemyWave(): void {
@@ -509,12 +501,12 @@ export class CrateboxScene extends Phaser.Scene {
     });
   }
 
-  enemyExplode = (proj: Phaser.GameObjects.GameObject, enemy: Enemy) => {
+  enemyExplode = (proj: Phaser.GameObjects.Sprite, enemy: Enemy) => {
     if (enemy.canDamage) {
       this.events.emit('sfx', 'enemyshot', 2);
       let fromRight = true;
       let multiplier = 1;
-      if ((<any>proj).x < enemy.x) {
+      if (proj.x < enemy.x) {
         fromRight = false;
       }
       if (proj.getData('force')) {
@@ -524,18 +516,17 @@ export class CrateboxScene extends Phaser.Scene {
         proj.getData('onEnemy')(proj, enemy);
       }
       enemy.damage(proj.getData('dmg'), fromRight, multiplier);
-      // proj.destroy();
     }
   }
 
-  enemyShot = (proj: Phaser.GameObjects.GameObject, enemy: Enemy) => {
+  enemyShot = (proj: Phaser.GameObjects.Sprite, enemy: Enemy) => {
     if (enemy.canDamage || proj.getData('bypass')) {
       const scene = this as CrateboxScene;
       scene.sys.sound.playAudioSprite('sfx', 'enemyshot');
       let fromRight = true;
       let shouldFlip = false;
       let multiplier = 1;
-      if ((<any>proj).x < enemy.x) {
+      if (proj.x < enemy.x) {
         fromRight = false;
       }
       if (fromRight && enemy.body.velocity.x > 0 && proj.getData('flip')) {
@@ -570,9 +561,6 @@ export class CrateboxScene extends Phaser.Scene {
   minishake(resetTimer = true): void {
     const shakeX = Phaser.Math.Between(-2, 2);
     const shakeY = Phaser.Math.Between(-2, 2);
-    // const rotation = Phaser.Math.FloatBetween(-.02, .02);
-    // this.cameras.main.setRotation(rotation);
-
     this.cameras.main.x = shakeX;
     this.cameras.main.y = shakeY;
     if (resetTimer) {
@@ -583,7 +571,12 @@ export class CrateboxScene extends Phaser.Scene {
   flashGunName(name: string): void {
 
     this.gunText.setText(center(name + '!', 18)).setVisible(true);
-    this.gunTextTimer = 0;
+    this.time.addEvent({
+      delay: 2500,
+      callback: () => {
+        this.gunText.setVisible(false);
+      }
+    });
   }
 
   restart(): void {
@@ -595,18 +588,13 @@ export class CrateboxScene extends Phaser.Scene {
       callbackScope: this
     });
 
-    // this.enemySpawnEvent.
-
     this.smokeEmitter.emitters.destroy();
     this.difficulty = 0;
-    this.enemySpawnTimer = 5000;
-    this.enemySpawnTime = 5000;
     this.sys.sound.playAudioSprite('sfx', 'death');
-    this.cameras.main.shake(200);
-    this.cameras.main.flash(200, 1, 0, 0);
+    this.cameras.main.shake(200, 0.01).flash(200, 255, 0, 0);
     this.score = 0;
     this.lastRoll = 1;
-    this.spawnStar();
+    this.initStar();
     this.scoreText.setText(this.score.toString());
     this.bestScoreDisplay.setText(this.bestScore.toString());
     this.bestScoreDisplay.setDisplayCallback((data) => data);

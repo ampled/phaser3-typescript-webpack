@@ -51,8 +51,7 @@ export class CrateboxScene extends Phaser.Scene {
     { x: 350, y: 160 }
   ];
 
-  // Default one so the first star does not spawn close to the player
-  lastRoll = 1;
+  lastRoll = 0;
   star: Phaser.GameObjects.Sprite;
 
   constructor() {

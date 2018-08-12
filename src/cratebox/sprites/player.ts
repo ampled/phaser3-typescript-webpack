@@ -55,14 +55,11 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.isFalling = this.body.velocity.y > 50;
 
     this.updateGun(time, delta);
-    this.animation(time, delta);
-    this.controls(time, delta);
-
-    this.body.setFrictionY(1000);
+    this.animation();
+    this.controls(delta);
 
     this.shootTimer += delta;
     this.walkSfxTimer += delta;
-
   }
 
   resetGun(x, y): void {
@@ -93,7 +90,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.scene.flashGunName(this.gun.id);
   }
 
-  controls(time: number, delta: number): void {
+  controls(delta: number): void {
     if (this.inputs.shoot) {
       if (this.gun.shootTimer > this.gun.cooldown) {
         this.knockback = this.shoot();
@@ -147,7 +144,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     }
   }
 
-  animation(time: number, delta: number): void {
+  animation(): void {
     let anim: string;
     if (this.body.velocity.y !== 0) {
       anim = 'jump';

@@ -77,10 +77,6 @@ export class BootScene extends Phaser.Scene {
         bgm1ogg
       ])
       .audioSprite('sfx', sfxsheet, [sfxmp3, sfxogg]);
-    // .audioSprite('sfx', [
-    //   sfxmp3,
-    //   sfxogg
-    // ], sfxsheet as any, { instances: 2 });
 
   }
 
@@ -205,8 +201,6 @@ export class BootScene extends Phaser.Scene {
     // PROJECTILE ANIMS
     this.anims.create({
       key: 'projectile',
-      duration: 100,
-      // frameRate: 12,
       frames: [
         { key: 'projectiles', frame: 'projectile' },
         { key: 'projectiles', frame: 'smgproj' }
@@ -244,11 +238,6 @@ export class BootScene extends Phaser.Scene {
     })
 
     this.scene.start('CrateboxScene');
-  }
-
-  update(time: number, delta: number) {
-    // if (this.text.body.onFloor()) console.log('floor');
-    // if (this.text.body.onWall()) console.log('wall');
   }
 
 }

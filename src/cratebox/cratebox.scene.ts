@@ -42,7 +42,6 @@ export class CrateboxScene extends Phaser.Scene {
   smokeEmitter: Phaser.GameObjects.Particles.ParticleEmitterManager;
 
   starCoords = [
-    // { x: 200, y: 40 },
     { x: 200, y: 120 },
     { x: 200, y: 200 },
     { x: 50, y: 60 },
@@ -209,7 +208,7 @@ export class CrateboxScene extends Phaser.Scene {
 
     // enemy spawn interval
     this.enemySpawnEvent = this.time.addEvent({
-      delay: 2500,
+      delay: 3000,
       loop: true,
       callback: this.$spawnEnemy,
       callbackScope: this

@@ -1,5 +1,3 @@
-// @ts-check
-
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
@@ -8,7 +6,10 @@ const path = require('path');
 
 module.exports = {
   devServer: {
-    host: '0.0.0.0'
+    host: 'localhost',
+    hot: true,
+    hotOnly: true,
+    contentBase: path.resolve(__dirname, 'src', 'assets')
   },
   entry: {
     main: path.resolve(__dirname, 'src/index.ts')
@@ -21,7 +22,13 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader'
+        exclude: /\.tsx$/,
+        use: [{
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true
+          }
+        }]
       },
       {
         test: [/\.vert$/, /\.frag$/],
@@ -54,10 +61,15 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       WEBGL_RENDERER: true,
-      CANVAS_RENDERER: true
+      CANVAS_RENDERER: true,
+      USELOCALSTORAGE: true,
+      'typeof SHADER_REQUIRE': JSON.stringify(false),
+      'typeof CANVAS_RENDERER': JSON.stringify(true),
+      'typeof WEBGL_RENDERER': JSON.stringify(true),
     }),
     new HtmlWebPackPlugin({
       template: './src/index.html'
-    })
+    }),
+    new webpack.HotModuleReplacementPlugin()
   ]
 }

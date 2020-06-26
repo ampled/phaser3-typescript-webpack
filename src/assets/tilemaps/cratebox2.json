@@ -3,7 +3,8 @@
     {
      "export":
         {
-         "target":"."
+         "format":"json",
+         "target":"cratebox2.json"
         }
     },
  "height":15,

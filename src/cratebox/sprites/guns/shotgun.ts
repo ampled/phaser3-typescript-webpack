@@ -1,6 +1,6 @@
 import { Gun, GunProps, ProjectileConfig } from 'cratebox/sprites/guns/gun';
 import { CrateboxScene } from 'cratebox/cratebox.scene';
-import { noop } from 'util/';
+import { noop } from 'src/util';
 
 export class Shotgun extends Gun implements GunProps {
   static id = 'SHOTGUN';

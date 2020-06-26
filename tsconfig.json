@@ -1,22 +1,19 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
     "target": "es2015",
     "module": "commonjs",
-    "moduleResolution": "node",
-    "strict": false,
-    "noImplicitAny": false,
-    "strictPropertyInitialization": false,
-    "sourceMap": true,
-    "typeRoots": [
-      "node_modules/@types",
-      "typings"
-    ]
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "paths": {
+      "cratebox/*": [
+        "src/cratebox/*"
+      ]
+    }
   },
   "exclude": [
     "node_modules",
     "assets",
-    "scripts",
-    "**/*.d.ts"
+    "scripts"
   ]
 }

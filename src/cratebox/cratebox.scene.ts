@@ -1,4 +1,6 @@
-import { center, noop } from 'util/';
+import { center, noop } from 'src/util/';
+
+import Phaser from 'phaser';
 
 import { EnemySpawn, getRandomEnemySpawnEvent } from './enemy-spawn.events';
 import { Enemy, SmallRobot, BigRobot, Drone } from 'cratebox/sprites/enemies';
@@ -38,7 +40,7 @@ export class CrateboxScene extends Phaser.Scene {
 
   map: Phaser.Tilemaps.Tilemap;
   tileset: Phaser.Tilemaps.Tileset;
-  groundLayer: Phaser.Tilemaps.StaticTilemapLayer;
+  groundLayer: Phaser.Tilemaps.DynamicTilemapLayer;
   smokeEmitter: Phaser.GameObjects.Particles.ParticleEmitterManager;
 
   starCoords = [
@@ -92,9 +94,10 @@ export class CrateboxScene extends Phaser.Scene {
       this.add.dynamicBitmapText(361, 5, 'mario', this.bestScore.toString()).setDepth(100) as any;
     //#endregion
 
-    this.map = this.make.tilemap({ key: 'cratebox' });
+    this.map = this.add.tilemap('cratebox2', 16, 16);
+    // this.map = this.make.tilemap({ key: 'cratebox' });
     this.tileset = this.map.addTilesetImage('cratebox', 'cratebox', 16, 16);
-    this.groundLayer = this.map.createStaticLayer('groundLayer', this.tileset, 0, 0);
+    this.groundLayer = this.map.createDynamicLayer('groundLayer', this.tileset, 0, 0);
     this.groundLayer.setCollisionByProperty({ collide: true });
     this.smokeEmitter = this.add.particles('projectiles');
 
@@ -209,7 +212,7 @@ export class CrateboxScene extends Phaser.Scene {
     // enemy spawn interval
     this.enemySpawnEvent = this.time.addEvent({
       delay: 3000,
-      loop: true,
+      loop: false,
       callback: this.$spawnEnemy,
       callbackScope: this
     });
@@ -217,7 +220,6 @@ export class CrateboxScene extends Phaser.Scene {
     this.enemySpawnEventDebug = this.add.bitmapText(5, 214, 'mario', this.enemySpawnEvent.getElapsed().toString());
     this.enemySpawnEventDebug.setVisible(false);
     this.enemySpawnEventDebug.setDepth(100);
-
   }
 
   update(time: number, delta: number): void {
@@ -357,6 +359,8 @@ export class CrateboxScene extends Phaser.Scene {
   initPlayer(): void {
     this.player = new Player(this, 200, 152, 'player-sprites', this.groundLayer);
     this.player.anims.play('stand');
+    this.physics.world.enable(this.player);
+    this.physics.add.collider(this.player, this.groundLayer, undefined, () => true);
     this.add.existing(this.player);
   }
 
@@ -383,10 +387,10 @@ export class CrateboxScene extends Phaser.Scene {
     }
   }
 
-  starGet = (star: Phaser.GameObjects.Sprite, player) => {
+  starGet = (star: Phaser.Physics.Arcade.Sprite, player) => {
     const newPos = this.getStarPosition();
-    (star.body).x = newPos.x - 8;
-    (star.body).y = newPos.y - 8;
+    star.body.x = newPos.x - 8;
+    star.body.y = newPos.y - 8;
     this.star.setX(newPos.x);
     this.star.setY(newPos.y);
     if (!this.music.isPlaying) {

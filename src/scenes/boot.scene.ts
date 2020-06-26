@@ -1,49 +1,48 @@
-import * as crateboxMap from 'assets/tilemaps/cratebox.json';
-import * as crateboxTiles from 'assets/tilesets/16x16.png';
+import crateboxMap2 from 'src/assets/tilemaps/cratebox2.json';
+import crateboxMap from 'src/assets/tilemaps/cratebox.json';
+import crateboxTiles from 'src/assets/tilesets/16x16.png';
 
-import * as playerSprite from 'assets/sprites/player.png';
-import * as playerSpriteSheet from 'assets/sprites/player/player.png';
-import * as playerSpriteAtlas from 'assets/sprites/player/player.json';
+import playerSprite from 'src/assets/sprites/player.png';
+import playerSpriteSheet from 'src/assets/sprites/player/player.png';
+import playerSpriteAtlas from 'src/assets/sprites/player/player.json';
 
-import * as enemySpriteSheet from 'assets/sprites/enemies/enemies.png';
-import * as enemySpriteAtlas from 'assets/sprites/enemies/enemies.json';
-import * as benemySpriteSheet from 'assets/sprites/enemies/bigenemies.png';
-import * as benemySpriteAtlas from 'assets/sprites/enemies/bigenemies.json';
+import enemySpriteSheet from 'src/assets/sprites/enemies/enemies.png';
+import enemySpriteAtlas from 'src/assets/sprites/enemies/enemies.json';
+import benemySpriteSheet from 'src/assets/sprites/enemies/bigenemies.png';
+import benemySpriteAtlas from 'src/assets/sprites/enemies/bigenemies.json';
 
-import * as gunSpriteSheet from 'assets/sprites/guns/guns.png';
-import * as gunSpriteAtlas from 'assets/sprites/guns/guns.json';
+import gunSpriteSheet from 'src/assets/sprites/guns/guns.png';
+import gunSpriteAtlas from 'src/assets/sprites/guns/guns.json';
 
-import * as projSpriteSheet from 'assets/sprites/guns/projectiles.png';
-import * as projSpriteAtlas from 'assets/sprites/guns/projectiles.json';
+import projSpriteSheet from 'src/assets/sprites/guns/projectiles.png';
+import projSpriteAtlas from 'src/assets/sprites/guns/projectiles.json';
 
-import * as enemySprite from 'assets/sprites/enemy.png';
-import * as starSprite from 'assets/sprites/star.png';
+import enemySprite from 'src/assets/sprites/enemy.png';
+import starSprite from 'src/assets/sprites/star.png';
 
-import * as gunSprite from 'assets/sprites/gun.png';
-import * as minigunSprite from 'assets/sprites/minigun.png';
-import * as dualGunSprite from 'assets/sprites/dualgun.png';
-import * as projectileSprite from 'assets/sprites/projectile.png';
-import * as smgSprite from 'assets/sprites/smg.png';
-import * as smgProj from 'assets/sprites/smgproj.png';
-import * as shotgunSprite from 'assets/sprites/shotgun.png';
-import * as shotgunProj from 'assets/sprites/shotgunproj.png';
+import minigunSprite from 'src/assets/sprites/minigun.png';
+import dualGunSprite from 'src/assets/sprites/dualgun.png';
+import gunSprite from 'src/assets/sprites/gun.png';
+import projectileSprite from 'src/assets/sprites/projectile.png';
+import smgSprite from 'src/assets/sprites/smg.png';
+import smgProj from 'src/assets/sprites/smgproj.png';
+import shotgunSprite from 'src/assets/sprites/shotgun.png';
+import shotgunProj from 'src/assets/sprites/shotgunproj.png';
 
-import * as dirButton from 'assets/sprites/touch/dir.png';
-import * as shootButton from 'assets/sprites/touch/shoot.png';
+import dirButton from 'src/assets/sprites/touch/dir.png';
+import shootButton from 'src/assets/sprites/touch/shoot.png';
 
-import * as marioFontPng from 'assets/fonts/font.png';
-import * as marioFont from 'assets/fonts/font.fnt';
+import marioFontPng from 'src/assets/fonts/font.png';
+import marioFont from 'src/assets/fonts/font.fnt';
 
-import * as bgm1mp3 from 'assets/music/bgm1.mp3';
-import * as bgm1ogg from 'assets/music/bgm1.ogg';
+import bgm1mp3 from 'src/assets/music/bgm1.mp3';
+import bgm1ogg from 'src/assets/music/bgm1.ogg';
 
-import * as sfxmp3 from 'assets/sounds/sfx.mp3';
-import * as sfxogg from 'assets/sounds/sfx.ogg';
-import * as sfxsheet from 'assets/sounds/sfx.json';
+import sfxmp3 from 'src/assets/sounds/sfx.mp3';
+import sfxogg from 'src/assets/sounds/sfx.ogg';
+import sfxsheet from 'src/assets/sounds/sfx.json';
 
 export class BootScene extends Phaser.Scene {
-  text: ArcadePhysicsText;
-  keys: { [key: string]: Phaser.Input.Keyboard.Key };
 
   constructor() {
     super({ key: 'Boot' });
@@ -51,6 +50,7 @@ export class BootScene extends Phaser.Scene {
 
   preload() {
     this.load
+      .tilemapTiledJSON('cratebox2', crateboxMap2)
       .tilemapTiledJSON('cratebox', crateboxMap)
       .spritesheet('cratebox', crateboxTiles, { frameWidth: 64, frameHeight: 64 })
       .spritesheet('player', playerSprite, { frameWidth: 16, frameHeight: 16 })
@@ -87,19 +87,18 @@ export class BootScene extends Phaser.Scene {
     explosionGraphic.generateTexture('explosion', 20, 20);
 
     // PLAYER ANIMS
-    const stand: AnimationConfig = {
+    const stand: Phaser.Types.Animations.Animation = {
       key: 'stand',
       defaultTextureKey: 'player',
       frames: this.anims.generateFrameNames('player-sprites',
         { start: 2, end: 2, suffix: '.png', zeroPad: 2 })
     };
 
-    const walk: AnimationConfig = {
+    const walk: Phaser.Types.Animations.Animation = {
       key: 'walk',
       defaultTextureKey: 'player',
       frameRate: 15,
       repeat: -1,
-      repeatDelay: 0,
       yoyo: false,
       frames: [
         { key: 'player-sprites', frame: '01.png' },
@@ -107,10 +106,10 @@ export class BootScene extends Phaser.Scene {
       ]
     };
 
-    const run: AnimationConfig = {
+    const run: Phaser.Types.Animations.Animation = {
       key: 'run',
-      defaultTextureKey: 'player',
-      frameRate: 15,
+      defaultTextureKey: 'player-sprites',
+      frameRate: 12,
       repeat: -1,
       yoyo: true,
       frames: [
@@ -121,7 +120,7 @@ export class BootScene extends Phaser.Scene {
       ]
     };
 
-    const jump: AnimationConfig = {
+    const jump: Phaser.Types.Animations.Animation = {
       key: 'jump',
       repeat: -1,
       defaultTextureKey: 'player',
@@ -131,7 +130,7 @@ export class BootScene extends Phaser.Scene {
         { start: 4, end: 7, suffix: '.png', zeroPad: 2 })
     };
 
-    const shoot: AnimationConfig = {
+    const shoot: Phaser.Types.Animations.Animation = {
       key: 'shoot',
       duration: 5,
       defaultTextureKey: 'player',
@@ -235,7 +234,7 @@ export class BootScene extends Phaser.Scene {
         { key: 'projectiles', frame: 'fire01' },
         { key: 'projectiles', frame: 'fire02' }
       ]
-    })
+    });
 
     this.scene.start('CrateboxScene');
   }

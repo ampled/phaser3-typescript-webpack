@@ -214,7 +214,7 @@ export class CrateboxScene extends Phaser.Scene {
     this.enemySpawnEvent = this.time.addEvent({
       delay: 3000,
       loop: true,
-      callback: this.$spawnEnemy,
+      callback: () => void 0,
       callbackScope: this
     });
 
@@ -226,7 +226,7 @@ export class CrateboxScene extends Phaser.Scene {
   update(time: number, delta: number): void {
     if (this.paused) { this.pause(); return; }
 
-    this.bestScoreDisplay.setText(this.player.body.velocity.y.toFixed(2));
+    this.bestScoreDisplay.setText(this.bestScore.toString());
 
     this.enemySpawnEventDebug.setText(
       (this.enemySpawnEvent.delay / 1000).toFixed(1).toString()
@@ -589,7 +589,7 @@ export class CrateboxScene extends Phaser.Scene {
     this.enemySpawnEvent.destroy();
     this.enemySpawnEvent = this.time.addEvent({
       delay: 2000,
-      loop: true,
+      loop: false,
       callback: this.$spawnEnemy,
       callbackScope: this
     });

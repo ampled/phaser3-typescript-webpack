@@ -49,6 +49,7 @@ export class Pistol extends Gun implements GunProps {
       this.canShoot = false;
       this.released = false;
       this.scene.events.emit('sfx', this.sfx, Phaser.Math.FloatBetween(0.7, 1));
+      console.log(this.y);
       const projectile =
         this.scene.projectileGroup.create(x, this.y, 'projectiles', this.projectile.key)
           .setData('dmg', this.damage)

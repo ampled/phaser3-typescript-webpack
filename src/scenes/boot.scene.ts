@@ -5,6 +5,8 @@ import crateboxTiles from 'src/assets/tilesets/16x16.png';
 import playerSprite from 'src/assets/sprites/player.png';
 import playerSpriteSheet from 'src/assets/sprites/player/player.png';
 import playerSpriteAtlas from 'src/assets/sprites/player/player.json';
+import playerSprites from 'src/assets/sprites/player/playertrim.png';
+import playerAtlas from 'src/assets/sprites/player/playertrim.json';
 
 import enemySpriteSheet from 'src/assets/sprites/enemies/enemies.png';
 import enemySpriteAtlas from 'src/assets/sprites/enemies/enemies.json';
@@ -53,8 +55,8 @@ export class BootScene extends Phaser.Scene {
       .tilemapTiledJSON('cratebox2', crateboxMap2)
       .tilemapTiledJSON('cratebox', crateboxMap)
       .spritesheet('cratebox', crateboxTiles, { frameWidth: 64, frameHeight: 64 })
-      .spritesheet('player', playerSprite, { frameWidth: 16, frameHeight: 16 })
       .atlas('player-sprites', playerSpriteSheet, playerSpriteAtlas)
+      .atlas('player', playerSprites, playerAtlas)
       .atlas('enemies', enemySpriteSheet, enemySpriteAtlas)
       .atlas('benemies', benemySpriteSheet, benemySpriteAtlas)
       .atlas('guns', gunSpriteSheet, gunSpriteAtlas)
@@ -90,8 +92,8 @@ export class BootScene extends Phaser.Scene {
     const stand: Phaser.Types.Animations.Animation = {
       key: 'stand',
       defaultTextureKey: 'player',
-      frames: this.anims.generateFrameNames('player-sprites',
-        { start: 2, end: 2, suffix: '.png', zeroPad: 2 })
+      frames: this.anims.generateFrameNames('player',
+        { start: 2, end: 2, zeroPad: 2 })
     };
 
     const walk: Phaser.Types.Animations.Animation = {
@@ -101,22 +103,22 @@ export class BootScene extends Phaser.Scene {
       repeat: -1,
       yoyo: false,
       frames: [
-        { key: 'player-sprites', frame: '01.png' },
-        { key: 'player-sprites', frame: '03.png' }
+        { key: 'player', frame: '01' },
+        { key: 'player', frame: '03' }
       ]
     };
 
     const run: Phaser.Types.Animations.Animation = {
       key: 'run',
-      defaultTextureKey: 'player-sprites',
+      defaultTextureKey: 'player',
       frameRate: 12,
       repeat: -1,
       yoyo: true,
       frames: [
-        { key: 'player-sprites', frame: '09.png' },
-        { key: 'player-sprites', frame: '010.png' },
-        { key: 'player-sprites', frame: '011.png' },
-        { key: 'player-sprites', frame: '010.png' },
+        { key: 'player', frame: '09' },
+        { key: 'player', frame: '010' },
+        { key: 'player', frame: '011' },
+        { key: 'player', frame: '010' },
       ]
     };
 
@@ -126,16 +128,16 @@ export class BootScene extends Phaser.Scene {
       defaultTextureKey: 'player',
       repeatDelay: 0,
       frameRate: 15,
-      frames: this.anims.generateFrameNames('player-sprites',
-        { start: 4, end: 7, suffix: '.png', zeroPad: 2 })
+      frames: this.anims.generateFrameNames('player',
+        { start: 4, end: 7, zeroPad: 2 })
     };
 
     const shoot: Phaser.Types.Animations.Animation = {
       key: 'shoot',
       duration: 5,
       defaultTextureKey: 'player',
-      frames: this.anims.generateFrameNames('player-sprites',
-        { start: 8, end: 8, suffix: '.png', zeroPad: 2 })
+      frames: this.anims.generateFrameNames('player',
+        { start: 8, end: 8, zeroPad: 2 })
     };
 
     this.anims.create(stand);

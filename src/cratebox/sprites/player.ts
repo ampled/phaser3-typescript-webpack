@@ -36,7 +36,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     // this.scene.physics.world.enable(this);
     // this.scene.physics.add.collider(this, layer);
     // this.body.setSize(15, 15).setCollideWorldBounds(false).setMaxVelocity(100, 1000);
-    // this.setDepth(10);
+    this.setDepth(10);
     // this.body.setSize(16, 16);
     this.setSize(20, 16);
     this.resetGun(x, y);
@@ -65,7 +65,9 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.updateGun(time, delta);
     this.animation();
 
-    this.body.setSize(16, 16);
+    // this.setSize(16, 16);
+    // this.body.setSize(16, 16);
+    // this.body.setCircle(20, 0, 0);
 
     this.shootTimer += delta;
     this.walkSfxTimer += delta;
@@ -170,7 +172,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     } else if (this.isShooting) {
       anim = 'shoot';
     } else if (this.body.velocity.x !== 0 && (this.inputs.left || this.inputs.right)) {
-      anim = 'walk';
+      anim = 'run';
     }
 
     this.anims.play(anim, true);

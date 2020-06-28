@@ -37,11 +37,13 @@ export class Player extends Phaser.GameObjects.Sprite {
     // this.scene.physics.add.collider(this, layer);
     // this.body.setSize(15, 15).setCollideWorldBounds(false).setMaxVelocity(100, 1000);
     // this.setDepth(10);
+    // this.body.setSize(16, 16);
+    this.setSize(20, 16);
     this.resetGun(x, y);
-    // this.body.setVelocityX(100);
   }
 
   update(time: number, delta: number): void {
+    // this.body.setVelocityX(50);
 
     this.inputs.left = this.keys.left.isDown;
     this.inputs.right = this.keys.right.isDown;
@@ -59,9 +61,11 @@ export class Player extends Phaser.GameObjects.Sprite {
     // }
     // this.isFalling = this.body.velocity.y > 50;
 
+    this.controls(delta);
     this.updateGun(time, delta);
     this.animation();
-    this.controls(delta);
+
+    this.body.setSize(16, 16);
 
     this.shootTimer += delta;
     this.walkSfxTimer += delta;
@@ -160,19 +164,16 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   animation(): void {
-    let anim: string;
+    let anim: string = 'stand';
     if (this.body.velocity.y !== 0) {
       anim = 'jump';
     } else if (this.isShooting) {
       anim = 'shoot';
     } else if (this.body.velocity.x !== 0 && (this.inputs.left || this.inputs.right)) {
-      anim = 'run';
-    } else {
-      anim = 'stand';
+      anim = 'walk';
     }
-    // if (this.anims.getCurrentKey() !== anim) {
+
     this.anims.play(anim, true);
-    // }
   }
 
   shoot(): number {

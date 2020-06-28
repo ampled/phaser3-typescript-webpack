@@ -94,10 +94,11 @@ export class CrateboxScene extends Phaser.Scene {
       this.add.dynamicBitmapText(361, 5, 'mario', this.bestScore.toString()).setDepth(100) as any;
     //#endregion
 
+    this.physics.world.TILE_BIAS = 16;
     this.map = this.add.tilemap('cratebox2', 16, 16);
     // this.map = this.make.tilemap({ key: 'cratebox' });
     this.tileset = this.map.addTilesetImage('cratebox', 'cratebox', 16, 16);
-    this.groundLayer = this.map.createDynamicLayer('groundLayer', this.tileset, 0, 0);
+    this.groundLayer = this.map.createDynamicLayer('groundLayer', this.tileset);
     this.groundLayer.setCollisionByProperty({ collide: true });
     this.smokeEmitter = this.add.particles('projectiles');
 
@@ -212,7 +213,7 @@ export class CrateboxScene extends Phaser.Scene {
     // enemy spawn interval
     this.enemySpawnEvent = this.time.addEvent({
       delay: 3000,
-      loop: false,
+      loop: true,
       callback: this.$spawnEnemy,
       callbackScope: this
     });
@@ -224,6 +225,8 @@ export class CrateboxScene extends Phaser.Scene {
 
   update(time: number, delta: number): void {
     if (this.paused) { this.pause(); return; }
+
+    this.bestScoreDisplay.setText(this.player.body.velocity.y.toFixed(2));
 
     this.enemySpawnEventDebug.setText(
       (this.enemySpawnEvent.delay / 1000).toFixed(1).toString()
@@ -360,8 +363,9 @@ export class CrateboxScene extends Phaser.Scene {
     this.player = new Player(this, 200, 152, 'player-sprites', this.groundLayer);
     this.player.anims.play('stand');
     this.physics.world.enable(this.player);
-    this.physics.add.collider(this.player, this.groundLayer, undefined, () => true);
+    this.physics.add.collider(this.player, this.groundLayer);
     this.add.existing(this.player);
+    this.player.body.setGravityY(0);
   }
 
   initStar(): void {

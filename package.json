@@ -11,7 +11,7 @@
     "makesound": "node scripts/soundgen.js"
   },
   "dependencies": {
-    "phaser": "3.22.0"
+    "phaser": "3.23.0"
   },
   "devDependencies": {
     "audiosprite": "^0.7.1",

@@ -10,7 +10,7 @@ export class CrateboxScene extends Phaser.Scene {
   music: Phaser.Sound.WebAudioSound;
   player: Player;
 
-  paused = true;
+  paused = false;
   pauseText: Phaser.GameObjects.BitmapText;
 
   cameraShakeTimer = 0;

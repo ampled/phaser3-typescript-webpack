@@ -36,10 +36,10 @@ export class Flamethrower extends Pistol implements GunProps {
       this.sfxCounter++;
     }
 
-    const x = this.flipX ? this.x - 8 : this.x + 8;
+    const x = this.flipX ? this.x - 5 : this.x + 19;
 
     const projectile =
-      this.scene.projectileGroup.create(x, this.y - 2, 'projectiles', this.projectile.key)
+      this.scene.projectileGroup.create(x, this.y + 6, 'projectiles', this.projectile.key)
         .setData('melee', true)
         .setData('bypass', false)
         .setData('dmg', this.damage)
@@ -48,11 +48,12 @@ export class Flamethrower extends Pistol implements GunProps {
         .setData('onCollide', this.projectileCollide) as Phaser.GameObjects.Sprite;
 
     projectile.setTint(Phaser.Display.Color.GetColor(0, 100, 200));
+    // projectile.setOrigin(0, 0);
     projectile.setAlpha(.45);
     projectile.z = 5;
     projectile.setDepth(50);
 
-    projectile.body
+    (<Phaser.Physics.Arcade.Body>projectile.body)
       .setDrag(300, 450)
       .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
       .setVelocityY(Phaser.Math.Between(-this.angleSpread, this.angleSpread))
@@ -93,7 +94,7 @@ export class Flamethrower extends Pistol implements GunProps {
     return 0;
   }
 
-  projectileCollide = (projectile: Sprite, scene) => {
+  projectileCollide = (projectile, scene) => {
     projectile.body.setVelocity(0, 50).allowGravity = false;
   }
 

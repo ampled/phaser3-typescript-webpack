@@ -13,7 +13,7 @@ import { DiscGun } from 'cratebox/sprites/guns/discgun';
 import { Flamethrower } from 'cratebox/sprites/guns/flamethrower';
 import { LaserGun } from 'cratebox/sprites/guns/lasergun';
 
-export const DefaultGun = Pistol;
+export const DefaultGun = LaserGun;
 
 export const guns: Array<typeof Gun> = [
   Pistol,
@@ -28,7 +28,7 @@ export const guns: Array<typeof Gun> = [
   Mines,
   DiscGun,
   Flamethrower,
-  LaserGun
+  LaserGun,
 ];
 
 export * from './gun';

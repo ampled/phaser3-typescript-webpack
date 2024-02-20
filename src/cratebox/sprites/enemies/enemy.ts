@@ -1,4 +1,5 @@
 import { CrateboxScene } from 'cratebox/cratebox.scene';
+import { v4 as uuid } from 'uuid';
 
 export class Enemy extends Phaser.GameObjects.Sprite {
   scene: CrateboxScene;
@@ -18,8 +19,15 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   animWalk: string;
   animMad: string;
   smoke: Phaser.GameObjects.Particles.ParticleEmitter;
+  id = uuid();
 
-  constructor(scene: CrateboxScene, x: number, y: number, public dir: number, key: string) {
+  constructor(
+    scene: CrateboxScene,
+    x: number,
+    y: number,
+    public dir: number,
+    key: string
+  ) {
     super(scene, x, y, key);
 
     this.scene.physics.world.enable(this);
@@ -46,7 +54,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
     }
 
     if (this.body.onFloor() && this.falling) {
-      this.scene.sys.sound.playAudioSprite('sfx', 'foley', { volume: .3 });
+      this.scene.sys.sound.playAudioSprite('sfx', 'foley', { volume: 0.3 });
     }
 
     this.falling = this.body.velocity.y > 50;
@@ -56,19 +64,19 @@ export class Enemy extends Phaser.GameObjects.Sprite {
     }
 
     if (this.y > 400) {
-      this.smoke = this.scene.smokeEmitter
-        .createEmitter({
-          frame: 'smoke',
-          angle: { min: -120, max: 120 },
-          scale: { start: 1.5, end: 0.5 },
-          alpha: { start: 1, end: .5 },
-          lifespan: 400,
-          speed: { min: 50, max: 100 },
-          follow: this,
-          frequency: 100,
-          quantity: 3,
-          blendMode: 'MULTIPLY'
-        });
+      this.smoke = this.scene.add.particles(this.x, this.y, 'projectiles', {
+        name: 'smoke' + this.id,
+        frame: 'smoke',
+        angle: { min: -120, max: 120 },
+        scale: { start: 1.5, end: 0.5 },
+        alpha: { start: 1, end: 0.5 },
+        lifespan: 400,
+        speed: { min: 50, max: 100 },
+        follow: this,
+        frequency: 100,
+        quantity: 3,
+        blendMode: 'MULTIPLY',
+      });
 
       this.y = -5;
       this.x = 200;
@@ -86,10 +94,14 @@ export class Enemy extends Phaser.GameObjects.Sprite {
       this.anims.play(this.animMad);
       this.scene.events.emit('sfx', 'enemyloop');
     }
-
   }
 
-  damage(amount: number = 0, fromRight: boolean, multiplier = 2, flip = false): void {
+  damage(
+    amount: number = 0,
+    fromRight: boolean,
+    multiplier = 2,
+    flip = false
+  ): void {
     this.canDamage = false;
     this.health -= amount;
     this.setTint(Phaser.Display.Color.GetColor(255, 0, 0));
@@ -104,13 +116,13 @@ export class Enemy extends Phaser.GameObjects.Sprite {
         targets: this,
         duration: 70,
         // x: this.x + 20,
-        scaleY: .7,
+        scaleY: 0.7,
         yoyo: true,
         onComplete: () => {
           this.setTint(Phaser.Display.Color.GetColor(255, 255, 255));
           this.setScale(1, 1);
           this.canDamage = true;
-        }
+        },
       });
     }
   }
@@ -134,14 +146,12 @@ export class Enemy extends Phaser.GameObjects.Sprite {
       callbackScope: this,
       callback: () => {
         if (this.smoke) {
-          this.scene.smokeEmitter.emitters.remove(this.smoke);
+          this.smoke.destroy();
         }
         this.scene.killedEnemies.remove(this);
         this.scene.physics.world.disable(this);
         this.destroy();
-      }
+      },
     });
-
   }
-
 }

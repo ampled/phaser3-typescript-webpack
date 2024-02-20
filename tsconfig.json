@@ -7,16 +7,7 @@
     "strict": false,
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
-    "sourceMap": true,
-    "typeRoots": [
-      "node_modules/@types",
-      "typings"
-    ]
+    "sourceMap": true
   },
-  "exclude": [
-    "node_modules",
-    "assets",
-    "scripts",
-    "**/*.d.ts"
-  ]
+  "exclude": ["node_modules", "assets", "scripts", "**/*.d.ts"]
 }

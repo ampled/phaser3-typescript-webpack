@@ -18,7 +18,7 @@ export class RocketLauncher extends Gun implements GunProps {
     velocity: 50,
     size: 5,
     gravity: false,
-    key: 'rocket'
+    key: 'rocket',
   };
 
   scene: CrateboxScene;
@@ -46,34 +46,27 @@ export class RocketLauncher extends Gun implements GunProps {
 
     this.scene.events.emit('sfx', this.sfx, this.sfxRate);
 
-    const rocket =
-      this.scene.projectileGroup.create(this.x, this.y, 'projectiles', this.projectile.key)
-        .setData('dmg', this.damage)
-        .setData('onCollide', this.projectileCollide)
-        .setData('onEnemy', this.explode) as Phaser.GameObjects.Sprite;
+    const rocket = this.scene.projectileGroup
+      .create(this.x, this.y, 'projectiles', this.projectile.key)
+      .setData('dmg', this.damage)
+      .setData('onCollide', this.projectileCollide)
+      .setData(
+        'onEnemy',
+        this.explode
+      ) as Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
     rocket.flipX = this.flipX;
 
     rocket.body
-      .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
+      .setVelocityX(
+        this.flipX ? -this.projectile.velocity : this.projectile.velocity
+      )
       .setAccelerationX(this.flipX ? -300 : 300)
       .setAccelerationY(Phaser.Math.Between(-7, 7))
-      .setSize(this.projectile.size, this.projectile.size)
-      .allowGravity = this.projectile.gravity;
+      .setSize(this.projectile.size, this.projectile.size).allowGravity =
+      this.projectile.gravity;
 
-    const smoke = this.scene.smokeEmitter
-      .createEmitter({
-        frame: 'smoke',
-        angle: { min: -120, max: 120 },
-        scale: { start: 1.5, end: 0.5 },
-        alpha: { start: 1, end: .5 },
-        lifespan: 400,
-        speed: { min: 50, max: 100 },
-        follow: rocket,
-        frequency: 100,
-        quantity: 3,
-        blendMode: 'MULTIPLY'
-      });
+    const smoke = this.scene.createSmokeEmitter(0, 0, this.id, rocket);
 
     rocket.setData('smoke', smoke);
 
@@ -83,22 +76,39 @@ export class RocketLauncher extends Gun implements GunProps {
       ease: 'Sine.easeInOut',
       yoyo: true,
       angle: this.flipX ? 30 : -30,
-      displayOriginX: this.flipX ? this.displayOriginX - 5 : this.displayOriginX + 5,
+      displayOriginX: this.flipX
+        ? this.displayOriginX - 5
+        : this.displayOriginX + 5,
     });
 
     return 0;
   }
 
-  explode = (rocket, enemy, scene: CrateboxScene) => {
+  explode = (
+    rocket: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody,
+    _enemy: any,
+    scene: CrateboxScene
+  ) => {
     if (rocket.getData('smoke').active) {
-      scene.smokeEmitter.emitters.remove(rocket.getData('smoke'));
+      const smoke: Phaser.GameObjects.Particles.ParticleEmitter =
+        rocket.getData('smoke');
+      if (smoke) {
+        smoke.particleAngle = { min: 0, max: 360 };
+        smoke.emitParticleAt(rocket.x, rocket.y, 200);
+        smoke.stop();
+        scene.time.delayedCall(1000, (s: typeof smoke) => s.destroy(), [smoke]);
+      }
     }
 
     if (rocket.active) {
       scene.events.emit('sfx', 'death', 0.5);
       const a = new Phaser.Geom.Point(rocket.x, rocket.y);
       rocket.destroy();
-      const explosion = scene.add.image(a.x, a.y, 'explosion');
+      const explosion = scene.add.image(
+        a.x,
+        a.y,
+        'explosion'
+      ) as Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
       scene.physics.world.enable(explosion);
       explosion.body.allowGravity = false;
       explosion.setData('dmg', 6).setData('force', 7);
@@ -113,30 +123,31 @@ export class RocketLauncher extends Gun implements GunProps {
         yoyo: true,
         scaleX: 5.5,
         scaleY: 5.5,
-        onComplete(tween: Phaser.Tweens.Tween, expl: Phaser.GameObjects.Image[]) {
+        onComplete(
+          tween: Phaser.Tweens.Tween,
+          expl: Phaser.GameObjects.Image[]
+        ) {
           expl[0].destroy();
         },
         onUpdate(tween: Phaser.Tweens.Tween, expl: Phaser.GameObjects.Image) {
           const p = tween.getValue();
-          expl.setAlpha(.16 * p);
+          expl.setAlpha(0.16 * p);
           if (p > 4) {
             expl.setTint(Phaser.Display.Color.GetColor(255, 255, 0));
           }
           if (p > 5.6) {
             expl.setTint(Phaser.Display.Color.GetColor(255, 255, 255));
           }
-        }
+        },
       });
     }
-
-  }
+  };
 
   projectileCollide = (projectile, scene) => {
     this.explode(projectile, undefined, scene);
-  }
+  };
 
   enemyCollide = (projectile, enemy, scene?) => {
     this.explode(projectile, enemy, scene);
-  }
-
+  };
 }

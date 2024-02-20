@@ -26,7 +26,12 @@ export class Drone extends Enemy {
   getOutOfTopX1 = 300;
   getOutOfTopX2 = 100;
 
-  constructor(scene, x, y, public dir) {
+  constructor(
+    scene,
+    x,
+    y,
+    public dir
+  ) {
     super(scene, x, y, dir, 'enemies');
   }
 
@@ -53,19 +58,19 @@ export class Drone extends Enemy {
       this.isMoving = false;
       this.goingToPit = false;
       this.isMad = true;
-      this.smoke = this.scene.smokeEmitter
-        .createEmitter({
-          frame: 'smoke',
-          angle: { min: -120, max: 120 },
-          scale: { start: 1.5, end: 0.5 },
-          alpha: { start: 1, end: .5 },
-          lifespan: 400,
-          speed: { min: 50, max: 100 },
-          follow: this,
-          frequency: 100,
-          quantity: 3,
-          blendMode: 'MULTIPLY'
-        });
+      this.smoke = this.scene.add.particles(this.x, this.y, 'projectiles', {
+        name: 'smoke' + this.id,
+        frame: 'smoke',
+        angle: { min: -120, max: 120 },
+        scale: { start: 1.5, end: 0.5 },
+        alpha: { start: 1, end: 0.5 },
+        lifespan: 400,
+        speed: { min: 50, max: 100 },
+        follow: this,
+        frequency: 100,
+        quantity: 3,
+        blendMode: 'MULTIPLY',
+      });
       this.y = -5;
       this.x = 200;
       this.health = this.baseHealth;
@@ -77,7 +82,7 @@ export class Drone extends Enemy {
     }
 
     // exit to pit if over it
-    if (this.y > 176 && (this.x > 186 && this.x < 206) && !this.goingToPit) {
+    if (this.y > 176 && this.x > 186 && this.x < 206 && !this.goingToPit) {
       this.isMoving = true;
       this.goingToPit = true;
       this.body.setVelocity(0, 5);
@@ -86,9 +91,8 @@ export class Drone extends Enemy {
         delay: 1000,
         callback: () => {
           this.scene.physics.moveTo(this, 200, 241, 20);
-        }
+        },
       });
-
     }
 
     if (!this.isMoving && !this.goingToPit) {
@@ -96,8 +100,14 @@ export class Drone extends Enemy {
 
       let x = 200;
       let y = 240;
-      const distanceToPlayer = Phaser.Math.Distance.Between(this.x, this.y, this.scene.player.x, this.scene.player.y);
-      const distanceToPit = Phaser.Math.Distance.Between(this.x, this.y, 120, 400) - 180;
+      const distanceToPlayer = Phaser.Math.Distance.Between(
+        this.x,
+        this.y,
+        this.scene.player.x,
+        this.scene.player.y
+      );
+      const distanceToPit =
+        Phaser.Math.Distance.Between(this.x, this.y, 120, 400) - 180;
 
       if (distanceToPlayer < distanceToPit && this.y < 170) {
         // go to player
@@ -113,7 +123,11 @@ export class Drone extends Enemy {
           }
         }
       }
-      if (this.y < this.getOutOfTopY && (this.x < this.getOutOfTopX1 && this.x > this.getOutOfTopX2)) {
+      if (
+        this.y < this.getOutOfTopY &&
+        this.x < this.getOutOfTopX1 &&
+        this.x > this.getOutOfTopX2
+      ) {
         // get out of top
         y = 40;
         if (this.dir === 1) {
@@ -123,7 +137,14 @@ export class Drone extends Enemy {
         }
       }
 
-      this.scene.physics.accelerateTo(this, x, y, this.accel, this.vel, this.vel);
+      this.scene.physics.accelerateTo(
+        this,
+        x,
+        y,
+        this.accel,
+        this.vel,
+        this.vel
+      );
       // const pointer = this.scene.add.sprite(x, y, 'projectiles', 'smgproj').setTint(0);
       this.moveEvent = this.scene.time.addEvent({
         delay: Phaser.Math.Between(1500, 2000),
@@ -131,7 +152,9 @@ export class Drone extends Enemy {
         callback: () => {
           this.setFrame(this.isMad ? 'dronemad01' : 'drone01');
           this.anims.currentAnim.pause();
-          this.body.setAcceleration(0, 0).setVelocity(this.body.velocity.x / 3, 5);
+          this.body
+            .setAcceleration(0, 0)
+            .setVelocity(this.body.velocity.x / 3, 5);
           this.scene.time.addEvent({
             delay: Phaser.Math.Between(2000, 3000),
             callbackScope: this,
@@ -142,11 +165,8 @@ export class Drone extends Enemy {
             },
             // args: [pointer]
           });
-        }
+        },
       });
-
     }
-
   }
-
 }

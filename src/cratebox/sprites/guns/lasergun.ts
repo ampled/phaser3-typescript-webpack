@@ -20,7 +20,7 @@ export class LaserGun extends Gun implements GunProps {
     velocity: 50,
     size: 5,
     gravity: false,
-    key: 'rocket'
+    key: 'rocket',
   };
 
   scene: CrateboxScene;
@@ -65,5 +65,4 @@ export class LaserGun extends Gun implements GunProps {
   // enemyCollide = (projectile, enemy, scene?) => {
   //   this.explode(projectile, enemy, scene);
   // }
-
 }

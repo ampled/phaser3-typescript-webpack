@@ -36,12 +36,17 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   update(time: number, delta: number): void {
-
     this.inputs = {
       left: this.keys.left.isDown || this.scene.touchControls.left,
       right: this.keys.right.isDown || this.scene.touchControls.right,
-      jump: this.keys.up.isDown || this.keys.space.isDown || this.scene.touchControls.up,
-      shoot: this.keys.down.isDown || this.keys.X.isDown || this.scene.touchControls.shoot
+      jump:
+        this.keys.up.isDown ||
+        this.keys.space.isDown ||
+        this.scene.touchControls.up,
+      shoot:
+        this.keys.down.isDown ||
+        this.keys.X.isDown ||
+        this.scene.touchControls.shoot,
     };
     if (this.y > 400) {
       this.scene.restart();
@@ -124,7 +129,11 @@ export class Player extends Phaser.GameObjects.Sprite {
         this.jumpTimer = 1;
         this.body.setVelocityY(-150);
         this.scene.events.emit('sfx', 'jump');
-      } else if (this.jumpTimer > 0 && this.jumpTimer < 301 && !this.body.onCeiling()) {
+      } else if (
+        this.jumpTimer > 0 &&
+        this.jumpTimer < 301 &&
+        !this.body.onCeiling()
+      ) {
         this.jumpTimer += delta;
         this.body.setVelocityY(-150);
       } else if (this.body.onCeiling()) {
@@ -134,7 +143,6 @@ export class Player extends Phaser.GameObjects.Sprite {
     } else {
       this.jumpTimer = 0;
     }
-
   }
 
   jump(): void {
@@ -150,12 +158,15 @@ export class Player extends Phaser.GameObjects.Sprite {
       anim = 'jump';
     } else if (this.isShooting) {
       anim = 'shoot';
-    } else if (this.body.velocity.x !== 0 && (this.inputs.left || this.inputs.right)) {
+    } else if (
+      this.body.velocity.x !== 0 &&
+      (this.inputs.left || this.inputs.right)
+    ) {
       anim = 'run';
     } else {
       anim = 'stand';
     }
-    if (this.anims.getCurrentKey() !== anim) {
+    if (this.anims.currentAnim.key !== anim) {
       this.anims.play(anim);
     }
   }
@@ -180,5 +191,4 @@ export class Player extends Phaser.GameObjects.Sprite {
       this.walkSfxTimer = 0;
     }
   }
-
 }

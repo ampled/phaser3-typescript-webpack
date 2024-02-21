@@ -3,6 +3,7 @@ import { center, noop } from 'util/';
 import { EnemySpawn, getRandomEnemySpawnEvent } from './enemy-spawn.events';
 import { Enemy, SmallRobot, BigRobot, Drone } from 'cratebox/sprites/enemies';
 import { Player } from 'cratebox/sprites/player';
+import constants from './constants';
 
 export class CrateboxScene extends Phaser.Scene {
   music: Phaser.Sound.WebAudioSound;
@@ -249,10 +250,9 @@ export class CrateboxScene extends Phaser.Scene {
 
     // enemy spawn interval
     this.enemySpawnEvent = this.time.addEvent({
-      delay: 3000,
+      delay: 5000,
       loop: true,
-      // callback: this.$spawnEnemy,
-      callback: () => undefined,
+      callback: this.$spawnEnemy,
       callbackScope: this,
     });
 
@@ -295,7 +295,8 @@ export class CrateboxScene extends Phaser.Scene {
     }
 
     if (this.keys.shift.isDown && this.debugTimer < 0) {
-      this.spawnEnemy(true);
+      // this.spawnEnemy(true);
+      this.spawnDrone();
       this.debugTimer = 300;
     }
 
@@ -483,6 +484,7 @@ export class CrateboxScene extends Phaser.Scene {
   }
 
   $spawnEnemy = (): void => {
+    if (!constants.ENEMY_SPAWNS_ENABLED) return;
     const event = getRandomEnemySpawnEvent(this.difficulty);
     if (event === EnemySpawn.NORMAL) {
       this.spawnEnemy();
@@ -629,7 +631,7 @@ export class CrateboxScene extends Phaser.Scene {
   restart(): void {
     this.enemySpawnEvent.destroy();
     this.enemySpawnEvent = this.time.addEvent({
-      delay: 2000,
+      delay: constants.ENEMY_SPAWN_TIME,
       loop: true,
       callback: this.$spawnEnemy,
       callbackScope: this,

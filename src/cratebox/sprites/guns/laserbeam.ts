@@ -36,12 +36,15 @@ export class LaserBeam extends Phaser.GameObjects.Sprite {
   explode = (beam: LaserBeam, scene: CrateboxScene) => {
     scene.events.emit('sfx', 'laser2');
     scene.minishake();
-    beam.x = scene.player.flipX ? scene.player.x - 16 : scene.player.x + 16;
+    // beam.x = scene.player.flipX ? scene.player.x - 16 : scene.player.x + 16;
     beam.setFrame('beam00');
 
     const dir = scene.player.flipX ? -1 : 1;
 
-    beam.body.setOffset(16 * dir, 0);
+    // beam.body.setOffset(16 * dir, 0);
+    if (dir === -1) {
+      beam.body.setOffset(-16, 0);
+    }
     beam.setOrigin(0, 0.5);
 
     beam.setScale(1, 3);
@@ -50,7 +53,7 @@ export class LaserBeam extends Phaser.GameObjects.Sprite {
     scene.tweens.add({
       targets: beam,
       ease: Phaser.Math.Easing.Sine.In,
-      scaleX: 24,
+      scaleX: 10,
       duration: 100,
     });
     scene.time.addEvent({

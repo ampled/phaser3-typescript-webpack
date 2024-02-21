@@ -86,7 +86,7 @@ export class Drone extends Enemy {
       this.isMoving = true;
       this.goingToPit = true;
       this.body.setVelocity(0, 5);
-      this.anims.currentAnim.resume();
+      this.anims && this.anims.currentAnim.resume();
       this.scene.time.addEvent({
         delay: 1000,
         callback: () => {

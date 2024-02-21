@@ -1,5 +1,4 @@
 import { CrateboxScene } from 'cratebox/cratebox.scene';
-import { v4 as uuid } from 'uuid';
 
 export class Enemy extends Phaser.GameObjects.Sprite {
   scene: CrateboxScene;
@@ -19,7 +18,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   animWalk: string;
   animMad: string;
   smoke: Phaser.GameObjects.Particles.ParticleEmitter;
-  id = uuid();
+  id = Math.random().toString();
 
   constructor(
     scene: CrateboxScene,
@@ -64,19 +63,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
     }
 
     if (this.y > 400) {
-      this.smoke = this.scene.add.particles(this.x, this.y, 'projectiles', {
-        name: 'smoke' + this.id,
-        frame: 'smoke',
-        angle: { min: -120, max: 120 },
-        scale: { start: 1.5, end: 0.5 },
-        alpha: { start: 1, end: 0.5 },
-        lifespan: 400,
-        speed: { min: 50, max: 100 },
-        follow: this,
-        frequency: 100,
-        quantity: 3,
-        blendMode: 'MULTIPLY',
-      });
+      this.smoke = this.scene.createSmokeEmitter(this.x, this.y, this.id, this);
 
       this.y = -5;
       this.x = 200;

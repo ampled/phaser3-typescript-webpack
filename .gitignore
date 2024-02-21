@@ -3,3 +3,4 @@ node_modules/
 src/assets/@raw/*/
 dist/
 ideas
+.DS_Store

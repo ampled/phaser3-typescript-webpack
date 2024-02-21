@@ -25,12 +25,23 @@ export class Player extends Phaser.GameObjects.Sprite {
   isJumping = false;
   isFalling = false;
 
-  constructor(scene, x, y, key, layer) {
+  constructor(
+    scene: CrateboxScene,
+    x: number,
+    y: number,
+    key: string,
+    layer: Phaser.Tilemaps.TilemapLayer
+  ) {
     super(scene, x, y, key);
     this.keys = this.scene.keys;
     this.scene.physics.world.enable(this);
     this.scene.physics.add.collider(this, layer);
-    this.body.setSize(11, 16).setCollideWorldBounds(false);
+    // this.setDisplaySize(16, 16);
+    this.body.setSize(16, 16);
+    this.setOrigin(0.5, 1);
+    this.body.setOffset(0, 0);
+    this.body.setCollideWorldBounds(false);
+    this.setOriginFromFrame();
     // this.setOrigin(0.5, 1);
     this.setDepth(10);
     this.resetGun(x, y);
@@ -59,10 +70,6 @@ export class Player extends Phaser.GameObjects.Sprite {
       this.scene.events.emit('sfx', 'foley');
     }
     this.isFalling = this.body.velocity.y > 50;
-
-    if (this.isFalling) {
-      console.log('falling!!');
-    }
 
     this.updateGun(time, delta);
     this.animation();
@@ -115,13 +122,13 @@ export class Player extends Phaser.GameObjects.Sprite {
 
     if (this.inputs.left && !this.inputs.right) {
       this.body.setVelocityX(-this.runSpeed + this.knockback);
-      if (this.walkSfxTimer > 150 && this.body.onFloor()) {
+      if (this.walkSfxTimer > 200 && this.body.onFloor()) {
         this.walkSfx();
       }
       this.flipX = true;
     } else if (this.inputs.right && !this.inputs.left) {
       this.body.setVelocityX(this.runSpeed + this.knockback);
-      if (this.walkSfxTimer > 150 && this.body.onFloor()) {
+      if (this.walkSfxTimer > 200 && this.body.onFloor()) {
         this.walkSfx();
       }
       this.flipX = false;
@@ -159,22 +166,21 @@ export class Player extends Phaser.GameObjects.Sprite {
 
   animation(): void {
     let anim: string;
-    if (this.body.velocity.y !== 0) {
-      anim = 'jump';
-    } else if (this.isShooting) {
-      anim = 'shoot';
+    let repeatDelay = 0;
+    if (this.body.velocity.y !== 0 || !this.body.onFloor()) {
+      anim = 'cube-jump';
+      repeatDelay = 0;
     } else if (
       this.body.velocity.x !== 0 &&
       (this.inputs.left || this.inputs.right)
     ) {
-      anim = 'run';
+      anim = 'cube-run';
     } else {
-      anim = 'stand';
+      anim = 'cube-idle';
     }
-    if (this.anims.currentAnim.key !== anim) {
-      // this.anims.play(anim, true);
-      this.play(anim, true);
-    }
+
+    // this.play(anim, true);
+    this.play({ key: anim, repeatDelay }, true);
   }
 
   shoot(): number {

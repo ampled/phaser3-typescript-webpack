@@ -406,14 +406,8 @@ export class CrateboxScene extends Phaser.Scene {
   }
 
   initPlayer(): void {
-    this.player = new Player(
-      this,
-      200,
-      152,
-      'player-sprites',
-      this.groundLayer
-    );
-    this.player.anims.play('stand');
+    this.player = new Player(this, 200, 152, 'player-cube', this.groundLayer);
+    this.player.anims.play('cube-idle');
     this.add.existing(this.player);
   }
 

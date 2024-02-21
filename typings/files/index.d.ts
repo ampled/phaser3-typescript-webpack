@@ -19,4 +19,4 @@ declare module '*.ogg' {
 declare module '*.mp3' {
   const content: string;
   export = content;
-} 
+}

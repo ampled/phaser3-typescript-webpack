@@ -1,6 +1,5 @@
 import { Gun, GunProps, ProjectileConfig } from 'cratebox/sprites/guns/gun';
 import { CrateboxScene } from 'cratebox/cratebox.scene';
-import { noop } from 'util/';
 
 export class FryingPan extends Gun implements GunProps {
   static id = 'FRYINGPAN';
@@ -19,7 +18,7 @@ export class FryingPan extends Gun implements GunProps {
     amount: 6,
     size: 3,
     gravity: false,
-    key: 'smgproj'
+    key: 'smgproj',
   };
 
   shooting = false;
@@ -36,7 +35,7 @@ export class FryingPan extends Gun implements GunProps {
   update(time: number, delta: number): void {
     if (!this.shooting) {
       this.setFrame('fryingpan');
-      this.x = this.flipX ? this.scene.player.x + 8 : this.scene.player.x - 8;
+      this.x = this.flipX ? this.scene.player.x + 6 : this.scene.player.x - 6;
     }
 
     this.y = this.scene.player.y - 4;
@@ -63,7 +62,9 @@ export class FryingPan extends Gun implements GunProps {
       callbackScope: this,
       onUpdate() {
         if (this.active) {
-          this.x = this.flipX ? this.scene.player.x - 16 : this.scene.player.x + 16;
+          this.x = this.flipX
+            ? this.scene.player.x - 16
+            : this.scene.player.x + 16;
         }
       },
       onComplete() {
@@ -71,9 +72,11 @@ export class FryingPan extends Gun implements GunProps {
           const scene = this.scene as CrateboxScene;
           this.shooting = false;
           scene.projectileGroup.remove(this);
-          this.x = this.flipX ? this.scene.player.x + 8 : this.scene.player.x - 8;
+          this.x = this.flipX
+            ? this.scene.player.x + 8
+            : this.scene.player.x - 8;
         }
-      }
+      },
     });
     this.setFrame('fryingpanattack');
     return 0;
@@ -81,14 +84,13 @@ export class FryingPan extends Gun implements GunProps {
 
   enemyCollide = (projectile, enemy, scene?) => {
     enemy.flip();
-  }
+  };
 
   preDestroy(): void {
     // this.projRef.forEach(proj => proj.destroy());
   }
 
   projectileCollide = (projectile, scene) => {
-    projectile.setAlpha(.7);
-  }
-
+    projectile.setAlpha(0.7);
+  };
 }

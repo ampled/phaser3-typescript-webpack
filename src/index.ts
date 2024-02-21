@@ -3,7 +3,7 @@ import 'phaser';
 import { BootScene } from 'scenes/boot.scene';
 import { CrateboxScene } from 'cratebox/cratebox.scene';
 
-const config: Opt<GameConfig> = {
+const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.WEBGL,
   backgroundColor: '#ADD8E6',
   parent: 'game',
@@ -12,10 +12,10 @@ const config: Opt<GameConfig> = {
   zoom: 2,
   render: {
     antialias: false,
-    pixelArt: true
+    pixelArt: true,
   },
   input: {
-    gamepad: true
+    gamepad: true,
   },
   // fps: {
   //   min: 1,
@@ -26,15 +26,12 @@ const config: Opt<GameConfig> = {
   physics: {
     default: 'arcade',
     arcade: {
-      tilebias: 0,
+      // tileBias: 0,
       gravity: { y: 600 },
-      debug: true
-    }
+      debug: true,
+    },
   },
-  scene: [
-    BootScene,
-    CrateboxScene
-  ]
+  scene: [BootScene, CrateboxScene],
 };
 
 const game = new Phaser.Game(config);

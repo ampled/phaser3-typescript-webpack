@@ -3,6 +3,7 @@ import crateboxTiles from 'assets/tilesets/16x16.png';
 
 import playerSprite from 'assets/sprites/player.png';
 import playerSpriteSheet from 'assets/sprites/player/player.png';
+import playerCube from 'assets/sprites/player/playercube.png';
 import playerSpriteAtlas from 'assets/sprites/player/player.json';
 
 import enemySpriteSheet from 'assets/sprites/enemies/enemies.png';
@@ -57,6 +58,10 @@ export class BootScene extends Phaser.Scene {
         frameHeight: 64,
       })
       .spritesheet('player', playerSprite, { frameWidth: 16, frameHeight: 16 })
+      .spritesheet('playercube', playerCube, {
+        frameWidth: 16,
+        frameHeight: 16,
+      })
       .atlas('player-sprites', playerSpriteSheet, playerSpriteAtlas)
       .atlas('enemies', enemySpriteSheet, enemySpriteAtlas)
       .atlas('benemies', benemySpriteSheet, benemySpriteAtlas)
@@ -170,6 +175,31 @@ export class BootScene extends Phaser.Scene {
     this.anims.create(run);
     this.anims.create(jump);
     this.anims.create(shoot);
+
+    this.anims.create({
+      key: 'cube-idle',
+      defaultTextureKey: 'playercube',
+      frames: [{ key: 'playercube', frame: 0 }],
+    });
+
+    this.anims.create({
+      key: 'cube-run',
+      duration: 1,
+      frameRate: 16,
+      defaultTextureKey: 'playercube',
+      repeat: -1,
+      frames: this.anims.generateFrameNames('playercube', { start: 5, end: 8 }),
+    });
+
+    this.anims.create({
+      key: 'cube-jump',
+      duration: 1,
+      frameRate: 16,
+      defaultTextureKey: 'playercube',
+      // yoyo: true,
+      repeat: 1,
+      frames: this.anims.generateFrameNames('playercube', { start: 1, end: 4 }),
+    });
 
     // ENEMY ANIMS
     this.anims.create({

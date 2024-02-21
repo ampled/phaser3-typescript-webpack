@@ -19,11 +19,11 @@ export class Shotgun extends Gun implements GunProps {
     amount: 6,
     size: 3,
     gravity: false,
-    key: 'smgproj'
+    key: 'smgproj',
   };
 
   projectileTimer = 0;
-  projRef: Phaser.GameObjects.GameObject[] = [];
+  projRef: Phaser.Types.Physics.Arcade.GameObjectWithDynamicBody[] = [];
 
   scene: CrateboxScene;
 
@@ -33,8 +33,11 @@ export class Shotgun extends Gun implements GunProps {
   }
 
   update(time: number, delta: number): void {
-    this.x = this.flipX ? this.scene.player.x - 8 : this.scene.player.x + 8;
-    this.y = this.scene.player.y;
+    const offset = 1;
+    this.x = this.flipX
+      ? this.scene.player.x - offset
+      : this.scene.player.x + offset;
+    this.y = this.scene.player.y + 2;
     this.flipX = this.scene.player.flipX;
     this.setDepth(this.flipX ? 11 : 9);
     this.shootTimer += delta;
@@ -52,25 +55,26 @@ export class Shotgun extends Gun implements GunProps {
   shoot() {
     this.scene.events.emit('sfx', this.sfx);
     this.scene.minishake();
-    this.projRef =
-      this.scene.projectileGroup
-        .createMultiple({
-          key: 'projectiles',
-          frame: this.projectile.key,
-          repeat: this.projectile.amount,
-          setXY: { x: this.x, y: this.y }
-        });
-    this.projRef.forEach(proj => {
+    this.projRef = this.scene.projectileGroup.createMultiple({
+      key: 'projectiles',
+      frame: this.projectile.key,
+      repeat: this.projectile.amount,
+      setXY: { x: this.x, y: this.y },
+    });
+    this.projRef.forEach((proj) => {
       proj.body
-        .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
+        .setVelocityX(
+          this.flipX ? -this.projectile.velocity : this.projectile.velocity
+        )
         .setVelocityY(Phaser.Math.Between(-150, 120))
         .setSize(this.projectile.size, this.projectile.size)
-        .setBounce(.7, 2)
-        .setDragX(Phaser.Math.Between(3000, 4000))
-        .allowGravity = this.projectile.gravity;
+        .setBounce(0.7, 2)
+        .setDragX(Phaser.Math.Between(3000, 4000)).allowGravity =
+        this.projectile.gravity;
     });
-    this.projRef.forEach(proj =>
-      proj.setData('dmg', this.damage)
+    this.projRef.forEach((proj) =>
+      proj
+        .setData('dmg', this.damage)
         .setData('bypass', true)
         .setData('id', 'shotgun')
         .setData('onCollide', this.projectileCollide)
@@ -81,12 +85,13 @@ export class Shotgun extends Gun implements GunProps {
       // tslint:disable-next-line:object-literal-shorthand
       callback() {
         const scene = this as CrateboxScene;
-        scene.projectileGroup.children.each(proj => {
+        scene.projectileGroup.children.each((proj) => {
           proj.getData('id') === 'shotgun' ? proj.destroy() : noop();
+          return true;
         }, undefined);
       },
       callbackScope: this.scene,
-      loop: false
+      loop: false,
     });
 
     this.scene.tweens.add({
@@ -107,7 +112,6 @@ export class Shotgun extends Gun implements GunProps {
   }
 
   projectileCollide = (projectile, scene) => {
-    projectile.setAlpha(.7);
-  }
-
+    projectile.setAlpha(0.7);
+  };
 }

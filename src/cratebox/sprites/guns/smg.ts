@@ -21,7 +21,7 @@ export class Smg extends Pistol implements GunProps {
     size: 5,
     gravity: false,
     key: 'smgproj',
-    anim: 'projectile'
+    anim: 'projectile',
   };
 
   constructor(scene, x, y, key = 'guns', frame = 'smg') {
@@ -33,11 +33,13 @@ export class Smg extends Pistol implements GunProps {
 
     const x = this.flipX ? this.x - 8 : this.x + 8;
 
-    const projectile =
-      this.scene.projectileGroup.create(x, this.y, 'projectiles', this.projectile.key)
-        .setData('bypass', true)
-        .setData('dmg', this.damage)
-        .setData('onCollide', this.projectileCollide) as Phaser.GameObjects.Sprite;
+    const projectile = this.scene.projectileGroup
+      .create(x, this.y, 'projectiles', this.projectile.key)
+      .setData('bypass', true)
+      .setData('dmg', this.damage)
+      .setData('onCollide', this.projectileCollide) as Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+
+    projectile.setScale(1.5, 1.5);
 
     projectile.anims.play('projectilefast');
 
@@ -45,8 +47,7 @@ export class Smg extends Pistol implements GunProps {
       .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
       .setVelocityY(Phaser.Math.Between(-this.angleSpread, this.angleSpread))
       .setSize(this.projectile.size, this.projectile.size)
-      .setBounceY(1)
-      .allowGravity = this.projectile.gravity;
+      .setBounceY(1).allowGravity = this.projectile.gravity;
     this.scene.tweens.add({
       targets: this,
       duration: this.cooldown / 2,
@@ -72,5 +73,4 @@ export class Smg extends Pistol implements GunProps {
       }
     }
   }
-
 }

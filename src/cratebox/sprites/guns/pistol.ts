@@ -20,7 +20,7 @@ export class Pistol extends Gun implements GunProps {
     size: 10,
     gravity: false,
     key: 'smgproj',
-    anim: 'projectile'
+    anim: 'projectile',
   };
 
   scene: CrateboxScene;
@@ -49,17 +49,18 @@ export class Pistol extends Gun implements GunProps {
       this.canShoot = false;
       this.released = false;
       this.scene.events.emit('sfx', this.sfx, Phaser.Math.FloatBetween(0.7, 1));
-      const projectile =
-        this.scene.projectileGroup.create(x, this.y, 'projectiles', this.projectile.key)
-          .setData('dmg', this.damage)
-          .setData('onCollide', this.projectileCollide) as Phaser.GameObjects.Sprite;
+      const projectile = this.scene.projectileGroup
+        .create(x, this.y, 'projectiles', this.projectile.key)
+        .setData('dmg', this.damage)
+        .setData('onCollide', this.projectileCollide) as Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
       projectile.anims.play(this.projectile.anim);
 
+      projectile.setScale(2, 2);
+
       projectile.body
         .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
-        .setSize(this.projectile.size, this.projectile.size)
-        .allowGravity = this.projectile.gravity;
+        .setSize(this.projectile.size / 3, this.projectile.size / 3).allowGravity = this.projectile.gravity;
 
       this.scene.time.addEvent({
         delay: this.cooldown,
@@ -68,7 +69,7 @@ export class Pistol extends Gun implements GunProps {
           if (this.active && this.released) {
             this.canShoot = true;
           }
-        }
+        },
       });
 
       this.scene.tweens.add({
@@ -80,7 +81,7 @@ export class Pistol extends Gun implements GunProps {
         callbackScope: this,
         onComplete() {
           this.setAngle(0);
-        }
+        },
       });
 
       // this.body.setAngularVelocity(this.flipX ? this.recoil : -this.recoil);
@@ -93,7 +94,7 @@ export class Pistol extends Gun implements GunProps {
           if (this.active && this.released) {
             this.canShoot = true;
           }
-        }
+        },
       });
     }
     return 0;
@@ -106,6 +107,5 @@ export class Pistol extends Gun implements GunProps {
   projectileCollide = (projectile, scene) => {
     scene.events.emit('sfx', 'foley');
     projectile.destroy();
-  }
-
+  };
 }

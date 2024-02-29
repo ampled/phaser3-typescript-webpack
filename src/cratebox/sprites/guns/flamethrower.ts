@@ -21,7 +21,7 @@ export class Flamethrower extends Pistol implements GunProps {
     size: 16,
     gravity: true,
     key: 'fire',
-    anim: 'fire'
+    anim: 'fire',
   };
 
   constructor(scene, x, y, key = 'guns', frame = 'flamethrower') {
@@ -29,8 +29,8 @@ export class Flamethrower extends Pistol implements GunProps {
   }
 
   shoot(): number {
-    if (this.sfxCounter === 3) {
-      this.scene.events.emit('sfx', this.sfx, Phaser.Math.FloatBetween(0.2, 1.5));
+    if (this.sfxCounter === 2) {
+      this.scene.events.emit('sfx', this.sfx, Phaser.Math.FloatBetween(1, 1.5));
       this.sfxCounter = 0;
     } else {
       this.sfxCounter++;
@@ -38,38 +38,42 @@ export class Flamethrower extends Pistol implements GunProps {
 
     const x = this.flipX ? this.x - 8 : this.x + 8;
 
-    const projectile =
-      this.scene.projectileGroup.create(x, this.y - 2, 'projectiles', this.projectile.key)
-        .setData('melee', true)
-        .setData('bypass', false)
-        .setData('dmg', this.damage)
-        .setData('color', Phaser.Math.Between(230, 255))
-        .setData('onPlayer', this.onPlayer)
-        .setData('onCollide', this.projectileCollide) as Phaser.GameObjects.Sprite;
+    const projectile = this.scene.projectileGroup
+      .create(x, this.y - 2, 'projectiles', this.projectile.key)
+      .setData('melee', true)
+      .setData('bypass', false)
+      .setData('dmg', this.damage)
+      .setData('color', Phaser.Math.Between(230, 255))
+      .setData('onPlayer', this.onPlayer)
+      .setData('onCollide', this.projectileCollide) as Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
+    projectile.setBlendMode(Phaser.BlendModes.ADD);
     projectile.setTint(Phaser.Display.Color.GetColor(0, 100, 200));
-    projectile.setAlpha(.45);
+    projectile.setAlpha(0.45);
     projectile.z = 5;
     projectile.setDepth(50);
 
+    const vel = Phaser.Math.Between(this.projectile.velocity, this.projectile.velocity * 1.5);
+
     projectile.body
       .setDrag(300, 450)
-      .setVelocityX(this.flipX ? -this.projectile.velocity : this.projectile.velocity)
+      .setVelocityX(this.flipX ? -vel : vel)
       .setVelocityY(Phaser.Math.Between(-this.angleSpread, this.angleSpread))
       .setSize(this.projectile.size - 4, this.projectile.size - 8)
       .setFriction(1, 1)
-      .setAngularVelocity(Phaser.Math.Between(-200, 200))
-      .setBounceY(.2)
-      .allowGravity = this.projectile.gravity;
+      .setAngularVelocity(Phaser.Math.Between(-500, 500))
+      .setBounceY(0.2).allowGravity = this.projectile.gravity;
 
-    projectile.setScale(.5, .5);
+    projectile.setScale(0.5, 0.5);
+    // projectile.anims.play({ key: 'fire', yoyo: true, repeat: -1, frameRate: 1 });
+    // projectile.anims.play('fire');
 
     this.scene.tweens.add({
       targets: projectile,
-      alpha: 1,
-      scaleX: Phaser.Math.FloatBetween(1.5, 2.1),
-      scaleY: Phaser.Math.FloatBetween(1.5, 2.5),
-      duration: Phaser.Math.Between(600, 1200),
+      alpha: 0.8,
+      scaleX: Phaser.Math.FloatBetween(1.5 * 1.2, 2.1 * 1.2),
+      scaleY: Phaser.Math.FloatBetween(1.5 * 1.2, 2.5 * 1.2),
+      duration: Phaser.Math.Between(600 + 200, 1200 + 800),
       ease: 'Back',
       yoyo: true,
       onComplete: (tween: Tween, fire: Sprite[]) => {
@@ -77,28 +81,28 @@ export class Flamethrower extends Pistol implements GunProps {
       },
       onUpdate(tween: Tween, fire: Sprite) {
         const p = tween.getValue() * 10;
-        if (p >= 10) {
-          fire.anims.play('fire');
+        // console.log(p);
+        if (p >= 7) {
+          fire.anims.play('fire', true);
         }
         if (p > 5.6) {
           const c = p * 23;
-          fire.setTint(
-            Phaser.Display.Color.GetColor(fire.getData('color'), c, c)
-          );
+          fire.setTint(Phaser.Display.Color.GetColor(fire.getData('color'), c, c));
         }
-      }
+      },
     });
 
     this.shootTimer = 0;
     return 0;
   }
 
-  projectileCollide = (projectile: Sprite, scene) => {
+  projectileCollide = (projectile: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody, scene) => {
+    // projectile.anims.play('fire', true);
+
     projectile.body.setVelocity(0, 50).allowGravity = false;
-  }
+  };
 
   onPlayer = (fire, player: Player, scene: CrateboxScene) => {
     player.jump();
-  }
-
+  };
 }

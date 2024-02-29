@@ -1,3 +1,4 @@
+import * as constants from 'cratebox/constants';
 import { CrateboxScene } from 'cratebox/cratebox.scene';
 import { Gun, GunFactory } from 'cratebox/sprites/guns';
 
@@ -12,7 +13,7 @@ export class Player extends Phaser.GameObjects.Sprite {
   gun: Gun;
 
   // factors
-  runSpeed = 100;
+  runSpeed = 180;
   knockback = 0;
 
   // timers
@@ -25,14 +26,10 @@ export class Player extends Phaser.GameObjects.Sprite {
   isJumping = false;
   isFalling = false;
 
-  constructor(
-    scene: CrateboxScene,
-    x: number,
-    y: number,
-    key: string,
-    layer: Phaser.Tilemaps.TilemapLayer
-  ) {
+  constructor(scene: any, x: number, y: number, key: string, layer: Phaser.Tilemaps.TilemapLayer) {
     super(scene, x, y, key);
+    console.log('scene', scene);
+    console.log('scene.keys:', scene.keys);
     this.keys = this.scene.keys;
     this.scene.physics.world.enable(this);
     this.scene.physics.add.collider(this, layer);
@@ -49,18 +46,12 @@ export class Player extends Phaser.GameObjects.Sprite {
 
   update(time: number, delta: number): void {
     this.inputs = {
-      left: this.keys.left.isDown || this.scene.touchControls.left,
-      right: this.keys.right.isDown || this.scene.touchControls.right,
-      jump:
-        this.keys.up.isDown ||
-        this.keys.space.isDown ||
-        this.scene.touchControls.up,
-      shoot:
-        this.keys.down.isDown ||
-        this.keys.X.isDown ||
-        this.scene.touchControls.shoot,
+      left: this.keys.left.isDown || this.scene.touchControls?.left,
+      right: this.keys.right.isDown || this.scene.touchControls?.right,
+      jump: this.keys.up.isDown || this.keys.space.isDown || this.scene.touchControls?.up,
+      shoot: this.keys.down.isDown || this.keys.X.isDown || this.scene.touchControls?.shoot,
     };
-    if (this.y > 400) {
+    if (this.y > constants.MAPHEIGHT) {
       this.scene.restart();
       return;
     }
@@ -122,13 +113,13 @@ export class Player extends Phaser.GameObjects.Sprite {
 
     if (this.inputs.left && !this.inputs.right) {
       this.body.setVelocityX(-this.runSpeed + this.knockback);
-      if (this.walkSfxTimer > 200 && this.body.onFloor()) {
+      if (this.walkSfxTimer > 150 && this.body.onFloor()) {
         this.walkSfx();
       }
       this.flipX = true;
     } else if (this.inputs.right && !this.inputs.left) {
       this.body.setVelocityX(this.runSpeed + this.knockback);
-      if (this.walkSfxTimer > 200 && this.body.onFloor()) {
+      if (this.walkSfxTimer > 150 && this.body.onFloor()) {
         this.walkSfx();
       }
       this.flipX = false;
@@ -139,15 +130,11 @@ export class Player extends Phaser.GameObjects.Sprite {
     if (this.inputs.jump) {
       if (this.body.onFloor() && this.jumpTimer === 0) {
         this.jumpTimer = 1;
-        this.body.setVelocityY(-150);
+        this.body.setVelocityY(-300);
         this.scene.events.emit('sfx', 'jump');
-      } else if (
-        this.jumpTimer > 0 &&
-        this.jumpTimer < 301 &&
-        !this.body.onCeiling()
-      ) {
+      } else if (this.jumpTimer > 0 && this.jumpTimer < 301 && !this.body.onCeiling()) {
         this.jumpTimer += delta;
-        this.body.setVelocityY(-150);
+        this.body.setVelocityY(-300);
       } else if (this.body.onCeiling()) {
         this.scene.events.emit('sfx', 'foley');
         this.jumpTimer = 301;
@@ -170,10 +157,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     if (this.body.velocity.y !== 0 || !this.body.onFloor()) {
       anim = 'cube-jump';
       repeatDelay = 0;
-    } else if (
-      this.body.velocity.x !== 0 &&
-      (this.inputs.left || this.inputs.right)
-    ) {
+    } else if (this.body.velocity.x !== 0 && (this.inputs.left || this.inputs.right)) {
       anim = 'cube-run';
     } else {
       anim = 'cube-idle';

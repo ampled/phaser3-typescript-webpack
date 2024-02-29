@@ -1,5 +1,6 @@
 /// <reference path="node_modules/webpack-dev-server/types/lib/Server.d.ts"/>
 import HtmlWebPackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import type { Configuration } from 'webpack';
 
@@ -9,8 +10,8 @@ import path from 'path';
 const config: Configuration = {
   devServer: {
     host: 'localhost',
-    hot: 'only',
-    static: path.resolve(__dirname, 'src', 'assets'),
+    hot: true,
+    static: [path.resolve(__dirname, 'src', 'assets')],
   },
   entry: {
     main: path.resolve(__dirname, 'src/index.ts'),
@@ -22,52 +23,6 @@ const config: Configuration = {
   output: {
     assetModuleFilename: 'images/[hash][ext][query]',
     path: path.resolve(__dirname, 'dist'),
-  },
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        exclude: /\.tsx$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              transpileOnly: true,
-            },
-          },
-        ],
-      },
-      {
-        test: [/\.vert$/, /\.frag$/],
-        type: 'asset/source',
-      },
-      {
-        test: [/\.(png|fnt|mp3|ogg)$/],
-        type: 'asset/resource',
-        generator: {
-          filename: 'assets/[name].[hash][ext]',
-        },
-        // use: [
-        //   {
-        //     loader: 'file-loader',
-        //     options: { name: 'assets/[name].[hash].[ext]' },
-        //   },
-        // ],
-      },
-      {
-        test: /\.json$/,
-        type: 'asset/resource',
-        generator: {
-          filename: '[name].[hash][ext]',
-        },
-        // use: [
-        //   {
-        //     loader: 'file-loader',
-        //     options: { name: 'assets/[name].[hash].[ext]' },
-        //   },
-        // ],
-      },
-    ],
   },
   optimization: {
     splitChunks: {
@@ -92,8 +47,46 @@ const config: Configuration = {
     new HtmlWebPackPlugin({
       template: './src/index.html',
     }),
-    new webpack.HotModuleReplacementPlugin(),
+    new MiniCssExtractPlugin(),
   ],
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        exclude: /\.tsx$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
+      },
+      {
+        test: [/\.vert$/, /\.frag$/],
+        type: 'asset/source',
+      },
+      {
+        test: [/\.(png|fnt|mp3|ogg)$/],
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/[name].[hash][ext]',
+        },
+      },
+      {
+        test: /\.json$/,
+        type: 'asset/resource',
+        generator: {
+          filename: '[name].[hash][ext]',
+        },
+      },
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+    ],
+  },
 };
 
 export default config;

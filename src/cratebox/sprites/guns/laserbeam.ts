@@ -9,11 +9,14 @@ export class LaserBeam extends Phaser.GameObjects.Sprite {
     super(scene, x, y, key, frame);
     this.scene.physics.world.enable(this);
     this.setScale(0.2, 0.2);
+    this.setOrigin(0.6, 0.5);
     this.scene.tweens.add({
       targets: this,
-      duration: 800,
+      duration: 400,
       scaleY: 1,
       scaleX: 1,
+      yoyo: true,
+      ease: Phaser.Math.Easing.Back.InOut,
     });
     this.scene.time.addEvent({
       delay: 1000,
@@ -25,9 +28,7 @@ export class LaserBeam extends Phaser.GameObjects.Sprite {
 
   update(time: number, delta: number): void {
     if (!this.exploded) {
-      this.x = this.scene.player.flipX
-        ? this.scene.player.x - 21
-        : this.scene.player.x + 21;
+      this.x = this.scene.player.flipX ? this.scene.player.x - 21 : this.scene.player.x + 21;
       this.y = this.scene.player.y - 1;
       this.flipX = this.scene.player.flipX;
     }
@@ -36,7 +37,7 @@ export class LaserBeam extends Phaser.GameObjects.Sprite {
   explode = (beam: LaserBeam, scene: CrateboxScene) => {
     scene.events.emit('sfx', 'laser2');
     scene.minishake();
-    // beam.x = scene.player.flipX ? scene.player.x - 16 : scene.player.x + 16;
+    beam.x = scene.player.flipX ? scene.player.x - 16 : scene.player.x + 16;
     beam.setFrame('beam00');
 
     const dir = scene.player.flipX ? -1 : 1;
@@ -52,8 +53,9 @@ export class LaserBeam extends Phaser.GameObjects.Sprite {
     beam.exploded = true;
     scene.tweens.add({
       targets: beam,
-      ease: Phaser.Math.Easing.Sine.In,
-      scaleX: 10,
+      ease: Phaser.Math.Easing.Sine.InOut,
+      scaleX: 50,
+      scaleY: 5,
       duration: 100,
     });
     scene.time.addEvent({
@@ -62,7 +64,7 @@ export class LaserBeam extends Phaser.GameObjects.Sprite {
         s.tweens.add({
           targets: b,
           scaleY: 0,
-          duration: 100,
+          duration: 200,
           onComplete: (tween, beams: LaserBeam[]) => beams[0].destroy(),
         });
       },

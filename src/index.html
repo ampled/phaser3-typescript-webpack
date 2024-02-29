@@ -9,52 +9,17 @@
   <!-- This meta tag ensures that the toolbar at the bottom of the browser 
 		is hidden when this page is accessed frome the Home Screen. -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <style>
-    html,
-    body {
-      /* height: 100%; */
-      margin: 0;
-      width: 100%;
-      background-color: black;
-      color: white;
-    }
-
-    a {
-      color: white;
-      font-size: 1.5em;
-    }
-
-    #game {
-      width: 100%;
-      text-align: center;
-    }
-
-    #game canvas {
-      display: inline-block;
-      border-style: solid inset;
-      border-color: rgba(0, 0, 0, 0.3);
-      /* border-width: 30px; */
-      /* padding: 30px; */
-      border-radius: 8px;
-      margin-top: 25px;
-      z-index: 2;
-      overflow: visible;
-    }
-
-    #info {
-      margin-left: auto;
-      margin-right: auto;
-      width: 400px;
-    }
-  </style>
 
 </head>
 
 <body>
+
   <div id="game">
   </div>
+
   <pre id="info">
-    collect stars ~ <em><a href="javascript:toggleTouch()">toggle touch</a></em> ~ <em><a href="javascript:togglePause()">toggle pause</a></em>
+    collect stars ~ <em><a href="javascript:togglePause()">toggle pause</a></em> ~ <em><a href="javascript:doatick()">tick</a></em> 
+    <!-- <em><a href="javascript:toggleTouch()">toggle touch</a></em> -->
 
     left / right ~ move
     up / space   ~ jump

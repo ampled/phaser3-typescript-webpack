@@ -1,4 +1,5 @@
 import { CrateboxScene } from 'cratebox/cratebox.scene';
+import * as constants from '../../constants';
 
 export class Enemy extends Phaser.GameObjects.Sprite {
   scene: CrateboxScene;
@@ -19,6 +20,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   animMad: string;
   smoke: Phaser.GameObjects.Particles.ParticleEmitter;
   id = Math.random().toString();
+  tween: Phaser.Tweens.Tween;
 
   constructor(
     scene: CrateboxScene,
@@ -62,11 +64,11 @@ export class Enemy extends Phaser.GameObjects.Sprite {
       return;
     }
 
-    if (this.y > 400) {
+    if (this.y > constants.MAPHEIGHT) {
       this.smoke = this.scene.createSmokeEmitter(this.x, this.y, this.id, this);
 
       this.y = -5;
-      this.x = 200;
+      this.x = constants.MAPCENTERX;
 
       if (this.body.velocity.x > 0) {
         this.vel = -this.madVel;
@@ -83,12 +85,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
     }
   }
 
-  damage(
-    amount: number = 0,
-    fromRight: boolean,
-    multiplier = 2,
-    flip = false
-  ): void {
+  damage(amount: number = 0, fromRight: boolean, multiplier = 2, flip = false): void {
     this.canDamage = false;
     this.health -= amount;
     this.setTint(Phaser.Display.Color.GetColor(255, 0, 0));
@@ -132,11 +129,10 @@ export class Enemy extends Phaser.GameObjects.Sprite {
       delay: 2000,
       callbackScope: this,
       callback: () => {
-        if (this.smoke) {
-          this.smoke.destroy();
-        }
+        this.smoke?.destroy();
         this.scene.killedEnemies.remove(this);
         this.scene.physics.world.disable(this);
+        this.tween?.destroy();
         this.destroy();
       },
     });

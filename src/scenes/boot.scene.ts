@@ -316,6 +316,7 @@ export class BootScene extends Phaser.Scene {
     this.anims.create({
       key: 'fire',
       repeat: -1,
+      frameRate: 10,
       frames: [
         { key: 'projectiles', frame: 'fire00' },
         { key: 'projectiles', frame: 'fire01' },
@@ -324,5 +325,6 @@ export class BootScene extends Phaser.Scene {
     });
 
     this.scene.start('CrateboxScene');
+    // this.scene.start('BigMap');
   }
 }

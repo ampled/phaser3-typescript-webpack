@@ -47,29 +47,25 @@ export class DualPistol extends Pistol implements GunProps {
       this.released = false;
       this.scene.events.emit('sfx', this.sfx, Phaser.Math.FloatBetween(0.7, 1.1));
 
-      const projectile =
-        this.scene.projectileGroup.create(x1, this.y, 'projectiles', this.projectile.key)
-          .setData('dmg', this.damage)
-          .setData('onCollide', this.projectileCollide) as Phaser.GameObjects.Sprite;
+      const projectile = this.scene.projectileGroup
+        .create(x1, this.y, 'projectiles', this.projectile.key)
+        .setData('dmg', this.damage)
+        .setData('onCollide', this.projectileCollide) as Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
       projectile.anims.play(this.projectile.anim);
 
-      const projectile2 =
-        this.scene.projectileGroup.create(x2, this.y, 'projectiles', this.projectile.key)
-          .setData('dmg', this.damage)
-          .setData('onCollide', this.projectileCollide) as Phaser.GameObjects.Sprite;
+      const projectile2 = this.scene.projectileGroup
+        .create(x2, this.y, 'projectiles', this.projectile.key)
+        .setData('dmg', this.damage)
+        .setData('onCollide', this.projectileCollide) as Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
       projectile2.anims.play(this.projectile.anim);
 
-      projectile2.body
-        .setVelocityX(-this.projectile.velocity)
-        .setSize(this.projectile.size, this.projectile.size)
-        .allowGravity = this.projectile.gravity;
+      projectile2.body.setVelocityX(-this.projectile.velocity).setSize(this.projectile.size, this.projectile.size).allowGravity =
+        this.projectile.gravity;
 
-      projectile.body
-        .setVelocityX(this.projectile.velocity)
-        .setSize(this.projectile.size, this.projectile.size)
-        .allowGravity = this.projectile.gravity;
+      projectile.body.setVelocityX(this.projectile.velocity).setSize(this.projectile.size, this.projectile.size).allowGravity =
+        this.projectile.gravity;
 
       this.scene.time.addEvent({
         delay: this.cooldown,
@@ -78,7 +74,7 @@ export class DualPistol extends Pistol implements GunProps {
           if (this.active && this.released) {
             this.canShoot = true;
           }
-        }
+        },
       });
 
       this.scene.tweens.add({
@@ -90,7 +86,7 @@ export class DualPistol extends Pistol implements GunProps {
         callbackScope: this,
         onComplete() {
           this.setAngle(0);
-        }
+        },
       });
 
       // this.body.setAngularVelocity(this.flipX ? this.recoil : -this.recoil);
@@ -103,7 +99,7 @@ export class DualPistol extends Pistol implements GunProps {
           if (this.active && this.released) {
             this.canShoot = true;
           }
-        }
+        },
       });
     }
     return 0;
@@ -112,6 +108,5 @@ export class DualPistol extends Pistol implements GunProps {
   projectileCollide = (projectile, scene) => {
     scene.events.emit('sfx', 'foley');
     projectile.destroy();
-  }
-
+  };
 }

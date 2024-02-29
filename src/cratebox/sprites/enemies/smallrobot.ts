@@ -1,9 +1,9 @@
 import { Enemy } from './enemy';
 
 export class SmallRobot extends Enemy {
-  baseVel: number = 90;
-  madVel: number = 120;
-  vel: number = 90;
+  baseVel: number = 90 * 2;
+  madVel: number = 120 * 3;
+  vel: number = 90 * 2;
   health = 6;
   isFirst = true;
   falling = false;
@@ -16,5 +16,4 @@ export class SmallRobot extends Enemy {
   constructor(scene, x, y, dir) {
     super(scene, x, y, dir, 'enemies');
   }
-
 }

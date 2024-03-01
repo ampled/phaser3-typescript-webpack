@@ -1,4 +1,6 @@
-// use wildard module-declarations so typescript don't complain when you import files other than .ts or .js with file-loader
+/***
+ * Wildcard module-declarations so typescript don't complain when importing files other than .ts or .js with file-loader
+ */
 
 declare module '*.png' {
   const content: string;

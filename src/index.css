@@ -32,16 +32,6 @@ a {
   /* text-align: center; */
 }
 
-/* #game canvas {
-  display: inline-block;
-  border-style: solid inset;
-  padding: 30px;
-  border-radius: 16px;
-  margin-top: 0px;
-  z-index: 2;
-  overflow: visible;
-} */
-
 #info {
   margin-left: auto;
   margin-right: auto;

@@ -19,5 +19,5 @@
       "allowSyntheticDefaultImports": true
     }
   },
-  "exclude": ["node_modules", "assets", "scripts", "**/*.d.ts"]
+  "exclude": ["node_modules", "assets"]
 }

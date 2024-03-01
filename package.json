@@ -4,18 +4,15 @@
   "main": "src/index.ts",
   "license": "MIT",
   "scripts": {
-    "build:dev": "webpack-d --mode development",
     "build": "webpack --mode production --config webpack.config.ts",
     "dev": "webpack-dev-server --mode development --config webpack.config.ts",
-    "start": "npm run dev",
-    "makesound": "node scripts/soundgen.js"
+    "start": "npm run dev"
   },
   "dependencies": {
     "phaser": "3.80.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.19",
-    "audiosprite": "^0.7.1",
     "css-loader": "^6.10.0",
     "html-webpack-plugin": "^5.6.0",
     "mini-css-extract-plugin": "^2.8.0",

@@ -3,7 +3,6 @@ import 'phaser';
 import './index.css';
 
 import { BootScene } from 'scenes/boot.scene';
-import { CrateboxScene } from 'cratebox/cratebox.scene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.CANVAS,
@@ -13,14 +12,6 @@ const config: Phaser.Types.Core.GameConfig = {
   height: 480,
   zoom: 1,
   pixelArt: true,
-  // antialias: true,
-  // render: {
-  //   antialias: false,
-  //   pixelArt: true,
-  // },
-  input: {
-    gamepad: true,
-  },
   scale: {
     mode: Phaser.Scale.FIT,
     parent: 'game',
@@ -34,27 +25,7 @@ const config: Phaser.Types.Core.GameConfig = {
       height: 480 * 2,
     },
   },
-  // fps: {
-  //   min: 1,
-  //   target: 30,
-  //   forceSetTimeOut: true,
-  //   panicMax: 20
-  // },
-  physics: {
-    default: 'arcade',
-    arcade: {
-      // tileBias: 0,
-      gravity: { y: 600, x: 0 },
-      debug: true,
-    },
-  },
-  scene: [
-    BootScene,
-    // BigMapScene,
-    // TileMapScene,
-    CrateboxScene,
-  ],
+  scene: [BootScene],
 };
 
-const game = new Phaser.Game(config);
-// console.log(game);
+new Phaser.Game(config);

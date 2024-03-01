@@ -7,6 +7,7 @@ import * as constants from './constants';
 import crateboxTiles from '../assets/tilesets/cratebox.png';
 import map from '../assets/tilemaps/cratebox3.json';
 import { Types } from 'phaser';
+import { createExplosion } from './sprites/guns/explosion';
 
 export class CrateboxScene extends Phaser.Scene {
   music: Phaser.Sound.WebAudioSound;
@@ -249,14 +250,12 @@ export class CrateboxScene extends Phaser.Scene {
 
     this.initStar();
 
-    this.input.on(
-      'pointerup',
-      (pointer) => {
-        this.spawnDrone(pointer.x, pointer.y);
-        console.log({ x: pointer.worldX, y: pointer.worldY });
-      },
-      this
-    );
+    this.input.on('pointerup', (pointer) => {
+      console.log(this);
+      // this.spawnDrone(pointer.x, pointer.y);
+      createExplosion(this, pointer.x, pointer.y);
+      console.log({ x: pointer.worldX, y: pointer.worldY });
+    });
 
     // enemy spawn interval
     this.enemySpawnEvent = this.time.addEvent({

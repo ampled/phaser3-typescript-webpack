@@ -1,20 +1,23 @@
 {
   "compilerOptions": {
     "baseUrl": "src",
-    "target": "es5",
+    "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
     "strict": false,
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
-    "typeRoots": [
-      "node_modules/@types",
-      "typings"
-    ]
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": false,
+    "typeRoots": ["typings"]
   },
-  "exclude": [
-    "node_modules",
-    "assets",
-    "scripts"
-  ]
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS",
+      "allowSyntheticDefaultImports": true
+    }
+  },
+  "exclude": ["node_modules", "assets"]
 }

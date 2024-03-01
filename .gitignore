@@ -1,4 +1,6 @@
 node_modules/
 *.log
-assets/@raw
+src/assets/@raw/*/
 dist/
+ideas
+.DS_Store

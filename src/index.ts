@@ -1,29 +1,31 @@
 import 'phaser';
 
-import { Game } from 'phaser-util/game';
-import { BootScene } from 'scenes/boot.scene';
-import { CrateboxScene } from 'cratebox/cratebox.scene';
+import './index.css';
 
-const config: Opt<GameConfig> = {
-  type: Phaser.WEBGL,
+import { BootScene } from 'scenes/boot.scene';
+
+const config: Phaser.Types.Core.GameConfig = {
+  type: Phaser.CANVAS,
   backgroundColor: '#ADD8E6',
   parent: 'game',
-  width: 400,
-  height: 240,
+  width: 800,
+  height: 480,
   zoom: 1,
   pixelArt: true,
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { y: 600 },
-      debug: true
-    }
+  scale: {
+    mode: Phaser.Scale.FIT,
+    parent: 'game',
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    min: {
+      width: 800,
+      height: 480,
+    },
+    max: {
+      width: 800 * 2,
+      height: 480 * 2,
+    },
   },
-  scene: [
-    BootScene,
-    CrateboxScene
-  ]
+  scene: [BootScene],
 };
 
-const game = new Game(config);
-console.log(game);
+new Phaser.Game(config);

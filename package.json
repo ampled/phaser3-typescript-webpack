@@ -4,9 +4,10 @@
   "main": "src/index.ts",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --mode production --config webpack.config.ts",
+    "start": "npm run dev",
+    "build": "webpack --mode production --config webpack.build.ts",
     "dev": "webpack-dev-server --mode development --config webpack.config.ts",
-    "start": "npm run dev"
+    "preview": "npx http-server dist"
   },
   "dependencies": {
     "phaser": "3.80.0"

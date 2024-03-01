@@ -1,15 +1,10 @@
+import { Configuration } from 'webpack';
 import config from './webpack.config';
-// import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 
-// config.plugins.push(
-//   new UglifyJsPlugin({
-//     sourceMap: true,
-//     cache: true,
-//     uglifyOptions: {
-//       compress: true
-//     },
-//     parallel: 4
-//   })
-// )
+const buildConfig: Configuration = {
+  ...config,
+  optimization: { minimize: true, minimizer: [new TerserPlugin()] },
+};
 
-export default config;
+export default buildConfig;

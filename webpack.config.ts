@@ -25,15 +25,17 @@ const config: Configuration = {
     path: path.resolve(__dirname, 'dist'),
   },
   optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-        },
-      },
-    },
+    minimize: false,
+    minimizer: [],
+    // splitChunks: {
+    //   cacheGroups: {
+    //     commons: {
+    //       test: /[\\/]node_modules[\\/]/,
+    //       name: 'vendors',
+    //       chunks: 'all',
+    //     },
+    //   },
+    // },
   },
   plugins: [
     new webpack.DefinePlugin({
